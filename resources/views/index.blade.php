@@ -6,23 +6,23 @@
         <p class="lead">Register yourself for the summerschool.</p>
     </div>
     {!! Form::open(['url' => 'foo/bar']) !!}
-    <div class="col-lg-6 col-lg-offset-3 well">
+    <div class="col-lg-12 well">
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-lg-6">
                 {{Form::label('family', 'Family')}}
                 {{Form::text('family', null, ['class' => 'form-control'])}}
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-lg-6">
                 {{Form::label('address', 'Address')}}
                 {{Form::text('address', null, ['class' => 'form-control'])}}
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-lg-6">
                 {{Form::label('tel', 'Tel/GSM')}}
                 {{Form::text('tel', null, ['class' => 'form-control'])}}
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-lg-6">
                 {{Form::label('email', 'E-Mail Address')}}
                 {{Form::email('email', null, ['class' => 'form-control'])}}
             </div>

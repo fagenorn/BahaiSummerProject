@@ -7,6 +7,9 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.daterangepicker = require('daterangepicker');
+
+require('./custom');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -35,7 +38,7 @@ window.onload = function () {
         },
         methods: {
             addPerson: function (e) {
-                this.people.push({destroyed: false})
+                this.people.push({destroyed: false});
             },
             deletePerson: function (index) {
                 this.people[index].destroyed = true;
