@@ -979,6 +979,14 @@ module.exports = __webpack_require__(48);
 __webpack_require__(11);
 
 window.Vue = __webpack_require__(35);
+
+/**
+ * Dev tools disabled when in production when compiling to production
+ */
+Vue.config.devtools = "development" !== 'production';
+Vue.config.debug = "development" !== 'production';
+Vue.config.silent = "development" === 'production';
+
 window.daterangepicker = __webpack_require__(177);
 
 __webpack_require__(47);

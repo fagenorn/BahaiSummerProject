@@ -7,6 +7,14 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+
+/**
+ * Dev tools disabled when in production when compiling to production
+ */
+Vue.config.devtools = process.env.NODE_ENV !== 'production';
+Vue.config.debug = process.env.NODE_ENV !== 'production';
+Vue.config.silent = process.env.NODE_ENV === 'production';
+
 window.daterangepicker = require('daterangepicker');
 
 require('./custom');
