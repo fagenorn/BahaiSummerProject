@@ -5,7 +5,7 @@
         <h1 class="display-3">Welcome</h1>
         <p class="lead">Register yourself for the summerschool.</p>
     </div>
-    {!! Form::open(['url' => 'foo/bar']) !!}
+    {!! Form::open(['url' => 'register']) !!}
     <div class="col-lg-12 well">
         <div class="form-row">
             <div class="form-group col-lg-6">
