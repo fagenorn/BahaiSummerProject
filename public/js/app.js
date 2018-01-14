@@ -42893,7 +42893,7 @@ exports = module.exports = __webpack_require__(41)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -43462,6 +43462,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "person-form",
@@ -43549,62 +43551,58 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "form-group col-lg-6" }, [
-            _c("label", { attrs: { for: "language" } }, [
-              _vm._v("Attendance Language")
-            ]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                staticClass: "form-control",
-                attrs: { id: "language", name: "language" }
-              },
-              [
-                _c("option", { attrs: { value: "EN" } }, [_vm._v("English")]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "NL" } }, [
-                  _vm._v("Nederlands")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "FR" } }, [_vm._v("Français")])
-              ]
-            )
+            _c("label", [
+              _vm._v("Attendance Language\n                    "),
+              _c(
+                "select",
+                { staticClass: "form-control", attrs: { name: "language" } },
+                [
+                  _c("option", { attrs: { value: "EN" } }, [_vm._v("English")]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "NL" } }, [
+                    _vm._v("Nederlands")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "FR" } }, [_vm._v("Français")])
+                ]
+              )
+            ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "form-group col-lg-6" }, [
-            _c("label", { attrs: { for: "diet" } }, [_vm._v("Diet")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                staticClass: "form-control",
-                attrs: { id: "diet", name: "diet" }
-              },
-              [
-                _c(
-                  "option",
-                  {
-                    staticStyle: { display: "none" },
-                    attrs: { disabled: "", selected: "", value: "" }
-                  },
-                  [_vm._v(" -- select an option --")]
-                ),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "standard" } }, [
-                  _vm._v("Standard")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "vegetarian" } }, [
-                  _vm._v("Vegetarian")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "halal" } }, [_vm._v("Halal")]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "self-catering" } }, [
-                  _vm._v("Self-catering")
-                ])
-              ]
-            )
+            _c("label", [
+              _vm._v("Diet\n                    "),
+              _c(
+                "select",
+                { staticClass: "form-control", attrs: { name: "diet" } },
+                [
+                  _c(
+                    "option",
+                    {
+                      staticStyle: { display: "none" },
+                      attrs: { disabled: "", selected: "", value: "" }
+                    },
+                    [_vm._v(" -- select an option --")]
+                  ),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "standard" } }, [
+                    _vm._v("Standard")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "vegetarian" } }, [
+                    _vm._v("Vegetarian")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "halal" } }, [
+                    _vm._v("Halal")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "self-catering" } }, [
+                    _vm._v("Self-catering")
+                  ])
+                ]
+              )
+            ])
           ])
         ])
       ]),
@@ -43629,51 +43627,23 @@ var staticRenderFns = [
             _c("h4", [_vm._v("Arrival")]),
             _vm._v(" "),
             _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "arrivalLunch",
-                  id: "arrivalLunch"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "arrivalLunch" }
-                },
-                [
-                  _vm._v(
-                    "\n                        Lunch\n                    "
-                  )
-                ]
-              )
+              _c("label", { staticClass: "form-check-label" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "arrivalLunch" }
+                }),
+                _vm._v("\n                        Lunch\n                    ")
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "arrivalDinner",
-                  id: "arrivalDinner"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "arrivalDinner" }
-                },
-                [
-                  _vm._v(
-                    "\n                        Dinner\n                    "
-                  )
-                ]
-              )
+              _c("label", { staticClass: "form-check-label" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "arrivalDinner" }
+                }),
+                _vm._v("\n                        Dinner\n                    ")
+              ])
             ])
           ]),
           _vm._v(" "),
@@ -43681,51 +43651,23 @@ var staticRenderFns = [
             _c("h4", [_vm._v("Departure")]),
             _vm._v(" "),
             _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "departureLunch",
-                  id: "departureLunch"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "departureLunch" }
-                },
-                [
-                  _vm._v(
-                    "\n                        Lunch\n                    "
-                  )
-                ]
-              )
+              _c("label", { staticClass: "form-check-label" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "departureLunch" }
+                }),
+                _vm._v("\n                        Lunch\n                    ")
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  value: "departureDinner",
-                  id: "departureDinner"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass: "form-check-label",
-                  attrs: { for: "departureDinner" }
-                },
-                [
-                  _vm._v(
-                    "\n                        Dinner\n                    "
-                  )
-                ]
-              )
+              _c("label", { staticClass: "form-check-label" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", value: "departureDinner" }
+                }),
+                _vm._v("\n                        Dinner\n                    ")
+              ])
             ])
           ])
         ])

@@ -28,22 +28,24 @@
             </div>
             <div class="row">
                 <div class="form-group col-lg-6">
-                    <label for="language">Attendance Language</label>
-                    <select class="form-control" id="language" name="language">
-                        <option value="EN">English</option>
-                        <option value="NL">Nederlands</option>
-                        <option value="FR">Français</option>
-                    </select>
+                    <label>Attendance Language
+                        <select class="form-control" name="language">
+                            <option value="EN">English</option>
+                            <option value="NL">Nederlands</option>
+                            <option value="FR">Français</option>
+                        </select>
+                    </label>
                 </div>
                 <div class="form-group col-lg-6">
-                    <label for="diet">Diet</label>
-                    <select class="form-control" id="diet" name="diet">
-                        <option style="display:none;" disabled selected value> -- select an option --</option>
-                        <option value="standard">Standard</option>
-                        <option value="vegetarian">Vegetarian</option>
-                        <option value="halal">Halal</option>
-                        <option value="self-catering">Self-catering</option>
-                    </select>
+                    <label>Diet
+                        <select class="form-control" name="diet">
+                            <option style="display:none;" disabled selected value> -- select an option --</option>
+                            <option value="standard">Standard</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="halal">Halal</option>
+                            <option value="self-catering">Self-catering</option>
+                        </select>
+                    </label>
                 </div>
             </div>
         </div>
@@ -60,14 +62,14 @@
                 <div class="form-group col-lg-12">
                     <h4>Arrival</h4>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="arrivalLunch" id="arrivalLunch">
-                        <label class="form-check-label" for="arrivalLunch">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" value="arrivalLunch">
                             Lunch
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="arrivalDinner" id="arrivalDinner">
-                        <label class="form-check-label" for="arrivalDinner">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" value="arrivalDinner">
                             Dinner
                         </label>
                     </div>
@@ -75,14 +77,14 @@
                 <div class="form-group col-lg-12">
                     <h4>Departure</h4>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="departureLunch" id="departureLunch">
-                        <label class="form-check-label" for="departureLunch">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" value="departureLunch">
                             Lunch
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="departureDinner" id="departureDinner">
-                        <label class="form-check-label" for="departureDinner">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" value="departureDinner">
                             Dinner
                         </label>
                     </div>
