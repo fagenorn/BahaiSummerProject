@@ -8376,7 +8376,7 @@ button.close {
   margin-bottom: 30px;
 }
 
-#peopleContainer .person-form .stay-meals {
+#peopleContainer .person-form div[class^="stay-meals-"] {
   display: none;
 }
 

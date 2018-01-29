@@ -19,7 +19,7 @@
     > div {
       margin-bottom: 30px;
     }
-    .stay-meals {
+    div[class^="stay-meals-"] {
       display: none;
     }
     input, select {

@@ -3,13 +3,13 @@
 @section('content')
     <div class="jumbotron">
         <h1 class="display-3">Welcome</h1>
-        <p class="lead">Register yourself for the summerschool.</p>
+        <p class="lead">The online registration form for the Belgian Bahá'í Summer School.</p>
     </div>
     {!! Form::open(['url' => 'register']) !!}
     <div class="col-lg-12 well">
         <div class="form-row">
             <div class="form-group col-lg-6">
-                {{Form::label('family', 'Family')}}
+                {{Form::label('family', 'Family Name')}}
                 {{Form::text('family', null, ['class' => 'form-control'])}}
             </div>
             <div class="form-group col-lg-6">
@@ -23,7 +23,7 @@
                 {{Form::text('tel', null, ['class' => 'form-control'])}}
             </div>
             <div class="form-group col-lg-6">
-                {{Form::label('email', 'E-Mail Address')}}
+                {{Form::label('email', 'Email')}}
                 {{Form::email('email', null, ['class' => 'form-control'])}}
             </div>
         </div>
@@ -34,7 +34,7 @@
             <span class='glyphicon glyphicon-remove'
                   v-on:click="deletePerson(index)"></span>
             </div>
-            <person-form></person-form>
+            <person-form :index="index"></person-form>
             <div v-if="index !== lastVisableIndex" class="divider"></div>
         </div>
         <button class="btn btn-primary pull-right" type="button" v-on:click="addPerson()">Add Person</button>

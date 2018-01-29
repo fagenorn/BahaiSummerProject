@@ -1,8 +1,8 @@
-let start_date = "01/14/2018";
-let end_date = "01/20/2018";
+let start_date = "07/06/2018";
+let end_date = "07/10/2018";
 
 initializeDates = function () {
-    $('input[type="daterange-single"]').each(function () {
+    $('input[type="daterange-single-dob"]').each(function () {
         if (!this.value) $(this).daterangepicker({
             "forceParse": false,
             "singleDatePicker": true,
@@ -10,27 +10,15 @@ initializeDates = function () {
         });
     });
 
-    $('input[type="daterange-stay"]').each(function () {
+    $('input[type="daterange-single-stay"]').each(function () {
         if (!this.value) $(this).daterangepicker({
             "forceParse": false,
-            "autoApply": true,
-            "ranges": {
-                "Full Stay": [
-                    start_date,
-                    end_date
-                ]
-            },
+            "singleDatePicker": true,
+            "showDropdowns": true,
             "startDate": start_date,
             "endDate": end_date,
             "minDate": start_date,
-            "maxDate": end_date,
-            "drops": "up"
-        }, function (start, end) {
-            if (start.format('MM/DD/YYYY') !== start_date || end.format('MM/DD/YYYY') !== end_date) {
-                $('.stay-meals').slideDown();
-            } else {
-                $('.stay-meals').slideUp();
-            }
+            "maxDate": end_date
         });
     });
 };
