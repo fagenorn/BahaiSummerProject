@@ -139,58 +139,102 @@
             <span class="help-block">This year, you have the choice between a regular room in the main building or a deluxe room in the Bed&Breakfast across the street.</span>
             <div class="row">
                 <div class="form-group col-lg-12">
-                    <h4>Prices</h4>
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th colspan="2" scope="col">Regular</th>
-                            <th colspan="2" scope="col">Deluxe</th>
-                            <th scope="col">No Accommodation</th>
-                        </tr>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Full (incl. meals)</th>
-                            <th scope="col">Partial (per day, incl. meals)</th>
-                            <th scope="col">Full (incl. meals)</th>
-                            <th scope="col">Partial (per day, incl. meals)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">Adults and children over 13</th>
-                            <td>190 euros</td>
-                            <td>50 euros</td>
-                            <td>300 euros</td>
-                            <td>80 euros</td>
-                            <td>6 euros</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Children under 2</th>
-                            <td>Free</td>
-                            <td>Free</td>
-                            <td>Free</td>
-                            <td>Free</td>
-                            <td>Free</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Children from 3 to 5 (50%)</th>
-                            <td>95 euros</td>
-                            <td>25 euros</td>
-                            <td>150 euros</td>
-                            <td>40 euros</td>
-                            <td>6 euros</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Children from 6 to 12 (30%)</th>
-                            <td>133 euros</td>
-                            <td>35 euros</td>
-                            <td>210 euros</td>
-                            <td>64 euros</td>
-                            <td>6 euros</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div class="card">
+                        <div class="card-header" role="tab" :id="`heading-prices-${index}`">
+                            <h5 class="mb-0">
+                                <a class="collapsed btn btn-primary" data-toggle="collapse" :href="`#prices-${index}`"
+                                   aria-expanded="false" :aria-controls="`prices-${index}`">
+                                    Show Prices
+                                </a>
+                            </h5>
+                        </div>
+                        <div :id="`prices-${index}`" class="collapse" role="tabpanel"
+                             :aria-labelledby="`heading-prices-${index}`">
+                            <div class="card-block">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th colspan="2" scope="col">Regular</th>
+                                        <th colspan="2" scope="col">Deluxe</th>
+                                        <th scope="col">No Accommodation</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Full (incl. meals)</th>
+                                        <th scope="col">Partial (per day, incl. meals)</th>
+                                        <th scope="col">Full (incl. meals)</th>
+                                        <th scope="col">Partial (per day, incl. meals)</th>
+                                        <th scope="col">Per day, excl. meals (<span
+                                                :id="`heading-meal-prices-${index}`">Meal Prices</span>)
+                                            <table :id="`meal-prices-${index}`"
+                                                   class="table table-striped table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">Lunch</th>
+                                                    <th scope="col">Dinner</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">Adults and children over 13</th>
+                                                    <td>9 euros</td>
+                                                    <td>12 euros</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Children from 3 to 5</th>
+                                                    <td>6 euros</td>
+                                                    <td>7,20 euros</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Children from 6 to 12</th>
+                                                    <td>7 euros</td>
+                                                    <td>9 euros</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">Adults and children over 13</th>
+                                        <td>190 euros</td>
+                                        <td>50 euros</td>
+                                        <td>300 euros</td>
+                                        <td>80 euros</td>
+                                        <td>6 euros</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Children under 2</th>
+                                        <td>Free</td>
+                                        <td>Free</td>
+                                        <td>Free</td>
+                                        <td>Free</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Children from 3 to 5 (50%)</th>
+                                        <td>95 euros</td>
+                                        <td>25 euros</td>
+                                        <td>150 euros</td>
+                                        <td>40 euros</td>
+                                        <td>6 euros</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Children from 6 to 12 (30%)</th>
+                                        <td>133 euros</td>
+                                        <td>35 euros</td>
+                                        <td>210 euros</td>
+                                        <td>64 euros</td>
+                                        <td>6 euros</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -219,40 +263,6 @@
                 </label>
             </div>
         </div>
-        <div>
-            <h3>Meals (reservation required)</h3>
-            <div class="row">
-                <div class="form-group col-lg-12">
-                    <h4>Prices</h4>
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Lunch</th>
-                            <th scope="col">Dinner</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">Adults and children over 13</th>
-                            <td>9 euros</td>
-                            <td>12 euros</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Children from 3 to 5</th>
-                            <td>6 euros</td>
-                            <td>7,20 euros</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Children from 6 to 12</th>
-                            <td>7 euros</td>
-                            <td>9 euros</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -271,6 +281,11 @@
                 } else {
                     $("#free-child-" + this.index).slideUp();
                 }
+            });
+            $("#heading-meal-prices-" + this.index).hover(() => {
+                $("#meal-prices-" + this.index).fadeIn(500);
+            }, () => {
+                $("#meal-prices-" + this.index).fadeOut(100);
             });
         },
         methods: {

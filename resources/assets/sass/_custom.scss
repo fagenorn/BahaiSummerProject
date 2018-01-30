@@ -37,4 +37,13 @@
     }
     text-align: right;
   }
+  table[id^="meal-prices-"] {
+    width: 400px;
+    float: left;
+    position: absolute;
+    display: none;
+  }
+  span[id^="heading-meal-prices-"] {
+    color: #7da8c3;
+  }
 }

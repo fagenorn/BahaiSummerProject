@@ -2,6 +2,7 @@ let start_date = "07/06/2018";
 let end_date = "07/10/2018";
 
 initializeDates = function () {
+    $("[rel=tooltip]").tooltip({html:true});
     $('input[type="daterange-single-dob"]').each(function () {
         if (!this.value) $(this).daterangepicker({
             "forceParse": false,

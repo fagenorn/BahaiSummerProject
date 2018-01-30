@@ -60938,6 +60938,7 @@ var start_date = "07/06/2018";
 var end_date = "07/10/2018";
 
 initializeDates = function initializeDates() {
+    $("[rel=tooltip]").tooltip({ html: true });
     $('input[type="daterange-single-dob"]').each(function () {
         if (!this.value) $(this).daterangepicker({
             "forceParse": false,
@@ -61045,7 +61046,7 @@ exports = module.exports = __webpack_require__(164)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -61759,6 +61760,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['index'],
@@ -61776,6 +61787,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 $("#free-child-" + _this.index).slideUp();
             }
+        });
+        $("#heading-meal-prices-" + this.index).hover(function () {
+            $("#meal-prices-" + _this.index).fadeIn(500);
+        }, function () {
+            $("#meal-prices-" + _this.index).fadeOut(100);
         });
     },
     methods: {
@@ -62117,7 +62133,112 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(0),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "form-group col-lg-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card-header",
+                attrs: { role: "tab", id: "heading-prices-" + _vm.index }
+              },
+              [
+                _c("h5", { staticClass: "mb-0" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "collapsed btn btn-primary",
+                      attrs: {
+                        "data-toggle": "collapse",
+                        href: "#prices-" + _vm.index,
+                        "aria-expanded": "false",
+                        "aria-controls": "prices-" + _vm.index
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                Show Prices\n                            "
+                      )
+                    ]
+                  )
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "collapse",
+                attrs: {
+                  id: "prices-" + _vm.index,
+                  role: "tabpanel",
+                  "aria-labelledby": "heading-prices-" + _vm.index
+                }
+              },
+              [
+                _c("div", { staticClass: "card-block" }, [
+                  _c(
+                    "table",
+                    { staticClass: "table table-striped table-bordered" },
+                    [
+                      _c("thead", [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", { attrs: { scope: "col" } }),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Full (incl. meals)")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Partial (per day, incl. meals)")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Full (incl. meals)")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Partial (per day, incl. meals)")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Per day, excl. meals ("),
+                            _c(
+                              "span",
+                              {
+                                attrs: {
+                                  id: "heading-meal-prices-" + _vm.index
+                                }
+                              },
+                              [_vm._v("Meal Prices")]
+                            ),
+                            _vm._v(
+                              ")\n                                        "
+                            ),
+                            _c(
+                              "table",
+                              {
+                                staticClass:
+                                  "table table-striped table-bordered",
+                                attrs: { id: "meal-prices-" + _vm.index }
+                              },
+                              [_vm._m(1), _vm._v(" "), _vm._m(2)]
+                            )
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(3)
+                    ]
+                  )
+                ])
+              ]
+            )
+          ])
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "form-group col-lg-6" }, [
@@ -62156,16 +62277,14 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(1),
+      _vm._m(4),
       _vm._v(" "),
       _c(
         "div",
         { staticClass: "form-check", attrs: { id: "free-child-" + _vm.index } },
-        [_vm._m(2)]
+        [_vm._m(5)]
       )
-    ]),
-    _vm._v(" "),
-    _vm._m(3)
+    ])
   ])
 }
 var staticRenderFns = [
@@ -62173,115 +62292,129 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "form-group col-lg-12" }, [
-        _c("h4", [_vm._v("Prices")]),
+    return _c("tr", [
+      _c("th", { attrs: { scope: "col" } }),
+      _vm._v(" "),
+      _c("th", { attrs: { colspan: "2", scope: "col" } }, [_vm._v("Regular")]),
+      _vm._v(" "),
+      _c("th", { attrs: { colspan: "2", scope: "col" } }, [_vm._v("Deluxe")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("No Accommodation")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }),
         _vm._v(" "),
-        _c("table", { staticClass: "table table-striped table-bordered" }, [
-          _c("thead", [
-            _c("tr", [
-              _c("th", { attrs: { scope: "col" } }),
-              _vm._v(" "),
-              _c("th", { attrs: { colspan: "2", scope: "col" } }, [
-                _vm._v("Regular")
-              ]),
-              _vm._v(" "),
-              _c("th", { attrs: { colspan: "2", scope: "col" } }, [
-                _vm._v("Deluxe")
-              ]),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [
-                _vm._v("No Accommodation")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", { attrs: { scope: "col" } }),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [
-                _vm._v("Full (incl. meals)")
-              ]),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [
-                _vm._v("Partial (per day, incl. meals)")
-              ]),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [
-                _vm._v("Full (incl. meals)")
-              ]),
-              _vm._v(" "),
-              _c("th", { attrs: { scope: "col" } }, [
-                _vm._v("Partial (per day, incl. meals)")
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("th", { attrs: { scope: "row" } }, [
-                _vm._v("Adults and children over 13")
-              ]),
-              _vm._v(" "),
-              _c("td", [_vm._v("190 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("50 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("300 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("80 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("6 euros")])
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", { attrs: { scope: "row" } }, [
-                _vm._v("Children under 2")
-              ]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Free")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Free")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Free")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Free")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Free")])
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", { attrs: { scope: "row" } }, [
-                _vm._v("Children from 3 to 5 (50%)")
-              ]),
-              _vm._v(" "),
-              _c("td", [_vm._v("95 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("25 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("150 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("40 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("6 euros")])
-            ]),
-            _vm._v(" "),
-            _c("tr", [
-              _c("th", { attrs: { scope: "row" } }, [
-                _vm._v("Children from 6 to 12 (30%)")
-              ]),
-              _vm._v(" "),
-              _c("td", [_vm._v("133 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("35 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("210 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("64 euros")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("6 euros")])
-            ])
-          ])
-        ])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Lunch")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Dinner")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tbody", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "row" } }, [
+          _vm._v("Adults and children over 13")
+        ]),
+        _vm._v(" "),
+        _c("td", [_vm._v("9 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("12 euros")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { attrs: { scope: "row" } }, [_vm._v("Children from 3 to 5")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("6 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("7,20 euros")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { attrs: { scope: "row" } }, [
+          _vm._v("Children from 6 to 12")
+        ]),
+        _vm._v(" "),
+        _c("td", [_vm._v("7 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("9 euros")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tbody", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "row" } }, [
+          _vm._v("Adults and children over 13")
+        ]),
+        _vm._v(" "),
+        _c("td", [_vm._v("190 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("50 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("300 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("80 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("6 euros")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { attrs: { scope: "row" } }, [_vm._v("Children under 2")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Free")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Free")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Free")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Free")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Free")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { attrs: { scope: "row" } }, [
+          _vm._v("Children from 3 to 5 (50%)")
+        ]),
+        _vm._v(" "),
+        _c("td", [_vm._v("95 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("25 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("150 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("40 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("6 euros")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { attrs: { scope: "row" } }, [
+          _vm._v("Children from 6 to 12 (30%)")
+        ]),
+        _vm._v(" "),
+        _c("td", [_vm._v("133 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("35 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("210 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("64 euros")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("6 euros")])
       ])
     ])
   },
@@ -62311,64 +62444,6 @@ var staticRenderFns = [
       _vm._v(
         "\n                This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per\n                parent)\n            "
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("h3", [_vm._v("Meals (reservation required)")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "form-group col-lg-12" }, [
-          _c("h4", [_vm._v("Prices")]),
-          _vm._v(" "),
-          _c("table", { staticClass: "table table-striped table-bordered" }, [
-            _c("thead", [
-              _c("tr", [
-                _c("th", { attrs: { scope: "col" } }),
-                _vm._v(" "),
-                _c("th", { attrs: { scope: "col" } }, [_vm._v("Lunch")]),
-                _vm._v(" "),
-                _c("th", { attrs: { scope: "col" } }, [_vm._v("Dinner")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("tbody", [
-              _c("tr", [
-                _c("th", { attrs: { scope: "row" } }, [
-                  _vm._v("Adults and children over 13")
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v("9 euros")]),
-                _vm._v(" "),
-                _c("td", [_vm._v("12 euros")])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("th", { attrs: { scope: "row" } }, [
-                  _vm._v("Children from 3 to 5")
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v("6 euros")]),
-                _vm._v(" "),
-                _c("td", [_vm._v("7,20 euros")])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("th", { attrs: { scope: "row" } }, [
-                  _vm._v("Children from 6 to 12")
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v("7 euros")]),
-                _vm._v(" "),
-                _c("td", [_vm._v("9 euros")])
-              ])
-            ])
-          ])
-        ])
-      ])
     ])
   }
 ]

@@ -8399,6 +8399,17 @@ button.close {
   cursor: pointer;
 }
 
+#peopleContainer table[id^="meal-prices-"] {
+  width: 400px;
+  float: left;
+  position: absolute;
+  display: none;
+}
+
+#peopleContainer span[id^="heading-meal-prices-"] {
+  color: #7da8c3;
+}
+
 .daterangepicker {
   position: absolute;
   color: inherit;
