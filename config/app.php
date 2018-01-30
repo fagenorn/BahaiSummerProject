@@ -171,11 +171,11 @@ return [
         /*
          * Application Service Providers...
          */
-        SummerSchool\Providers\AppServiceProvider::class,
-        SummerSchool\Providers\AuthServiceProvider::class,
-        // SummerSchool\Providers\BroadcastServiceProvider::class,
-        SummerSchool\Providers\EventServiceProvider::class,
-        SummerSchool\Providers\RouteServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
