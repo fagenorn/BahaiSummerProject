@@ -21,7 +21,7 @@ class Participant extends AbstractWidget
      */
     public function run()
     {
-        $count = \App\Group::count();
+        $count = \App\Participant::count();
         $string = str_plural('Participant', $count);
 
         return view('voyager::dimmer', array_merge($this->config, [
@@ -30,7 +30,7 @@ class Participant extends AbstractWidget
             'text' => "You have " . $count . " " . str_plural('participant', $count) . " registered.",
             'button' => [
                 'text' => "View all participants",
-                'link' => route('voyager.groups.index'),
+                'link' => route('voyager.participants.index'),
             ],
             'image' => '/images/splash-participant-widget.jpg',
         ]));

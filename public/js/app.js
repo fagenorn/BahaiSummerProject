@@ -60934,28 +60934,37 @@ webpackContext.id = 159;
 /* 160 */
 /***/ (function(module, exports) {
 
-var start_date = "07/06/2018";
-var end_date = "07/10/2018";
+var start_date = "2018-07-06";
+var end_date = "2018-07-10";
 
 initializeDates = function initializeDates() {
     $("[rel=tooltip]").tooltip({ html: true });
     $('input[type="daterange-single-dob"]').each(function () {
         if (!this.value) $(this).daterangepicker({
+            "locale": {
+                "format": "YYYY-MM-DD"
+            },
             "forceParse": false,
             "singleDatePicker": true,
-            "showDropdowns": true
+            "showDropdowns": true,
+            "autoUpdateInput": false
         });
     });
 
     $('input[type="daterange-single-stay"]').each(function () {
         if (!this.value) $(this).daterangepicker({
+            "locale": {
+                "format": "YYYY-MM-DD"
+            },
             "forceParse": false,
             "singleDatePicker": true,
             "showDropdowns": true,
             "startDate": start_date,
             "endDate": end_date,
             "minDate": start_date,
-            "maxDate": end_date
+            "maxDate": end_date,
+            "autoUpdateInput": false
+
         });
     });
 };
@@ -61046,7 +61055,7 @@ exports = module.exports = __webpack_require__(164)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -61770,6 +61779,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['index'],
@@ -61778,15 +61795,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         initializeDates();
-        $("input[name=dob-" + this.index + "]").on('apply.daterangepicker', function () {
-            var dob = $("input[name=dob-" + _this.index + "]").data("daterangepicker").startDate;
+        $("input[name=rows\\[" + this.index + "\\]\\[dob\\]]").on('apply.daterangepicker', function (e, picker) {
+            picker.element.val(picker.startDate.format(picker.locale.format));
+            var dob = $("input[name=rows\\[" + _this.index + "\\]\\[dob\\]]").data("daterangepicker").startDate;
             var age = Math.floor((new Date() - dob) / (365.25 * 24 * 60 * 60 * 1000));
             console.log(age);
             if (age <= 15) {
                 $("#free-child-" + _this.index).slideDown();
             } else {
                 $("#free-child-" + _this.index).slideUp();
+                $("input[name=rows\\[" + _this.index + "\\]\\[acc_free_parent\\]]").prop('checked', false);
             }
+        });
+        $("input[name=rows\\[" + this.index + "\\]\\[arrival_date\\]]").on('apply.daterangepicker', function (e, picker) {
+            picker.element.val(picker.startDate.format(picker.locale.format));
+        });
+        $("input[name=rows\\[" + this.index + "\\]\\[departure_date\\]]").on('apply.daterangepicker', function (e, picker) {
+            picker.element.val(picker.startDate.format(picker.locale.format));
         });
         $("#heading-meal-prices-" + this.index).hover(function () {
             $("#meal-prices-" + _this.index).fadeIn(500);
@@ -61822,7 +61847,11 @@ var render = function() {
             _vm._v("First Name\n                    "),
             _c("input", {
               staticClass: "form-control",
-              attrs: { name: "fName-" + _vm.index, type: "text" }
+              attrs: {
+                required: "",
+                name: "rows[" + _vm.index + "][first_name]",
+                type: "text"
+              }
             })
           ])
         ]),
@@ -61832,7 +61861,11 @@ var render = function() {
             _vm._v("Name\n                    "),
             _c("input", {
               staticClass: "form-control",
-              attrs: { name: "name-" + _vm.index, type: "text" }
+              attrs: {
+                required: "",
+                name: "rows[" + _vm.index + "][last_name]",
+                type: "text"
+              }
             })
           ])
         ])
@@ -61844,7 +61877,11 @@ var render = function() {
             _vm._v("Date of Birth\n                    "),
             _c("input", {
               staticClass: "form-control",
-              attrs: { name: "dob-" + _vm.index, type: "daterange-single-dob" }
+              attrs: {
+                required: "",
+                name: "rows[" + _vm.index + "][dob]",
+                type: "daterange-single-dob"
+              }
             })
           ])
         ]),
@@ -61856,7 +61893,7 @@ var render = function() {
               "select",
               {
                 staticClass: "form-control",
-                attrs: { name: "gender-" + _vm.index }
+                attrs: { required: "", name: "rows[" + _vm.index + "][gender]" }
               },
               [
                 _c(
@@ -61868,9 +61905,9 @@ var render = function() {
                   [_vm._v(" -- select an option --")]
                 ),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "M" } }, [_vm._v("Male")]),
+                _c("option", { attrs: { value: "0" } }, [_vm._v("Male")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "F" } }, [_vm._v("Female")])
+                _c("option", { attrs: { value: "1" } }, [_vm._v("Female")])
               ]
             )
           ])
@@ -61885,16 +61922,17 @@ var render = function() {
               "select",
               {
                 staticClass: "form-control",
-                attrs: { name: "language-" + _vm.index }
+                attrs: {
+                  required: "",
+                  name: "rows[" + _vm.index + "][language]"
+                }
               },
               [
-                _c("option", { attrs: { value: "EN" } }, [_vm._v("English")]),
+                _c("option", { attrs: { value: "0" } }, [_vm._v("English")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "NL" } }, [
-                  _vm._v("Nederlands")
-                ]),
+                _c("option", { attrs: { value: "1" } }, [_vm._v("Nederlands")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "FR" } }, [_vm._v("Français")])
+                _c("option", { attrs: { value: "2" } }, [_vm._v("Français")])
               ]
             )
           ])
@@ -61907,7 +61945,7 @@ var render = function() {
               "select",
               {
                 staticClass: "form-control",
-                attrs: { name: "diet-" + _vm.index }
+                attrs: { required: "", name: "rows[" + _vm.index + "][diet]" }
               },
               [
                 _c(
@@ -61919,17 +61957,13 @@ var render = function() {
                   [_vm._v(" -- select an option --")]
                 ),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "standard" } }, [
-                  _vm._v("Standard")
-                ]),
+                _c("option", { attrs: { value: "0" } }, [_vm._v("Standard")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "vegetarian" } }, [
-                  _vm._v("Vegetarian")
-                ]),
+                _c("option", { attrs: { value: "1" } }, [_vm._v("Vegetarian")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "halal" } }, [_vm._v("Halal")]),
+                _c("option", { attrs: { value: "2" } }, [_vm._v("Halal")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "self-catering" } }, [
+                _c("option", { attrs: { value: "3" } }, [
                   _vm._v("Self-catering")
                 ])
               ]
@@ -61957,10 +61991,10 @@ var render = function() {
               _c("input", {
                 staticClass: "form-check-input",
                 attrs: {
-                  name: "stay-" + _vm.index,
+                  name: "rows[" + _vm.index + "][full_stay]",
                   type: "radio",
                   checked: "",
-                  value: "entire"
+                  value: "1"
                 },
                 on: { change: _vm.hideMeals }
               }),
@@ -61975,9 +62009,9 @@ var render = function() {
               _c("input", {
                 staticClass: "form-check-input",
                 attrs: {
-                  name: "stay-" + _vm.index,
+                  name: "rows[" + _vm.index + "][full_stay]",
                   type: "radio",
-                  value: "partial"
+                  value: "0"
                 },
                 on: { change: _vm.showMeals }
               }),
@@ -61997,7 +62031,7 @@ var render = function() {
                   _c("input", {
                     staticClass: "form-control",
                     attrs: {
-                      name: "daysArrival-" + _vm.index,
+                      name: "rows[" + _vm.index + "][arrival_date]",
                       type: "daterange-single-stay"
                     }
                   })
@@ -62009,10 +62043,9 @@ var render = function() {
                   _c("input", {
                     staticClass: "form-check-input",
                     attrs: {
-                      checked: "",
                       type: "radio",
-                      name: "arrivalMeal-" + _vm.index,
-                      value: "arrivalLunch"
+                      name: "rows[" + _vm.index + "][arrival_meal]",
+                      value: "0"
                     }
                   }),
                   _vm._v(
@@ -62027,8 +62060,8 @@ var render = function() {
                     staticClass: "form-check-input",
                     attrs: {
                       type: "radio",
-                      name: "arrivalMeal-" + _vm.index,
-                      value: "arrivalDinner"
+                      name: "rows[" + _vm.index + "][arrival_meal]",
+                      value: "1"
                     }
                   }),
                   _vm._v(
@@ -62043,8 +62076,8 @@ var render = function() {
                     staticClass: "form-check-input",
                     attrs: {
                       type: "radio",
-                      name: "arrivalMeal-" + _vm.index,
-                      value: "arrivalNoMeal"
+                      name: "rows[" + _vm.index + "][arrival_meal]",
+                      value: "2"
                     }
                   }),
                   _vm._v(
@@ -62063,7 +62096,7 @@ var render = function() {
                   _c("input", {
                     staticClass: "form-control",
                     attrs: {
-                      name: "daysDeparture-" + _vm.index,
+                      name: "rows[" + _vm.index + "][departure_date]",
                       type: "daterange-single-stay"
                     }
                   })
@@ -62075,10 +62108,9 @@ var render = function() {
                   _c("input", {
                     staticClass: "form-check-input",
                     attrs: {
-                      checked: "",
                       type: "radio",
-                      name: "departurelMeal-" + _vm.index,
-                      value: "departureLunch"
+                      name: "rows[" + _vm.index + "][departure_meal]",
+                      value: "0"
                     }
                   }),
                   _vm._v(
@@ -62093,8 +62125,8 @@ var render = function() {
                     staticClass: "form-check-input",
                     attrs: {
                       type: "radio",
-                      name: "departurelMeal-" + _vm.index,
-                      value: "departureDinner"
+                      name: "rows[" + _vm.index + "][departure_meal]",
+                      value: "1"
                     }
                   }),
                   _vm._v(
@@ -62109,8 +62141,8 @@ var render = function() {
                     staticClass: "form-check-input",
                     attrs: {
                       type: "radio",
-                      name: "departurelMeal-" + _vm.index,
-                      value: "departureNoMeal"
+                      name: "rows[" + _vm.index + "][departure_meal]",
+                      value: "2"
                     }
                   }),
                   _vm._v(
@@ -62248,7 +62280,10 @@ var render = function() {
               "select",
               {
                 staticClass: "form-control",
-                attrs: { name: "accommodation-" + _vm.index }
+                attrs: {
+                  required: "",
+                  name: "rows[" + _vm.index + "][acc_type]"
+                }
               },
               [
                 _c(
@@ -62260,15 +62295,11 @@ var render = function() {
                   [_vm._v(" -- select an option --")]
                 ),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "standard" } }, [
-                  _vm._v("Standard")
-                ]),
+                _c("option", { attrs: { value: "0" } }, [_vm._v("Standard")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "deluxe" } }, [
-                  _vm._v("Deluxe")
-                ]),
+                _c("option", { attrs: { value: "1" } }, [_vm._v("Deluxe")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "none" } }, [
+                _c("option", { attrs: { value: "2" } }, [
                   _vm._v("No Accommodation")
                 ])
               ]
@@ -62277,12 +62308,54 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(4),
+      _c("div", { staticClass: "form-check" }, [
+        _c("label", { staticClass: "form-check-label" }, [
+          _c("input", {
+            attrs: {
+              type: "hidden",
+              name: "rows[" + _vm.index + "][acc_single_room]",
+              value: "0"
+            }
+          }),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-check-input",
+            attrs: {
+              name: "rows[" + _vm.index + "][acc_single_room]",
+              type: "checkbox",
+              value: "1"
+            }
+          }),
+          _vm._v("\n                Single-room preferred\n            ")
+        ])
+      ]),
       _vm._v(" "),
       _c(
         "div",
         { staticClass: "form-check", attrs: { id: "free-child-" + _vm.index } },
-        [_vm._m(5)]
+        [
+          _c("label", { staticClass: "form-check-label" }, [
+            _c("input", {
+              attrs: {
+                type: "hidden",
+                name: "rows[" + _vm.index + "][acc_free_parent]",
+                value: "0"
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-check-input",
+              attrs: {
+                type: "checkbox",
+                name: "rows[" + _vm.index + "][acc_free_parent]",
+                value: "1"
+              }
+            }),
+            _vm._v(
+              "\n                This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per\n                parent)\n            "
+            )
+          ])
+        ]
       )
     ])
   ])
@@ -62416,34 +62489,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("td", [_vm._v("6 euros")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("label", { staticClass: "form-check-label" }, [
-        _c("input", {
-          staticClass: "form-check-input",
-          attrs: { type: "checkbox", value: "singlePreferred" }
-        }),
-        _vm._v("\n                Single-room preferred\n            ")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "form-check-label" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: { type: "checkbox", value: "freeChild" }
-      }),
-      _vm._v(
-        "\n                This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per\n                parent)\n            "
-      )
     ])
   }
 ]

@@ -5,26 +5,35 @@
         <h1 class="display-3">Welcome</h1>
         <p class="lead">The online registration form for the Belgian Bahá'í Summer School.</p>
     </div>
-    {!! Form::open(['url' => 'register']) !!}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    {!! Form::open(['url' => ['register'], 'method' => 'post', 'role'=> 'form', 'class' => 'form']) !!}
     <div class="col-lg-12 well">
         <div class="form-row">
             <div class="form-group col-lg-6">
-                {{Form::label('family', 'Family Name')}}
-                {{Form::text('family', null, ['class' => 'form-control'])}}
+                {{Form::label('last_name', 'Family Name')}}
+                {{Form::text('last_name', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
             <div class="form-group col-lg-6">
                 {{Form::label('address', 'Address')}}
-                {{Form::text('address', null, ['class' => 'form-control'])}}
+                {{Form::text('address', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-lg-6">
-                {{Form::label('tel', 'Tel/GSM')}}
-                {{Form::text('tel', null, ['class' => 'form-control'])}}
+                {{Form::label('phone', 'Tel/GSM')}}
+                {{Form::text('phone', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
             <div class="form-group col-lg-6">
                 {{Form::label('email', 'Email')}}
-                {{Form::email('email', null, ['class' => 'form-control'])}}
+                {{Form::email('email', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
         </div>
     </div>

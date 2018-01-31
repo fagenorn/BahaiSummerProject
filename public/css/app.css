@@ -8408,6 +8408,7 @@ button.close {
 
 #peopleContainer span[id^="heading-meal-prices-"] {
   color: #7da8c3;
+  cursor: default;
 }
 
 .daterangepicker {

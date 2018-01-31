@@ -7,8 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    public function users()
-    {
-        return $this->hasMany('App\Participant');
-    }
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'last_name', 'address', 'email', 'phone'
+    ];
+
+//    public function users()
+//    {
+//        return $this->hasMany(Participant::class, 'group_id', 'id');
+//    }
 }

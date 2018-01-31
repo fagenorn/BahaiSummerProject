@@ -12,10 +12,12 @@
 */
 
 Route::get('/', function () {
-    return view('index');
+    return redirect('register/create');
 });
-
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+
+Route::post('register', 'RegisterController@store');
+Route::get('register/create', 'RegisterController@create');

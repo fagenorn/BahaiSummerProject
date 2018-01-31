@@ -5,46 +5,46 @@
             <div class="row">
                 <div class="form-group col-lg-6">
                     <label>First Name
-                        <input class="form-control" :name="`fName-${index}`" type="text"></label>
+                        <input required class="form-control" :name="`rows[${index}][first_name]`" type="text"></label>
                 </div>
                 <div class="form-group col-lg-6">
                     <label>Name
-                        <input class="form-control" :name="`name-${index}`" type="text"></label>
+                        <input required class="form-control" :name="`rows[${index}][last_name]`" type="text"></label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-6">
                     <label>Date of Birth
-                        <input class="form-control" :name="`dob-${index}`"
+                        <input required class="form-control" :name="`rows[${index}][dob]`"
                                type="daterange-single-dob"></label>
                 </div>
                 <div class="form-group col-lg-6">
                     <label>Gender
-                        <select class="form-control" :name="`gender-${index}`">
+                        <select required class="form-control" :name="`rows[${index}][gender]`">
                             <option style="display:none;" disabled selected value> -- select an option --</option>
-                            <option value="M">Male</option>
-                            <option value="F">Female</option>
+                            <option value="0">Male</option>
+                            <option value="1">Female</option>
                         </select></label>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-6">
                     <label>Attendance Language
-                        <select class="form-control" :name="`language-${index}`">
-                            <option value="EN">English</option>
-                            <option value="NL">Nederlands</option>
-                            <option value="FR">Français</option>
+                        <select required class="form-control" :name="`rows[${index}][language]`">
+                            <option value="0">English</option>
+                            <option value="1">Nederlands</option>
+                            <option value="2">Français</option>
                         </select>
                     </label>
                 </div>
                 <div class="form-group col-lg-6">
                     <label>Diet
-                        <select class="form-control" :name="`diet-${index}`">
+                        <select required class="form-control" :name="`rows[${index}][diet]`">
                             <option style="display:none;" disabled selected value> -- select an option --</option>
-                            <option value="standard">Standard</option>
-                            <option value="vegetarian">Vegetarian</option>
-                            <option value="halal">Halal</option>
-                            <option value="self-catering">Self-catering</option>
+                            <option value="0">Standard</option>
+                            <option value="1">Vegetarian</option>
+                            <option value="2">Halal</option>
+                            <option value="3">Self-catering</option>
                         </select>
                     </label>
                 </div>
@@ -58,15 +58,17 @@
                     <h4>Duration of Stay</h4>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" @change="hideMeals" :name="`stay-${index}`" type="radio"
-                                   checked value="entire">
+                            <input class="form-check-input" @change="hideMeals" :name="`rows[${index}][full_stay]`"
+                                   type="radio"
+                                   checked value="1">
                             Entire Stay
                         </label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" @change="showMeals" :name="`stay-${index}`" type="radio"
-                                   value="partial">
+                            <input class="form-check-input" @change="showMeals" :name="`rows[${index}][full_stay]`"
+                                   type="radio"
+                                   value="0">
                             Partial Stay
                         </label>
                     </div>
@@ -75,27 +77,28 @@
                             <h4>Arrival</h4>
                             <div class="form-group">
                                 <label>Days
-                                    <input class="form-control" :name="`daysArrival-${index}`"
+                                    <input class="form-control" :name="`rows[${index}][arrival_date]`"
                                            type="daterange-single-stay"></label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" checked type="radio" :name="`arrivalMeal-${index}`"
-                                           value="arrivalLunch">
+                                    <input class="form-check-input" type="radio"
+                                           :name="`rows[${index}][arrival_meal]`"
+                                           value="0">
                                     Before Lunch
                                 </label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" :name="`arrivalMeal-${index}`"
-                                           value="arrivalDinner">
+                                    <input class="form-check-input" type="radio" :name="`rows[${index}][arrival_meal]`"
+                                           value="1">
                                     Before Dinner
                                 </label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" :name="`arrivalMeal-${index}`"
-                                           value="arrivalNoMeal">
+                                    <input class="form-check-input" type="radio" :name="`rows[${index}][arrival_meal]`"
+                                           value="2">
                                     After Dinner
                                 </label>
                             </div>
@@ -104,28 +107,30 @@
                             <h4>Departure</h4>
                             <div class="form-group">
                                 <label>Days
-                                    <input class="form-control" :name="`daysDeparture-${index}`"
+                                    <input class="form-control" :name="`rows[${index}][departure_date]`"
                                            type="daterange-single-stay"></label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" checked type="radio"
-                                           :name="`departurelMeal-${index}`"
-                                           value="departureLunch">
+                                    <input class="form-check-input" type="radio"
+                                           :name="`rows[${index}][departure_meal]`"
+                                           value="0">
                                     Before Lunch
                                 </label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" :name="`departurelMeal-${index}`"
-                                           value="departureDinner">
+                                    <input class="form-check-input" type="radio"
+                                           :name="`rows[${index}][departure_meal]`"
+                                           value="1">
                                     Before Dinner
                                 </label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" :name="`departurelMeal-${index}`"
-                                           value="departureNoMeal">
+                                    <input class="form-check-input" type="radio"
+                                           :name="`rows[${index}][departure_meal]`"
+                                           value="2">
                                     After Dinner
                                 </label>
                             </div>
@@ -240,24 +245,27 @@
             <div class="row">
                 <div class="form-group col-lg-6">
                     <label>Type
-                        <select class="form-control" :name="`accommodation-${index}`">
+                        <select required class="form-control" :name="`rows[${index}][acc_type]`">
                             <option style="display:none;" disabled selected value> -- select an option --</option>
-                            <option value="standard">Standard</option>
-                            <option value="deluxe">Deluxe</option>
-                            <option value="none">No Accommodation</option>
+                            <option value="0">Standard</option>
+                            <option value="1">Deluxe</option>
+                            <option value="2">No Accommodation</option>
                         </select>
                     </label>
                 </div>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" value="singlePreferred">
+                    <input type='hidden' :name="`rows[${index}][acc_single_room]`" value='0'>
+                    <input class="form-check-input" :name="`rows[${index}][acc_single_room]`" type="checkbox" value="1">
                     Single-room preferred
                 </label>
             </div>
             <div :id="`free-child-${index}`" class="form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" value="freeChild"/>
+                    <input type='hidden' :name="`rows[${index}][acc_free_parent]`" value='0'>
+                    <input class="form-check-input" type="checkbox" :name="`rows[${index}][acc_free_parent]`"
+                           value="1"/>
                     This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per
                     parent)
                 </label>
@@ -272,15 +280,23 @@
         name: "person-form",
         mounted: function () {
             initializeDates();
-            $("input[name=dob-" + this.index + "]").on('apply.daterangepicker', () => {
-                let dob = $("input[name=dob-" + this.index + "]").data("daterangepicker").startDate;
+            $("input[name=rows\\[" + this.index + "\\]\\[dob\\]]").on('apply.daterangepicker', (e, picker) => {
+                picker.element.val(picker.startDate.format(picker.locale.format));
+                let dob = $("input[name=rows\\[" + this.index + "\\]\\[dob\\]]").data("daterangepicker").startDate;
                 let age = Math.floor((new Date() - dob) / (365.25 * 24 * 60 * 60 * 1000));
                 console.log(age);
                 if (age <= 15) {
                     $("#free-child-" + this.index).slideDown();
                 } else {
                     $("#free-child-" + this.index).slideUp();
+                    $("input[name=rows\\[" + this.index + "\\]\\[acc_free_parent\\]]").prop('checked', false);
                 }
+            });
+            $("input[name=rows\\[" + this.index + "\\]\\[arrival_date\\]]").on('apply.daterangepicker', (e, picker) => {
+                picker.element.val(picker.startDate.format(picker.locale.format));
+            });
+            $("input[name=rows\\[" + this.index + "\\]\\[departure_date\\]]").on('apply.daterangepicker', (e, picker) => {
+                picker.element.val(picker.startDate.format(picker.locale.format));
             });
             $("#heading-meal-prices-" + this.index).hover(() => {
                 $("#meal-prices-" + this.index).fadeIn(500);
