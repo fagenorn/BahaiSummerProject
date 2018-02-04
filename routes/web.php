@@ -11,6 +11,10 @@
 |
 */
 
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
+
 Route::any('/', function () {
     return redirect(session('locale') ?: Lang::getLocale());
 });
@@ -27,10 +31,6 @@ Route::prefix('{lang?}')->middleware('locale')->group(function () {
     Route::get('register/success', function () {
         return view('success');
     });
-});
-
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
 });
 
 Route::post('register', 'RegisterController@store');
