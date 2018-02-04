@@ -28,7 +28,7 @@ require('./custom');
 Vue.component('person-form', require('./components/PersonForm.vue'));
 
 window.onload = function () {
-    var people = new Vue({
+    new Vue({
         el: '#peopleContainer',
         data: {
             people: [{destroyed: false}]

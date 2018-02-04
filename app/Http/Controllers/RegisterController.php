@@ -18,7 +18,7 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'last_name' => 'required|alpha',
+            'last_name' => 'required',
             'address' => 'required',
             'email' => 'required|email',
             'phone' => 'required|phone',
@@ -72,10 +72,10 @@ class RegisterController extends Controller
                 'acc_single_room' => $row['acc_single_room'],
                 'acc_free_parent' => $row['acc_free_parent'],
                 'full_stay' => $row['full_stay'],
-                'arrival_date' => isset($row['arrival_date']) ? $row['arrival_date'] : null,
-                'arrival_meal' => isset($row['arrival_meal']) ? $row['arrival_meal'] : null,
-                'departure_date' => isset($row['departure_date']) ? $row['departure_date'] : null,
-                'departure_meal' => isset($row['departure_meal']) ? $row['departure_meal'] : null,
+                'arrival_date' => isset($row['arrival_date']) && $row['full_stay'] == "0" ? $row['arrival_date'] : null,
+                'arrival_meal' => isset($row['arrival_meal']) && $row['full_stay'] == "0" ? $row['arrival_meal'] : null,
+                'departure_date' => isset($row['departure_date']) && $row['full_stay'] == "0" ? $row['departure_date'] : null,
+                'departure_meal' => isset($row['departure_meal']) && $row['full_stay'] == "0" ? $row['departure_meal'] : null,
             ]);
         }
 

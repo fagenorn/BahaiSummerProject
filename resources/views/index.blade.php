@@ -42,7 +42,7 @@
             <div v-if="index !== lastVisableIndex" class="divider"></div>
         </div>
         <button class="btn btn-primary pull-right" type="button" v-on:click="addPerson()">Add Person</button>
-        {{Form::submit('Submit', ['class' => 'btn btn-primary btn-submit'])}}
+        {{Form::submit('Submit', ['class' => 'btn btn-primary', 'id' =>'submit'])}}
     </div>
     {!! Form::close() !!}
 @endsection

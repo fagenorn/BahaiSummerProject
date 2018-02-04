@@ -1,12 +1,13 @@
 let start_date = "2018-07-06";
 let end_date = "2018-07-10";
 
-initializeDates = function () {
-    $(document).ready(function () {
-        $(".btn-submit").click(function (e) {
-            e.preventDefault();
+$(document).ready(function () {
+    let clicked = false;
+    $("#submit").on("click", function (e) {
+        e.preventDefault();
+        if (!clicked) {
+            clicked = true;
             let data = $(".form").serialize();
-
             $.ajax({
                 url: "/register",
                 type: 'POST',
@@ -15,22 +16,27 @@ initializeDates = function () {
                     if (!$.isEmptyObject(data.error)) {
                         printErrorMsg(data.error);
                         window.scrollTo(0, 0);
+                        clicked = false;
                     } else {
                         window.location.href = "success";
                     }
                 }
             });
-        });
-
-        function printErrorMsg(msg) {
-            $(".print-error-msg").show();
-            $(".print-error-msg").find("ul").html('');
-            $(".print-error-msg").css('display', 'block');
-            $.each(msg, function (key, value) {
-                $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
-            });
         }
+        return false;
     });
+
+    function printErrorMsg(msg) {
+        $(".print-error-msg").show();
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display', 'block');
+        $.each(msg, function (key, value) {
+            $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+        });
+    }
+});
+
+initializeDates = function () {
     $("[rel=tooltip]").tooltip({html: true});
     $('input[type="daterange-single-dob"]').each(function () {
         if (!this.value) $(this).daterangepicker({

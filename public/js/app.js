@@ -27491,7 +27491,7 @@ __webpack_require__(160);
 Vue.component('person-form', __webpack_require__(161));
 
 window.onload = function () {
-    var people = new Vue({
+    new Vue({
         el: '#peopleContainer',
         data: {
             people: [{ destroyed: false }]
@@ -60937,12 +60937,13 @@ webpackContext.id = 159;
 var start_date = "2018-07-06";
 var end_date = "2018-07-10";
 
-initializeDates = function initializeDates() {
-    $(document).ready(function () {
-        $(".btn-submit").click(function (e) {
-            e.preventDefault();
+$(document).ready(function () {
+    var clicked = false;
+    $("#submit").on("click", function (e) {
+        e.preventDefault();
+        if (!clicked) {
+            clicked = true;
             var data = $(".form").serialize();
-
             $.ajax({
                 url: "/register",
                 type: 'POST',
@@ -60951,22 +60952,27 @@ initializeDates = function initializeDates() {
                     if (!$.isEmptyObject(data.error)) {
                         printErrorMsg(data.error);
                         window.scrollTo(0, 0);
+                        clicked = false;
                     } else {
                         window.location.href = "success";
                     }
                 }
             });
-        });
-
-        function printErrorMsg(msg) {
-            $(".print-error-msg").show();
-            $(".print-error-msg").find("ul").html('');
-            $(".print-error-msg").css('display', 'block');
-            $.each(msg, function (key, value) {
-                $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
-            });
         }
+        return false;
     });
+
+    function printErrorMsg(msg) {
+        $(".print-error-msg").show();
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display', 'block');
+        $.each(msg, function (key, value) {
+            $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+        });
+    }
+});
+
+initializeDates = function initializeDates() {
     $("[rel=tooltip]").tooltip({ html: true });
     $('input[type="daterange-single-dob"]').each(function () {
         if (!this.value) $(this).daterangepicker({
