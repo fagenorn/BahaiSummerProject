@@ -17,6 +17,8 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
+        app()->setLocale(session('locale') ?: config('app.fallback_locale'));
+
         $validator = Validator::make($request->all(), [
             'last_name' => 'required',
             'address' => 'required',

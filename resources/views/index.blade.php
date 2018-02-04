@@ -2,8 +2,9 @@
 @include('forms.base')
 @section('content')
     <div class="jumbotron">
-        <h1 class="display-3">Welcome</h1>
-        <p class="lead">The online registration form for the Belgian Bahá'í Summer School.</p>
+        <h1 class="display-3">{{ __('index.welcome') }}</h1>
+        <p class="lead">{{ __('index.welcome_message') }}</p>
+        <p class="pull-right"><a href="/en">en</a>/<a href="/fr">fr</a>/<a href="/nl">nl</a></p>
     </div>
     <div class="alert alert-danger print-error-msg" style="display: none">
         <ul>
@@ -13,21 +14,21 @@
     <div class="col-lg-12 well">
         <div class="form-row">
             <div class="form-group col-lg-6">
-                {{Form::label('last_name', 'Family Name')}}
+                {{Form::label('last_name', __('index.family_name'))}}
                 {{Form::text('last_name', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
             <div class="form-group col-lg-6">
-                {{Form::label('address', 'Address')}}
+                {{Form::label('address', __('index.address'))}}
                 {{Form::text('address', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-lg-6">
-                {{Form::label('phone', 'Tel/GSM')}}
+                {{Form::label('phone', __('index.phone'))}}
                 {{Form::text('phone', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
             <div class="form-group col-lg-6">
-                {{Form::label('email', 'Email')}}
+                {{Form::label('email', __('index.email'))}}
                 {{Form::email('email', null, ['class' => 'form-control', 'required' => 'required'])}}
             </div>
         </div>
@@ -41,8 +42,9 @@
             <person-form :index="index"></person-form>
             <div v-if="index !== lastVisableIndex" class="divider"></div>
         </div>
-        <button class="btn btn-primary pull-right" type="button" v-on:click="addPerson()">Add Person</button>
-        {{Form::submit('Submit', ['class' => 'btn btn-primary', 'id' =>'submit'])}}
+        <button class="btn btn-primary pull-right" type="button"
+                v-on:click="addPerson()">{{ __('index.add_person') }}</button>
+        {{Form::submit(__('index.submit'), ['class' => 'btn btn-primary', 'id' =>'submit'])}}
     </div>
     {!! Form::close() !!}
 @endsection

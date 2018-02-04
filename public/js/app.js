@@ -1911,7 +1911,7 @@ function loadLocale(name) {
         try {
             oldLocale = globalLocale._abbr;
             var aliasedRequire = require;
-            __webpack_require__(159)("./" + name);
+            __webpack_require__(162)("./" + name);
             getSetGlobalLocale(oldLocale);
         } catch (e) {}
     }
@@ -27454,13 +27454,20 @@ return zhTw;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(132);
-module.exports = __webpack_require__(170);
+module.exports = __webpack_require__(173);
 
 
 /***/ }),
 /* 132 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex_i18n__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__vue_i18n_locales_generated_js__ = __webpack_require__(160);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -27469,18 +27476,29 @@ module.exports = __webpack_require__(170);
 
 __webpack_require__(133);
 
-window.Vue = __webpack_require__(155);
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
+var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store();
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vuex_i18n__["a" /* default */].plugin, store);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.i18n.add('en', __WEBPACK_IMPORTED_MODULE_3__vue_i18n_locales_generated_js__["a" /* default */].en);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.i18n.add('nl', __WEBPACK_IMPORTED_MODULE_3__vue_i18n_locales_generated_js__["a" /* default */].nl);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.i18n.add('fr', __WEBPACK_IMPORTED_MODULE_3__vue_i18n_locales_generated_js__["a" /* default */].fr);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.i18n.set('en');
 
 /**
  * Dev tools disabled when in production when compiling to production
  */
-Vue.config.devtools = "development" !== 'production';
-Vue.config.debug = "development" !== 'production';
-Vue.config.silent = "development" === 'production';
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = "development" !== 'production';
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.debug = "development" !== 'production';
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.silent = "development" === 'production';
 
-window.daterangepicker = __webpack_require__(158);
+window.daterangepicker = __webpack_require__(161);
 
-__webpack_require__(160);
+__webpack_require__(163);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -27488,10 +27506,11 @@ __webpack_require__(160);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('person-form', __webpack_require__(161));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('person-form', __webpack_require__(164));
 
 window.onload = function () {
-    new Vue({
+    window.App = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
+        store: store,
         el: '#peopleContainer',
         data: {
             people: [{ destroyed: false }]
@@ -59012,6 +59031,8841 @@ exports.clearImmediate = clearImmediate;
 
 /***/ }),
 /* 158 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Store */
+/* unused harmony export install */
+/* unused harmony export mapState */
+/* unused harmony export mapMutations */
+/* unused harmony export mapGetters */
+/* unused harmony export mapActions */
+/* unused harmony export createNamespacedHelpers */
+/**
+ * vuex v3.0.1
+ * (c) 2017 Evan You
+ * @license MIT
+ */
+var applyMixin = function (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
+
+  if (version >= 2) {
+    Vue.mixin({ beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = typeof options.store === 'function'
+        ? options.store()
+        : options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+  }
+};
+
+var devtoolHook =
+  typeof window !== 'undefined' &&
+  window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook;
+
+  devtoolHook.emit('vuex:init', store);
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
+  });
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  });
+}
+
+/**
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
+/**
+ * Deep copy the given object considering circular structure.
+ * This function caches all nested objects and its copies.
+ * If it detects circular structure, use cached copy to avoid infinite loop.
+ *
+ * @param {*} obj
+ * @param {Array<Object>} cache
+ * @return {*}
+ */
+
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  this._children = Object.create(null);
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors$1 = { namespaced: { configurable: true } };
+
+prototypeAccessors$1.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors$1 );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  if (true) {
+    assertRawModule(path, rawModule);
+  }
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  if (!parent.getChild(key).runtime) { return }
+
+  parent.removeChild(key);
+};
+
+function update (path, targetModule, newModule) {
+  if (true) {
+    assertRawModule(path, newModule);
+  }
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        if (true) {
+          console.warn(
+            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+            'manual reload is needed'
+          );
+        }
+        return
+      }
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+var functionAssert = {
+  assert: function (value) { return typeof value === 'function'; },
+  expected: 'function'
+};
+
+var objectAssert = {
+  assert: function (value) { return typeof value === 'function' ||
+    (typeof value === 'object' && typeof value.handler === 'function'); },
+  expected: 'function or object with "handler" function'
+};
+
+var assertTypes = {
+  getters: functionAssert,
+  mutations: functionAssert,
+  actions: objectAssert
+};
+
+function assertRawModule (path, rawModule) {
+  Object.keys(assertTypes).forEach(function (key) {
+    if (!rawModule[key]) { return }
+
+    var assertOptions = assertTypes[key];
+
+    forEachValue(rawModule[key], function (value, type) {
+      assert(
+        assertOptions.assert(value),
+        makeAssertionMessage(path, key, type, value, assertOptions.expected)
+      );
+    });
+  });
+}
+
+function makeAssertionMessage (path, key, type, value, expected) {
+  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
+  if (path.length > 0) {
+    buf += " in module \"" + (path.join('.')) + "\"";
+  }
+  buf += " is " + (JSON.stringify(value)) + ".";
+  return buf
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #731
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  if (true) {
+    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+    assert(this instanceof Store, "Store must be called with the new operator.");
+  }
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  var state = options.state; if ( state === void 0 ) state = {};
+  if (typeof state === 'function') {
+    state = state() || {};
+  }
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1); });
+
+  if (Vue.config.devtools) {
+    devtoolPlugin(this);
+  }
+};
+
+var prototypeAccessors = { state: { configurable: true } };
+
+prototypeAccessors.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors.state.set = function (v) {
+  if (true) {
+    assert(false, "Use store.replaceState() to explicit replace store state.");
+  }
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    if (true) {
+      console.error(("[vuex] unknown mutation type: " + type));
+    }
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+  this._subscribers.forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (
+    "development" !== 'production' &&
+    options && options.silent
+  ) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    if (true) {
+      console.error(("[vuex] unknown action type: " + type));
+    }
+    return
+  }
+
+  this._actionSubscribers.forEach(function (sub) { return sub(action, this$1.state); });
+
+  return entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload)
+};
+
+Store.prototype.subscribe = function subscribe (fn) {
+  return genericSubscribe(fn, this._subscribers)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn) {
+  return genericSubscribe(fn, this._actionSubscribers)
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  if (true) {
+    assert(typeof getter === 'function', "store.watch only accepts a function.");
+  }
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if (true) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+    assert(path.length > 0, 'cannot register the root module by using registerModule.');
+  }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if (true) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors );
+
+function genericSubscribe (fn, subs) {
+  if (subs.indexOf(fn) < 0) {
+    subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    computed[key] = function () { return fn(store); };
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
+      });
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if ("development" !== 'production' && !store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if ("development" !== 'production' && !store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  var gettersProxy = {};
+
+  var splitPos = namespace.length;
+  Object.keys(store.getters).forEach(function (type) {
+    // skip if the target getter is not match this namespace
+    if (type.slice(0, splitPos) !== namespace) { return }
+
+    // extract local getter type
+    var localType = type.slice(splitPos);
+
+    // Add a port to the getters proxy.
+    // Define as getter property because
+    // we do not want to evaluate the getters in this time.
+    Object.defineProperty(gettersProxy, localType, {
+      get: function () { return store.getters[type]; },
+      enumerable: true
+    });
+  });
+
+  return gettersProxy
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload, cb) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload, cb);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    if (true) {
+      console.error(("[vuex] duplicate getter key: " + type));
+    }
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    if (true) {
+      assert(store._committing, "Do not mutate vuex store state outside mutation handlers.");
+    }
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.length
+    ? path.reduce(function (state, key) { return state[key]; }, state)
+    : state
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  if (true) {
+    assert(typeof type === 'string', ("Expects string as the type, but found " + (typeof type) + "."));
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    if (true) {
+      console.error(
+        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      var commit = this.$store.commit;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
+        if (!module) {
+          return
+        }
+        commit = module.context.commit;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [commit].concat(args))
+        : commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if ("development" !== 'production' && !(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      var dispatch = this.$store.dispatch;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
+        if (!module) {
+          return
+        }
+        dispatch = module.context.dispatch;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [dispatch].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+var createNamespacedHelpers = function (namespace) { return ({
+  mapState: mapState.bind(null, namespace),
+  mapGetters: mapGetters.bind(null, namespace),
+  mapMutations: mapMutations.bind(null, namespace),
+  mapActions: mapActions.bind(null, namespace)
+}); };
+
+function normalizeMap (map) {
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if ("development" !== 'production' && !module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+var index_esm = {
+  Store: Store,
+  install: install,
+  version: '3.0.1',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions,
+  createNamespacedHelpers: createNamespacedHelpers
+};
+
+
+/* harmony default export */ __webpack_exports__["a"] = (index_esm);
+
+
+/***/ }),
+/* 159 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+/* vuex-i18n-store defines a vuex module to store locale translations. Make sure
+** to also include the file vuex-i18n.js to enable easy access to localized
+** strings in your vue components.
+*/
+
+// define a simple vuex module to handle locale translations
+var i18nVuexModule = {
+	namespaced: true,
+	state: {
+		locale: null,
+		fallback: null,
+		translations: {}
+	},
+	mutations: {
+
+		// set the current locale
+		SET_LOCALE: function SET_LOCALE(state, payload) {
+			state.locale = payload.locale;
+		},
+
+
+		// add a new locale
+		ADD_LOCALE: function ADD_LOCALE(state, payload) {
+
+			// reduce the given translations to a single-depth tree
+			var translations = flattenTranslations(payload.translations);
+
+			if (state.translations.hasOwnProperty(payload.locale)) {
+				// get the existing translations
+				var existingTranslations = state.translations[payload.locale];
+				// merge the translations
+				state.translations[payload.locale] = Object.assign({}, existingTranslations, translations);
+			} else {
+				// just set the locale if it does not yet exist
+				state.translations[payload.locale] = translations;
+			}
+
+			// make sure to notify vue of changes (this might break with new vue versions)
+			try {
+				if (state.translations.__ob__) {
+					state.translations.__ob__.dep.notify();
+				}
+			} catch (ex) {}
+		},
+
+
+		// replace existing locale information with new translations
+		REPLACE_LOCALE: function REPLACE_LOCALE(state, payload) {
+
+			// reduce the given translations to a single-depth tree
+			var translations = flattenTranslations(payload.translations);
+
+			// replace the translations entirely
+			state.translations[payload.locale] = translations;
+
+			// make sure to notify vue of changes (this might break with new vue versions)
+			try {
+				if (state.translations.__ob__) {
+					state.translations.__ob__.dep.notify();
+				}
+			} catch (ex) {}
+		},
+
+
+		// remove a locale from the store
+		REMOVE_LOCALE: function REMOVE_LOCALE(state, payload) {
+
+			// check if the given locale is present in the state
+			if (state.translations.hasOwnProperty(payload.locale)) {
+
+				// check if the current locale is the given locale to remvoe
+				if (state.locale === payload.locale) {
+					// reset the current locale
+					state.locale = null;
+				}
+
+				// create a copy of the translations object
+				var translationCopy = Object.assign({}, state.translations);
+
+				// remove the given locale
+				delete translationCopy[payload.locale];
+
+				// set the state to the new object
+				state.translations = translationCopy;
+			}
+		},
+		SET_FALLBACK_LOCALE: function SET_FALLBACK_LOCALE(state, payload) {
+			state.fallback = payload.locale;
+		}
+	},
+	actions: {
+
+		// set the current locale
+		setLocale: function setLocale(context, payload) {
+			context.commit({
+				type: 'SET_LOCALE',
+				locale: payload.locale
+			});
+		},
+
+
+		// add or extend a locale with translations
+		addLocale: function addLocale(context, payload) {
+			context.commit({
+				type: 'ADD_LOCALE',
+				locale: payload.locale,
+				translations: payload.translations
+			});
+		},
+
+
+		// replace locale information
+		replaceLocale: function replaceLocale(context, payload) {
+			context.commit({
+				type: 'REPLACE_LOCALE',
+				locale: payload.locale,
+				translations: payload.translations
+			});
+		},
+
+
+		// remove the given locale translations
+		removeLocale: function removeLocale(context, payload) {
+			context.commit({
+				type: 'REMOVE_LOCALE',
+				locale: payload.locale,
+				translations: payload.translations
+			});
+		},
+		setFallbackLocale: function setFallbackLocale(context, payload) {
+			context.commit({
+				type: 'SET_FALLBACK_LOCALE',
+				locale: payload.locale
+			});
+		}
+	}
+};
+
+// flattenTranslations will convert object trees for translations into a
+// single-depth object tree
+var flattenTranslations = function flattenTranslations(translations) {
+
+	var toReturn = {};
+
+	for (var i in translations) {
+
+		// check if the property is present
+		if (!translations.hasOwnProperty(i)) {
+			continue;
+		}
+
+		// get the type of the property
+		var objType = _typeof(translations[i]);
+
+		// allow unflattened array of strings
+		if (isArray(translations[i])) {
+
+			var count = translations[i].length;
+
+			for (var index = 0; index < count; index++) {
+				var itemType = _typeof(translations[i][index]);
+
+				if (itemType !== 'string') {
+					console.warn('i18n:', 'currently only arrays of strings are fully supported', translations[i]);
+					break;
+				}
+			}
+
+			toReturn[i] = translations[i];
+		} else if (objType == 'object' && objType !== null) {
+
+			var flatObject = flattenTranslations(translations[i]);
+
+			for (var x in flatObject) {
+				if (!flatObject.hasOwnProperty(x)) continue;
+
+				toReturn[i + '.' + x] = flatObject[x];
+			}
+		} else {
+			toReturn[i] = translations[i];
+		}
+	}
+	return toReturn;
+};
+
+// check if the given object is an array
+function isArray(obj) {
+	return !!obj && Array === obj.constructor;
+}
+
+var plurals = {
+	getTranslationIndex: function getTranslationIndex(languageCode, n) {
+		switch (languageCode) {
+			case 'ay': // Aymará
+			case 'bo': // Tibetan
+			case 'cgg': // Chiga
+			case 'dz': // Dzongkha
+			case 'fa': // Persian
+			case 'id': // Indonesian
+			case 'ja': // Japanese
+			case 'jbo': // Lojban
+			case 'ka': // Georgian
+			case 'kk': // Kazakh
+			case 'km': // Khmer
+			case 'ko': // Korean
+			case 'ky': // Kyrgyz
+			case 'lo': // Lao
+			case 'ms': // Malay
+			case 'my': // Burmese
+			case 'sah': // Yakut
+			case 'su': // Sundanese
+			case 'th': // Thai
+			case 'tt': // Tatar
+			case 'ug': // Uyghur
+			case 'vi': // Vietnamese
+			case 'wo': // Wolof
+			case 'zh':
+				// Chinese
+				// 1 form
+				return 0;
+			case 'is':
+				// Icelandic
+				// 2 forms
+				return n % 10 !== 1 || n % 100 === 11 ? 1 : 0;
+			case 'jv':
+				// Javanese
+				// 2 forms
+				return n !== 0 ? 1 : 0;
+			case 'mk':
+				// Macedonian
+				// 2 forms
+				return n === 1 || n % 10 === 1 ? 0 : 1;
+			case 'ach': // Acholi
+			case 'ak': // Akan
+			case 'am': // Amharic
+			case 'arn': // Mapudungun
+			case 'br': // Breton
+			case 'fil': // Filipino
+			case 'fr': // French
+			case 'gun': // Gun
+			case 'ln': // Lingala
+			case 'mfe': // Mauritian Creole
+			case 'mg': // Malagasy
+			case 'mi': // Maori
+			case 'oc': // Occitan
+			case 'pt_BR': // Brazilian Portuguese
+			case 'tg': // Tajik
+			case 'ti': // Tigrinya
+			case 'tr': // Turkish
+			case 'uz': // Uzbek
+			case 'wa': // Walloon
+			/* eslint-disable */
+			/* Disable "Duplicate case label" because there are 2 forms of Chinese plurals */
+			case 'zh':
+				// Chinese
+				/* eslint-enable */
+				// 2 forms
+				return n > 1 ? 1 : 0;
+			case 'lv':
+				// Latvian
+				// 3 forms
+				return n % 10 === 1 && n % 100 !== 11 ? 0 : n !== 0 ? 1 : 2;
+			case 'lt':
+				// Lithuanian
+				// 3 forms
+				return n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+			case 'be': // Belarusian
+			case 'bs': // Bosnian
+			case 'hr': // Croatian
+			case 'ru': // Russian
+			case 'sr': // Serbian
+			case 'uk':
+				// Ukrainian
+				// 3 forms
+				return n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+			case 'mnk':
+				// Mandinka
+				// 3 forms
+				return n === 0 ? 0 : n === 1 ? 1 : 2;
+			case 'ro':
+				// Romanian
+				// 3 forms
+				return n === 1 ? 0 : n === 0 || n % 100 > 0 && n % 100 < 20 ? 1 : 2;
+			case 'pl':
+				// Polish
+				// 3 forms
+				return n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+			case 'cs': // Czech
+			case 'sk':
+				// Slovak
+				// 3 forms
+				return n === 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2;
+			case 'csb':
+				// Kashubian
+				// 3 forms
+				return n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+			case 'sl':
+				// Slovenian
+				// 4 forms
+				return n % 100 === 1 ? 0 : n % 100 === 2 ? 1 : n % 100 === 3 || n % 100 === 4 ? 2 : 3;
+			case 'mt':
+				// Maltese
+				// 4 forms
+				return n === 1 ? 0 : n === 0 || n % 100 > 1 && n % 100 < 11 ? 1 : n % 100 > 10 && n % 100 < 20 ? 2 : 3;
+			case 'gd':
+				// Scottish Gaelic
+				// 4 forms
+				return n === 1 || n === 11 ? 0 : n === 2 || n === 12 ? 1 : n > 2 && n < 20 ? 2 : 3;
+			case 'cy':
+				// Welsh
+				// 4 forms
+				return n === 1 ? 0 : n === 2 ? 1 : n !== 8 && n !== 11 ? 2 : 3;
+			case 'kw':
+				// Cornish
+				// 4 forms
+				return n === 1 ? 0 : n === 2 ? 1 : n === 3 ? 2 : 3;
+			case 'ga':
+				// Irish
+				// 5 forms
+				return n === 1 ? 0 : n === 2 ? 1 : n > 2 && n < 7 ? 2 : n > 6 && n < 11 ? 3 : 4;
+			case 'ar':
+				// Arabic
+				// 6 forms
+				return n === 0 ? 0 : n === 1 ? 1 : n === 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5;
+			default:
+				// Everything else
+				return n !== 1 ? 1 : 0;
+		}
+	}
+};
+
+/* vuex-i18n defines the Vuexi18nPlugin to enable localization using a vuex
+** module to store the translation information. Make sure to also include the
+** file vuex-i18n-store.js to include a respective vuex module.
+*/
+
+// initialize the plugin object
+var VuexI18nPlugin = {};
+
+// internationalization plugin for vue js using vuex
+VuexI18nPlugin.install = function install(Vue, store, config) {
+
+	// TODO: remove this block for next major update (API break)
+	if (typeof arguments[2] === 'string' || typeof arguments[3] === 'string') {
+		console.warn('i18n: Registering the plugin vuex-i18n with a string for `moduleName` or `identifiers` is deprecated. Use a configuration object instead.', 'https://github.com/dkfbasel/vuex-i18n#setup');
+		config = {
+			moduleName: arguments[2],
+			identifiers: arguments[3]
+		};
+	}
+
+	// merge default options with user supplied options
+	var mergedConfig = Object.assign({
+		moduleName: 'i18n',
+		identifiers: ['{', '}'],
+		preserveState: false,
+		onTranslationNotFound: function onTranslationNotFound() {}
+	}, config);
+
+	// define module name and identifiers as constants to prevent any changes
+	var moduleName = mergedConfig.moduleName;
+	var identifiers = mergedConfig.identifiers;
+
+	// initialize the onTranslationNotFound function and make sure it is actually
+	// a function
+	var onTranslationNotFound = mergedConfig.onTranslationNotFound;
+	if (typeof onTranslationNotFound !== 'function') {
+		console.error('i18n: i18n config option onTranslationNotFound must be a function');
+		onTranslationNotFound = function onTranslationNotFound() {};
+	}
+
+	// register the i18n module in the vuex store
+	// preserveState can be used via configuration if server side rendering is used
+	store.registerModule(moduleName, i18nVuexModule, { preserveState: mergedConfig.preserveState });
+
+	// check if the plugin was correctly initialized
+	if (store.state.hasOwnProperty(moduleName) === false) {
+		console.error('i18n: i18n vuex module is not correctly initialized. Please check the module name:', moduleName);
+
+		// always return the key if module is not initialized correctly
+		Vue.prototype.$i18n = function (key) {
+			return key;
+		};
+
+		Vue.prototype.$getLanguage = function () {
+			return null;
+		};
+
+		Vue.prototype.$setLanguage = function () {
+			console.error('i18n: i18n vuex module is not correctly initialized');
+		};
+
+		return;
+	}
+
+	// initialize the replacement function
+	var render = renderFn(identifiers);
+
+	// get localized string from store. note that we pass the arguments passed
+	// to the function directly to the translateInLanguage function
+	var translate = function $t() {
+
+		// get the current language from the store
+		var locale = store.state[moduleName].locale;
+
+		return translateInLanguage.apply(undefined, [locale].concat(Array.prototype.slice.call(arguments)));
+	};
+
+	// get localized string from store in a given language if available.
+	// there are two possible signatures for the function.
+	// we will check the arguments to make up the options passed.
+	// 1: locale, key, options, pluralization
+	// 2: locale, key, defaultValue, options, pluralization
+	var translateInLanguage = function translateInLanguage(locale) {
+
+		// read the function arguments
+		var args = arguments;
+
+		// initialize options
+		var key = '';
+		var defaultValue = '';
+		var options = {};
+		var pluralization = null;
+
+		var count = args.length;
+
+		// check if a default value was specified and fill options accordingly
+		if (count >= 3 && typeof args[2] === 'string') {
+
+			key = args[1];
+			defaultValue = args[2];
+
+			if (count > 3) {
+				options = args[3];
+			}
+
+			if (count > 4) {
+				pluralization = args[4];
+			}
+		} else {
+
+			key = args[1];
+
+			// default value was not specified and is therefore the same as the key
+			defaultValue = key;
+
+			if (count > 2) {
+				options = args[2];
+			}
+
+			if (count > 3) {
+				pluralization = args[3];
+			}
+		}
+
+		// return the default value if the locale is not set (could happen on initialization)
+		if (!locale) {
+			console.warn('i18n: i18n locale is not set when trying to access translations:', key);
+			return defaultValue;
+		}
+
+		// get the translations from the store
+		var translations = store.state[moduleName].translations;
+
+		// get the last resort fallback from the store
+		var fallback = store.state[moduleName].fallback;
+
+		// split locale by - to support partial fallback for regional locales
+		// like de-CH, en-UK
+		var localeRegional = locale.split('-');
+
+		// flag for translation to exist or not
+		var translationExists = true;
+
+		// check if the language exists in the store. return the key if not
+		if (translations.hasOwnProperty(locale) === false) {
+			translationExists = false;
+
+			// check if the key exists in the store. return the key if not
+		} else if (translations[locale].hasOwnProperty(key) === false) {
+			translationExists = false;
+		}
+
+		// return the value from the store
+		if (translationExists === true) {
+			return render(locale, translations[locale][key], options, pluralization);
+		}
+
+		// check if a regional locale translation would be available for the key
+		// i.e. de for de-CH
+		if (localeRegional.length > 1 && translations.hasOwnProperty(localeRegional[0]) === true && translations[localeRegional[0]].hasOwnProperty(key) === true) {
+			return render(localeRegional[0], translations[localeRegional[0]][key], options, pluralization);
+		}
+
+		// invoke a method if a translation is not found
+		var asyncTranslation = onTranslationNotFound(locale, key, defaultValue);
+
+		// resolve async translations by updating the store
+		if (asyncTranslation) {
+			Promise.resolve(asyncTranslation).then(function (value) {
+				var additionalTranslations = {};
+				additionalTranslations[key] = value;
+				addLocale(locale, additionalTranslations);
+			});
+		}
+
+		// check if a vaild fallback exists in the store.
+		// return the default value if not
+		if (translations.hasOwnProperty(fallback) === false) {
+			return render(locale, defaultValue, options, pluralization);
+		}
+
+		// check if the key exists in the fallback locale in the store.
+		// return the default value if not
+		if (translations[fallback].hasOwnProperty(key) === false) {
+			return render(fallback, defaultValue, options, pluralization);
+		}
+
+		return render(locale, translations[fallback][key], options, pluralization);
+	};
+
+	// check if the given key exists in the current locale
+	var checkKeyExists = function checkKeyExists(key) {
+		var scope = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'fallback';
+
+
+		// get the current language from the store
+		var locale = store.state[moduleName].locale;
+		var fallback = store.state[moduleName].fallback;
+		var translations = store.state[moduleName].translations;
+
+		// check the current translation
+		if (translations.hasOwnProperty(locale) && translations[locale].hasOwnProperty(key)) {
+			return true;
+		}
+
+		if (scope == 'strict') {
+			return false;
+		}
+
+		// check any localized translations
+		var localeRegional = locale.split('-');
+
+		if (localeRegional.length > 1 && translations.hasOwnProperty(localeRegional[0]) && translations[localeRegional[0]].hasOwnProperty(key)) {
+			return true;
+		}
+
+		if (scope == 'locale') {
+			return false;
+		}
+
+		// check if a fallback locale exists
+		if (translations.hasOwnProperty(fallback) && translations[fallback].hasOwnProperty(key)) {
+			return true;
+		}
+
+		// key does not exist in the store
+		return false;
+	};
+
+	// set fallback locale
+	var setFallbackLocale = function setFallbackLocale(locale) {
+		store.dispatch({
+			type: moduleName + '/setFallbackLocale',
+			locale: locale
+		});
+	};
+
+	// set the current locale
+	var setLocale = function setLocale(locale) {
+		store.dispatch({
+			type: moduleName + '/setLocale',
+			locale: locale
+		});
+	};
+
+	// get the current locale
+	var getLocale = function getLocale() {
+		return store.state[moduleName].locale;
+	};
+
+	// get all available locales
+	var getLocales = function getLocales() {
+		return Object.keys(store.state[moduleName].translations);
+	};
+
+	// add predefined translations to the store (keeping existing information)
+	var addLocale = function addLocale(locale, translations) {
+		return store.dispatch({
+			type: moduleName + '/addLocale',
+			locale: locale,
+			translations: translations
+		});
+	};
+
+	// replace all locale information in the store
+	var replaceLocale = function replaceLocale(locale, translations) {
+		return store.dispatch({
+			type: moduleName + '/replaceLocale',
+			locale: locale,
+			translations: translations
+		});
+	};
+
+	// remove the givne locale from the store
+	var removeLocale = function removeLocale(locale) {
+		if (store.state[moduleName].translations.hasOwnProperty(locale)) {
+			store.dispatch({
+				type: moduleName + '/removeLocale',
+				locale: locale
+			});
+		}
+	};
+
+	// we are phasing out the exists function
+	var phaseOutExistsFn = function phaseOutExistsFn(locale) {
+		console.warn('i18n: $i18n.exists is depreceated. Please use $i18n.localeExists instead. It provides exatly the same functionality.');
+		return checkLocaleExists(locale);
+	};
+
+	// check if the given locale is already loaded
+	var checkLocaleExists = function checkLocaleExists(locale) {
+		return store.state[moduleName].translations.hasOwnProperty(locale);
+	};
+
+	// register vue prototype methods
+	Vue.prototype.$i18n = {
+		locale: getLocale,
+		locales: getLocales,
+		set: setLocale,
+		add: addLocale,
+		replace: replaceLocale,
+		remove: removeLocale,
+		fallback: setFallbackLocale,
+		localeExists: checkLocaleExists,
+		keyExists: checkKeyExists,
+
+		translate: translate,
+		translateIn: translateInLanguage,
+
+		exists: phaseOutExistsFn
+	};
+
+	// register global methods
+	Vue.i18n = {
+		locale: getLocale,
+		locales: getLocales,
+		set: setLocale,
+		add: addLocale,
+		replace: replaceLocale,
+		remove: removeLocale,
+		fallback: setFallbackLocale,
+		translate: translate,
+		translateIn: translateInLanguage,
+		localeExists: checkLocaleExists,
+		keyExists: checkKeyExists,
+
+		exists: phaseOutExistsFn
+	};
+
+	// register the translation function on the vue instance directly
+	Vue.prototype.$t = translate;
+
+	// register the specific language translation function on the vue instance directly
+	Vue.prototype.$tlang = translateInLanguage;
+
+	// register a filter function for translations
+	Vue.filter('translate', translate);
+};
+
+// renderFn will initialize a function to render the variable substitutions in
+// the translation string. identifiers specify the tags will be used to find
+// variable substitutions, i.e. {test} or {{test}}, note that we are using a
+// closure to avoid recompilation of the regular expression to match tags on
+// every render cycle.
+var renderFn = function renderFn(identifiers) {
+
+	if (identifiers == null || identifiers.length != 2) {
+		console.warn('i18n: You must specify the start and end character identifying variable substitutions');
+	}
+
+	// construct a regular expression ot find variable substitutions, i.e. {test}
+	var matcher = new RegExp('' + identifiers[0] + '\\w+' + identifiers[1], 'g');
+
+	// define the replacement function
+	var replace = function replace(translation, replacements) {
+		var warn = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+
+		// check if the object has a replace property
+		if (!translation.replace) {
+			return translation;
+		}
+
+		return translation.replace(matcher, function (placeholder) {
+
+			// remove the identifiers (can be set on the module level)
+			var key = placeholder.replace(identifiers[0], '').replace(identifiers[1], '');
+
+			if (replacements[key] !== undefined) {
+				return replacements[key];
+			}
+
+			// warn user that the placeholder has not been found
+			if (warn === true) {
+				console.group ? console.group('i18n: Not all placeholders found') : console.warn('i18n: Not all placeholders found');
+				console.warn('Text:', translation);
+				console.warn('Placeholder:', placeholder);
+				if (console.groupEnd) {
+					console.groupEnd();
+				}
+			}
+
+			// return the original placeholder
+			return placeholder;
+		});
+	};
+
+	// the render function will replace variable substitutions and prepare the
+	// translations for rendering
+	var render = function render(locale, translation) {
+		var replacements = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+		var pluralization = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+		// get the type of the property
+		var objType = typeof translation === 'undefined' ? 'undefined' : _typeof(translation);
+		var pluralizationType = typeof pluralization === 'undefined' ? 'undefined' : _typeof(pluralization);
+
+		var resolvePlaceholders = function resolvePlaceholders() {
+
+			if (isArray$1(translation)) {
+
+				// replace the placeholder elements in all sub-items
+				return translation.map(function (item) {
+					return replace(item, replacements, false);
+				});
+			} else if (objType === 'string') {
+				return replace(translation, replacements, true);
+			}
+		};
+
+		// return translation item directly
+		if (pluralization === null) {
+			return resolvePlaceholders();
+		}
+
+		// check if pluralization value is countable
+		if (pluralizationType !== 'number') {
+			console.warn('i18n: pluralization is not a number');
+			return resolvePlaceholders();
+		}
+
+		// --- handle pluralizations ---
+
+		// replace all placeholders
+		var resolvedTranslation = resolvePlaceholders();
+
+		// initialize pluralizations
+		var pluralizations = null;
+
+		// if translations are already an array and have more than one entry,
+		// we will not perform a split operation on :::
+		if (isArray$1(resolvedTranslation) && resolvedTranslation.length > 0) {
+			pluralizations = resolvedTranslation;
+		} else {
+			// split translation strings by ::: to find create the pluralization array
+			pluralizations = resolvedTranslation.split(':::');
+		}
+
+		// determine the pluralization version to use by locale
+		var index = plurals.getTranslationIndex(locale, pluralization);
+
+		// check if the specified index is present in the pluralization
+		if (typeof pluralizations[index] === 'undefined') {
+			console.warn('i18n: pluralization not provided in locale', translation, locale, index);
+
+			// return the first element of the pluralization by default
+			return pluralizations[0].trim();
+		}
+
+		// return the requested item from the pluralizations
+		return pluralizations[index].trim();
+	};
+
+	// return the render function to the caller
+	return render;
+};
+
+// check if the given object is an array
+function isArray$1(obj) {
+	return !!obj && Array === obj.constructor;
+}
+
+// import the vuex module for localization
+// import the corresponding plugin for vue
+// export both modules as one file
+var index = {
+	store: i18nVuexModule,
+	plugin: VuexI18nPlugin
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (index);
+
+
+/***/ }),
+/* 160 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    "al": {
+        "voyager": {
+            "date": {
+                "last_week": "Javën e kaluar",
+                "last_year": "Viti i kaluar",
+                "this_week": "Kjo javë",
+                "this_year": "Këtë vit"
+            },
+            "generic": {
+                "action": "Veprimi",
+                "actions": "Veprimet",
+                "add": "Shto",
+                "add_folder": "Shto Dosje",
+                "add_new": "Shto të ri",
+                "all_done": "Të gjitha të kryera",
+                "are_you_sure": "Jeni i sigurt",
+                "are_you_sure_delete": "Jeni i sigurt që doni të fshini",
+                "auto_increment": "Rritja automatike",
+                "browse": "Shfleto",
+                "builder": "Ndërtues",
+                "bulk_delete": "Largo bulk",
+                "bulk_delete_confirm": "Po, fshini këto",
+                "bulk_delete_nothing": "Ju nuk keni zgjedhur ndonjë gjë për të fshirë",
+                "cancel": "Anulo",
+                "choose_type": "Zgjidhni Lloji",
+                "click_here": "Kliko këtu",
+                "close": "Mbyll",
+                "compass": "Kompasë",
+                "created_at": "Krijuar në",
+                "custom": "Custom",
+                "dashboard": "Dashboard",
+                "database": "Baza e të dhënave",
+                "default": "Default",
+                "delete": "Fshije",
+                "delete_confirm": "Po, fshij atë!",
+                "delete_question": "Jeni i sigurt që dëshironi të fshini këtë",
+                "delete_this_confirm": "Po, fshij këtë",
+                "deselect_all": "Deselect All",
+                "download": "Shkarko",
+                "edit": "Edit",
+                "email": "E-mail",
+                "error_deleting": "Më vjen keq që duket se ka pasur një problem duke fshirë këtë",
+                "exception": "Përjashtim",
+                "featured": "Të zgjedhura",
+                "field_does_not_exist": "Fusha nuk ekziston",
+                "how_to_use": "Si të përdorni",
+                "index": "Indeksi",
+                "internal_error": "Gabim i brendshëm",
+                "items": "artikull (et)",
+                "keep_sidebar_open": "Yarr! Hidhni ankorat! (dhe mbani sidebar hapur) ",
+                "key": "Çelësi",
+                "last_modified": "Modifikuar e fundit",
+                "length": "Gjatësia",
+                "login": "Login",
+                "media": "Media",
+                "menu_builder": "Ndërtuesi i menysë",
+                "move": "Leviz",
+                "name": "Emri",
+                "new": "New",
+                "no": "Jo",
+                "no_thanks": "Jo faleminderit",
+                "not_null": "Jo Null",
+                "options": "Opsionet",
+                "password": "Fjalëkalimi",
+                "permissions": "Lejet",
+                "profile": "Profili",
+                "public_url": "URL publik",
+                "read": "Lexo",
+                "rename": "Riemërtoj",
+                "required": "Required",
+                "return_to_list": "Kthehu në listë",
+                "route": "Rruga",
+                "save": "Ruaj",
+                "search": "Kërko",
+                "select_all": "Zgjidh të gjitha",
+                "select_group": "Zgjidh grupin ekzistues ose Shto të ri",
+                "settings": "Cilësimet",
+                "showing_entries": "Duke treguar: nga në: të: të gjitha entrie | Showing: from to: të: të gjitha shënimet",
+                "submit": "Paraqesë",
+                "successfully_added_new": "U shtua me sukses të ri",
+                "successfully_deleted": "Deleted me sukses",
+                "successfully_updated": "Përditëso me sukses",
+                "timestamp": "Timestamp",
+                "title": "Titulli",
+                "type": "Lloji",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "Zhvidhos shiritin anësor",
+                "update": "Përditëso",
+                "update_failed": "Përditëso dështimi",
+                "upload": "Ngarko",
+                "url": "URL",
+                "view": "Shikoni",
+                "viewing": "Duke parë",
+                "yes": "Po",
+                "yes_please": "Po, Ju lutem"
+            },
+            "login": {
+                "loggingin": "Identifikimi",
+                "signin_below": "Hyni më poshtë:",
+                "welcome": "Mirë se vini në Voyager. Adminja e zhdukur për Laravel "
+            },
+            "profile": {
+                "avatar": "Avatari",
+                "edit": "Edit My Profile",
+                "edit_user": "Edit User",
+                "password": "Fjalëkalimi",
+                "password_hint": "Lëreni bosh për të mbajtur të njëjtën",
+                "role": "Roli",
+                "user_role": "Roli i përdoruesit"
+            },
+            "settings": {
+                "usage_help": "Ju mund të merrni vlerën e çdo cilësie kudo në faqen tuaj duke telefonuar",
+                "save": "Save Settings",
+                "new": "Vendosja e re",
+                "help_name": "Vendosja e emrit ex: Title Admin",
+                "help_key": "Vendosja e tastit ex: admin_title",
+                "help_option": "(opsional, vlen vetëm për lloje të caktuara si kuti dropdown ose radio button)",
+                "add_new": "Shto vendosjen e re",
+                "delete_question": "A jeni i sigurt që doni të fshini: vendosjen e Vendosjes?",
+                "delete_confirm": "Po, fshij këtë cilësim",
+                "successfully_created": "Cilësimet e krijuara me sukses",
+                "successfully_saved": "Parametrat e ruajtura me sukses",
+                "successfully_deleted": "Vendosja me sukses e fshirë",
+                "already_at_top": "Kjo është tashmë në krye të listës",
+                "already_at_bottom": "Kjo tashmë është në fund të listës",
+                "key_already_exists": "Çelësi: çelësi tashmë ekziston",
+                "moved_order_up": "Kaluar: emri i vendosjes së rendit lart",
+                "moved_order_down": "Moved: rregullimi i emrit të rendit poshtë",
+                "successfully_removed": "Hiqet me sukses: vlera e emrit",
+                "group_general": "Përgjithshme",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Grupi",
+                "help_group": "Grupi ky përcaktim është caktuar për"
+            },
+            "media": {
+                "add_new_folder": "Shto një dosje të re",
+                "audio_support": "Shfletuesi juaj nuk e mbështet elementin audio.",
+                "create_new_folder": "Krijo dosje të re",
+                "delete_folder_question": "Fshirja e një dosjeje do të heqë të gjitha skedarët  dhe dosjet e përmbajtura brenda",
+                "destination_folder": "Folder Destinacioni",
+                "drag_drop_info": "Drag dhe rrëzo skedarët ose kliko më poshtë për të ngarkuar",
+                "error_already_exists": "Na vjen keq që ekziston një skedar \/ dosje me atë emër ekzistues në atë dosje.",
+                "error_creating_dir": "Duket sikur diçka e keqe ka shkuar keq në krijimin e direktorisë. kontrolloni lejet tuaja",
+                "error_deleting_file": "Na duket diçka e keqe që duket se ka shkuar gabim duke fshirë këtë skedar, ju lutem kontrolloni lejet",
+                "error_deleting_folder": "Duket sikur diçka e keqe ka shkuar keq kur fshihet kjo dosje kontrolloni lejet tuaja",
+                "error_may_exist": "Skedari ose Folderi mund të ekzistojnë tashmë me këtë emër. Ju lutem zgjidhni një emër tjetër ose fshini skedarin tjetër.",
+                "error_moving": "Na vjen keq që duket se ka një problem të lëvizë atë skedar \/ dosje, ju lutemi bëni sigurohuni që keni lejet e duhura.",
+                "error_uploading": "Ngarko dështoj: Gabim i panjohur ndodhi!",
+                "folder_exists_already": "Na vjen keq se dosja tashmë ekziston, ju lutem fshini atë dosje nëse dëshironi për ta rikrijuar atë",
+                "image_does_not_exist": "Imazhi nuk ekziston",
+                "image_removed": "Imazhi i hequr",
+                "library": "Biblioteka e Medias",
+                "loading": "LOADING YOUR MEDIA FILES",
+                "move_file_folder": "Move File \/ Folder",
+                "new_file_folder": "Emri i ri i skedarit \/ folderit",
+                "new_folder_name": "Emri i ri i dosjes",
+                "no_files_here": "Asnjë fotografi këtu.",
+                "no_files_in_folder": "Asnjë fotografi në këtë dosje.",
+                "nothing_selected": "Nuk ka skedar ose dosje të zgjedhur",
+                "rename_file_folder": "Rename File \/ Folder",
+                "success_uploaded_file": "Skedari i ri i ngarkuar me sukses!",
+                "success_uploading": "Ngarkuar me sukses!",
+                "uploading_wrong_type": "Ngarko dështoj: Formati i skedarit të pambështetur ose Është tepër i madh për të ngarkuar!",
+                "video_support": "Shfletuesi juaj nuk e mbështet videon.",
+                "crop": "Crop",
+                "crop_and_create": "Crop & Krijo",
+                "crop_override_confirm": "Do të anashkalojë imazhin origjinal, a jeni i sigurt?",
+                "crop_image": "Imazhi i prerë",
+                "success_crop_image": "Kulloni me sukses imazhin",
+                "height": "Lartësia:",
+                "width": "Gjerësia:"
+            },
+            "menu_builder": {
+                "color": "Ngjyra në RGB ose magji (opsionale)",
+                "color_ph": "Ngjyra (ex. #ffffff ose rgb (255, 255, 255)",
+                "create_new_item": "Krijo një artikull të ri të menysë",
+                "delete_item_confirm": "Po, fshini këtë artikull menu",
+                "delete_item_question": "A jeni i sigurt që doni ta fshini këtë artikull të menusë?",
+                "drag_drop_info": "Zvarriteni dhe hiqni menunë Artikujt e mëposhtëm për të riorganizuar ato.",
+                "dynamic_route": "Rruga dinamike",
+                "edit_item": "Modifiko artikullin e menysë",
+                "icon_class": "Klasa e Font Icon për Item Menu (Përdorni një",
+                "icon_class2": "Klasa e Fonteve Voyager)",
+                "icon_class_ph": "Klasa e ikonave (opsionale)",
+                "item_route": "Rruga për artikullin e menysë",
+                "item_title": "Titulli i artikullit të menysë",
+                "link_type": "Lloji i lidhjes",
+                "new_menu_item": "Artikulli i ri i menysë",
+                "open_in": "Hapni",
+                "open_new": "New Tab \/ Window",
+                "open_same": "Same Tab \/ Window",
+                "route_parameter": "Parametrat e rrugës (nëse ka)",
+                "static_url": "URL statik",
+                "successfully_created": "Krijoi me sukses artikullin e ri të menysë.",
+                "successfully_deleted": "U zhduk me sukses artikullin e menysë.",
+                "successfully_updated": "U përditësua me sukses artikulli i menusë.",
+                "updated_order": "Rendi i menysë i përditësuar me sukses.",
+                "url": "URL për artikullin e menysë",
+                "usage_hint": "Ju mund të nxjerrni një menu kudo në faqen tuaj duke telefonuar Mund të dalni  këtë menu diku në faqen tënde duke telefonuar"
+            },
+            "post": {
+                "category": "Kategoria postare",
+                "content": "Post Content",
+                "details": "Detajet e Postës",
+                "excerpt": "Ekstrakt <i vogël> Përshkrimi i vogël i këtij postimi <\/ small>",
+                "image": "Imazhi i postës",
+                "meta_description": "Meta Description",
+                "meta_keywords": "Meta Keywords",
+                "new": "Krijo postë të re",
+                "seo_content": "Përmbajtja SEO",
+                "seo_title": "Titulli i Seo",
+                "slug": "Slug URL",
+                "status": "Statusi i Postës",
+                "status_draft": "draft",
+                "status_pending": "në pritje",
+                "status_published": "publikuar",
+                "title": "Post Titulli",
+                "title_sub": "Titulli për postin tuaj",
+                "update": "Update Post"
+            },
+            "database": {
+                "add_bread": "Shto BREAD në këtë tabelë",
+                "add_new_column": "Shto shtyllë të re",
+                "add_softdeletes": "Shto butona të fshira",
+                "add_timestamps": "Shto Timestamps",
+                "already_exists": "ekziston tashmë",
+                "already_exists_table": "Tabela: tabela tashmë ekziston",
+                "bread_crud_actions": "BREAD \/ Actions",
+                "bread_info": "BREAD info",
+                "column": "Column",
+                "composite_warning": "Paralajmërim: kjo kolonë është pjesë e një indeksi të përbërë",
+                "controller_name": "Emri i Kontrollorit",
+                "controller_name_hint": "ex. Kontrolluesi i faqes, nëse bosh do të përdorë kontrollorin e BREAD",
+                "create_bread_for_table": "Krijo BREAD për: table table",
+                "create_migration": "Krijo migrim për këtë tryezë?",
+                "create_model_table": "Krijo model për këtë tabelë?",
+                "create_new_table": "Krijo tabelë të re",
+                "create_your_new_table": "Krijo tabelën tënde të re",
+                "default": "Default",
+                "delete_bread": "Fshi BREAD",
+                "delete_bread_before_table": "Ju lutemi sigurohuni që të hiqni BREAD në këtë tabelë përpara se të fshini tabelën.",
+                "delete_table_bread_conf": "Po, hiq BREAD",
+                "delete_table_bread_quest": "Jeni i sigurt që dëshironi të fshini BREAD për: tabelën e tabelës?",
+                "delete_table_confirm": "Po, fshij këtë tabelë",
+                "delete_table_question": "A jeni i sigurt që doni të fshini: tabelën e tabelës?",
+                "description": "Përshkrimi",
+                "display_name": "Emri i shfaqjes",
+                "display_name_plural": "Shfaq Emri (Plural)",
+                "display_name_singular": "Shfaq emrin (Singular)",
+                "edit_bread": "Edit BREAD",
+                "edit_bread_for_table": "Ndrysho BREAD për: table table",
+                "edit_rows": "Redakto rreshtave për: tabelën e tabelës më poshtë",
+                "edit_table": "Ndrysho tabelën e tabelës më poshtë",
+                "edit_table_not_exist": "Tabela që dëshironi të redaktoni nuk ekziston",
+                "error_creating_bread": "Më vjen keq që duket se mund të ketë pasur një problem në krijimin e këtij brezi",
+                "error_removing_bread": "Më vjen keq që duket se ka pasur një problem duke hequr këtë BREAME",
+                "error_updating_bread": "Më vjen keq që duket se mund të ketë pasur një problem në përditësimin e këtij BREAK ",
+                "extra": "Extra",
+                "field": "Fusha",
+                "field_safe_failed": "Dështoi në ruajtjen e fushës: fushë, ne do të kthehemi prapa!",
+                "generate_permissions": "Generate Permissions",
+                "icon_class": "Ikona për t'u përdorur për këtë tabelë",
+                "icon_hint": "Icon (opsional) Përdorni një",
+                "icon_hint2": "Klasa Font Voyager",
+                "index": "INDEKSI",
+                "input_type": "Lloji i hyrjes",
+                "key": "Çelësi",
+                "model_class": "Emri i emrit të modelit",
+                "model_name": "Emri i modelit",
+                "model_name_ph": "ex. \\ App \\ User, nëse majtas bosh do të përpiqet dhe të përdorë emrin e tabelës ",
+                "name_warning": "Ju lutemi emri kolonën para se të shtoni një indeks",
+                "no_composites_warning": "Kjo tabelë ka indekse të përbërë. Ju lutem vini re se ato nuk janë të mbështetura për momentin. Kini kujdes kur përpiqeni të shtoni\/hiqni indekset",
+                "null": "Null",
+                "optional_details": "Detajet Opsionale",
+                "policy_class": "Emri i klasës së politikës",
+                "policy_name": "Emri i politikave",
+                "policy_name_ph": "ex. \\ App \\ Policies \\ UserPolicy, nëse bosh bosh do të përpiqet dhe të përdorë parazgjedhjen ",
+                "primary": "FILLORE",
+                "server_pagination": "Paraqitja në anë të serverit",
+                "success_create_table": "Krijohet me sukses: tabela e tabelës",
+                "success_created_bread": "Krijoi me sukses krijesën e re",
+                "success_delete_table": "fshihet me sukses: tabela e tabelës",
+                "success_remove_bread": "U largua me sukses BREAD nga: tipi i të dhënave",
+                "success_update_bread": "Azhurohet me sukses: tipi i të dhënave BREAD",
+                "success_update_table": "Përditësuar me sukses: tabela e tabelës",
+                "table_actions": "Veprimet e tabelave",
+                "table_columns": "Kolona e tabelave",
+                "table_has_index": "Tabela tashmë ka një indeks primar.",
+                "table_name": "Emri i tabelës",
+                "table_no_columns": "Tabela nuk ka kollona ...",
+                "type": "Lloji",
+                "type_not_supported": "Ky lloj nuk është i mbështetur",
+                "unique": "UNIKË",
+                "unknown_type": "Tip i panjohur",
+                "update_table": "Tabela e përditësimit",
+                "url_slug": "Slug URL (duhet të jetë unik)",
+                "url_slug_ph": "Slug URL (ex posts)",
+                "visibility": "Shikueshmëria"
+            },
+            "dimmer": {
+                "page": "Faqe | Faqet",
+                "page_link_text": "Shikoni të gjitha faqet",
+                "page_text": "Ju keni: count: string në databazën tuaj. Klikoni butonin më poshtë për të parë të gjitha faqet. ",
+                "post": "Posta | Postime",
+                "post_link_text": "Shiko të gjitha postimet",
+                "post_text": "Ju keni: count: string në databazën tuaj. Klikoni butonin më poshtë për të parë të gjitha postimet. ",
+                "user": "Përdorues",
+                "user_link_text": "Shikoni të gjithë përdoruesit",
+                "user_text": "Ju keni: count: string në databazën tuaj. Klikoni butonin më poshtë për të parë të gjithë përdoruesit. "
+            },
+            "form": {
+                "field_password_keep": "Lëreni bosh për të mbajtur të njëjtën",
+                "field_select_dd_relationship": "Sigurohuni që të konfiguroni marrëdhënien e duhur në metodën e metodës së klasa e klasës.",
+                "0": "the {class} class.",
+                "type_checkbox": "Kutia e Kontrollit",
+                "type_codeeditor": "Editor Kodi",
+                "type_file": "Skedar",
+                "type_image": "Image",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Zgjidh Dropdown",
+                "type_textarea": "Zona e tekstit",
+                "type_textbox": "Kutia e tekstit"
+            },
+            "datatable": {
+                "sEmptyTable": "Nuk ka të dhëna të disponueshme në tabelë",
+                "sInfo": "Duke shfaqur _START_ me _END_ të _TOTAL_ entries",
+                "sInfoEmpty": "Duke shfaqur 0 deri në 0 nga 0 shënime",
+                "sInfoFiltered": "(filtruar nga hyrjet totale _MAX_)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Shfaq _MENU_ entries",
+                "sLoadingRecords": "Loading ...",
+                "sProcessing": "Përpunimi ...",
+                "sSearch": "Kërko:",
+                "sZeroRecords": "Nuk u gjetën shënime përputhëse",
+                "oPaginate": {
+                    "sFirst": "Së pari",
+                    "sLast": "I fundit",
+                    "sNext": "Tjetra",
+                    "sPrevious": "I mëparshmi"
+                },
+                "oAria": {
+                    "sSortAscending": ": aktivizoni për të renditur kolonën në ngjitje",
+                    "sSortDescending": ": aktivizo për të renditur kolonën zbritëse"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Bërë me <i class = \"voyager-heart\"> <\/ i> nga",
+                "footer_copyright2": "Bërë me rum dhe rum më shumë"
+            },
+            "json": {
+                "invalid": "Json i pavlefshëm",
+                "invalid_message": "Duket sikur keni futur disa JSON të pavlefshëm.",
+                "valid": "Valid Json",
+                "validation_errors": "Gabimet e validimit"
+            },
+            "analytics": {
+                "by_pageview": "Nga pageview",
+                "by_sessions": "Nga sesionet",
+                "by_users": "Nga përdoruesit",
+                "no_client_id": "Për të parë analitikën që do t'ju nevojitet për të marrë një ID të klientit të analytics google dhe  shtoni në cilësimet tuaja për kodin <code>google_analytics_client_id<\/code>. Merrni çelësin tuaj në tastierën zhvilluese të Google: ",
+                "set_view": "Zgjidh një pamje",
+                "this_vs_last_week": "Këtë javë ndaj javës së kaluar",
+                "this_vs_last_year": "Këtë vit kundër vitit të kaluar",
+                "top_browsers": "Shfletuesit kryesorë",
+                "top_countries": "Vendet më të mira",
+                "various_visualizations": "Vizualizime të ndryshme"
+            },
+            "error": {
+                "symlink_created_text": "Ne sapo krijuam linkun që mungon për ju.",
+                "symlink_created_title": "Sjellja e humbur e ruajtjes u krijua",
+                "symlink_failed_text": "Ne nuk arritëm të gjeneronim simbolin e humbur për aplikacionin tënd. Duket se ofruesi juaj i pritjes nuk e mbështet atë.",
+                "symlink_failed_title": "Nuk mundi të krijoj simbolin e ruajtjes së mungesës",
+                "symlink_missing_button": "Fix it",
+                "symlink_missing_text": "Ne nuk mund të gjejmë një symlink të ruajtjes. Kjo mund të shkaktojë probleme me ngarkimi i skedarëve të medias nga shfletuesi.",
+                "0": "loading media files from the browser.",
+                "symlink_missing_title": "Skeda e munguar e ruajtjes"
+            }
+        }
+    },
+    "ar": {
+        "voyager": {
+            "date": {
+                "last_week": "الأسبوع الماضي",
+                "last_year": "السنة الماضية",
+                "this_week": "هذا الأسبوع",
+                "this_year": "هذا العام"
+            },
+            "generic": {
+                "action": "إجراء",
+                "actions": "الإجراءات",
+                "add": "إضافة",
+                "add_folder": "إضافة مجلد",
+                "add_new": "إضافة جديد",
+                "all_done": "تم الكل",
+                "are_you_sure": "هل أنت واثق",
+                "are_you_sure_delete": "هل أنت متأكد أنك تريد الحذف",
+                "auto_increment": "زيادة تلقائية",
+                "browse": "استعراض",
+                "builder": "البناء",
+                "bulk_delete": "حذف متعدد",
+                "bulk_delete_confirm": "نعم, حذف هذه",
+                "bulk_delete_nothing": "لم تقم بتحديد أي عنصر لحذفه",
+                "cancel": "إلغاء",
+                "choose_type": "اختر النوع",
+                "click_here": "اضغط هنا",
+                "close": "إغلاق",
+                "compass": "البوصلة",
+                "created_at": "تاريخ الإنشاء",
+                "custom": "معدل",
+                "dashboard": "لوحة التحكم",
+                "database": "قاعدة البيانات",
+                "default": "افتراضي",
+                "delete": "حذف",
+                "delete_confirm": "نعم، احذفه!",
+                "delete_question": "هل أنت متأكد أنك تريد الحذف",
+                "delete_this_confirm": "نعم، احذف",
+                "deselect_all": "إلغاء تحديد الكل",
+                "download": "تحميل",
+                "edit": "تعديل",
+                "email": "البريد الإلكتروني",
+                "error_deleting": "عذرا، يبدو أنه حدثت مشكلة أثناء الحذف",
+                "exception": "استثناء",
+                "featured": "مميز",
+                "field_does_not_exist": "الحقل غير موجود",
+                "how_to_use": "كيفة الاستخدام",
+                "index": "فهرس",
+                "internal_error": "خطأ داخلي",
+                "items": "عناصر",
+                "keep_sidebar_open": "الحفاظ على فتح الشريط الجانبي",
+                "key": "مفتاح",
+                "last_modified": "آخر تعديل",
+                "length": "الطول",
+                "login": "تسجيل الدخول",
+                "media": "الوسائط",
+                "menu_builder": "منشئ القوائم",
+                "move": "نقل",
+                "name": "الاسم",
+                "new": "جديد",
+                "no": "لا",
+                "no_thanks": "لا شكراً",
+                "not_null": "غير فارغة",
+                "options": "خيارات",
+                "password": "كلمه السر",
+                "permissions": "الصلاحيات",
+                "profile": "الملف الشخصي",
+                "public_url": "الرابط URL المنشور",
+                "read": "معاينة",
+                "rename": "إعادة تسمية",
+                "required": "مطلوب",
+                "return_to_list": "العودة إلى القائمة",
+                "route": "Route الرابط",
+                "save": "حفظ",
+                "search": "بحث",
+                "select_all": "تحديد الكل",
+                "select_group": "اختر مجموعة موجودة أو أضف جديدة",
+                "settings": "الإعدادت",
+                "showing_entries": "عرض {from} إلى {to} من {all} عنصر|عرض {from} إلى {to} من {all} عناصر",
+                "submit": "إرسال",
+                "successfully_added_new": "تمت إضافة جديد بنجاح",
+                "successfully_deleted": "تم الحذف بنجاح",
+                "successfully_updated": "تم التحديث بنجاح",
+                "timestamp": "صيغة التوقيت",
+                "title": "العنوان",
+                "type": "النوع",
+                "unsigned": "غير سالبة",
+                "unstick_sidebar": "إلغاء تثبيت الشريط الجانبي",
+                "update": "تحديث",
+                "update_failed": "فشل التحديث",
+                "upload": "رفع",
+                "url": "URL الرابط",
+                "view": "معاينة",
+                "viewing": "معاينة",
+                "yes": "نعم",
+                "yes_please": "نعم، من فضلك"
+            },
+            "login": {
+                "loggingin": "دخول",
+                "signin_below": "تسجيل الدخول :",
+                "welcome": "مرحبا بكم في Voyager. لوحة التحكم المكملة للارافيل"
+            },
+            "profile": {
+                "avatar": "الصورة الرمزية",
+                "edit": "تعديل",
+                "edit_user": "تعديل المستخدم",
+                "password": "كلمه السر",
+                "password_hint": "اتركها فارغة إذا لم ترد التعديل عليها",
+                "role": "الدور",
+                "user_role": "دور المستخدم"
+            },
+            "settings": {
+                "usage_help": "يمكنك الحصول على قيمة أي إعداد في أي مكان في موقعك عن طريق استخدام",
+                "save": "احفظ الإعدادات",
+                "new": "إعداد جديد",
+                "help_name": "اسم الإعداد مثال : Admin Title",
+                "help_key": "مفتاح الإعداد مثال : admin_title",
+                "help_option": "(اختياري، ينطبق فقط على أنواع معينة مثل القائمة المنسدلة أو زر الاختيار)",
+                "add_new": "إضافة إعداد جديد",
+                "delete_question": "هل تريد بالتأكيد حذف الإعداد {setting} ؟",
+                "delete_confirm": "نعم، حذف هذا الإعداد",
+                "successfully_created": "تم إنشاء الإعدادات بنجاح",
+                "successfully_saved": "تم حفظ الإعدادات بنجاح",
+                "successfully_deleted": "تم حذف الإعداد بنجاح",
+                "already_at_top": "موجود بالفعل في أعلى القائمة",
+                "already_at_bottom": "موجود بالفعل في أسفل القائمة",
+                "key_already_exists": "المفتاح {key} موجود بالفعل",
+                "moved_order_up": "القيمة {name} تم نقلها إلى أعلى",
+                "moved_order_down": "القيمة {name} تم نقلها إلى أسفل",
+                "successfully_removed": "تم إزالة {name} بنجاح",
+                "group_general": "عام",
+                "group_admin": "الإدارة",
+                "group_site": "الموقع",
+                "group": "المجموعة",
+                "help_group": "مجموعة هذا الإعداد تنتمي إلى"
+            },
+            "media": {
+                "add_new_folder": "إضافة مجلد جديد",
+                "audio_support": "متصفحك لا يدعم عنصر الصوت.",
+                "create_new_folder": "إنشاء مجلد جديد",
+                "delete_folder_question": "سيؤدي حذف مجلد إلى إزالة جميع الملفات والمجلدات الموجودة في داخله",
+                "destination_folder": "مجلد الوجهة",
+                "drag_drop_info": "يمكنك سحب الملفات وإفلاتها أو النقر أدناه لرفعها",
+                "error_already_exists": "عذراً، يوجد بالفعل ملف\/مجلد بهذا الاسم في هذا المجلد.",
+                "error_creating_dir": "عذراً يبدو أن هناك خطأ في إنشاء المجلد، يرجى التحقق من صلاحياتك",
+                "error_deleting_file": "عذراً، يبدو أنه حدث خطأ عند حذف هذا الملف، يرجى التحقق من صلاحياتك",
+                "error_deleting_folder": "عذراً، يبدو أنه حدث خطأ عند حذف هذا المجلد، يرجى التحقق من صلاحياتك",
+                "error_may_exist": "قد يكون هناك ملف أو مجلد موجود بالفعل بهذا الاسم. الرجاء اختيار اسم آخر أو حذف الملف الآخر.",
+                "error_moving": "عذراً، يبدو أنه حصلت مشكلة أثناء نقل هذا الملف\/المجلد، يرجى التأكد من أن لديك الصلاحيات الصحيحة.",
+                "error_uploading": "أخفق الرفع: حدث خطأ غير معلوم!",
+                "folder_exists_already": "عذراً، هذا المجلد موجود بالفعل، يرجى حذف هذا المجلد إذا كنت ترغب في إعادة إنشائه",
+                "image_does_not_exist": "الصورة غير موجودة",
+                "image_removed": "تمت إزالة الصورة",
+                "library": "مكتبة الوسائط",
+                "loading": "تحميل ملفات الوسائط الخاصة بك",
+                "move_file_folder": "نقل ملف\/مجلد",
+                "new_file_folder": "اسم ملف\/مجلد جديد",
+                "new_folder_name": "اسم مجلد جديد",
+                "no_files_here": "لا توجد ملفات هنا.",
+                "no_files_in_folder": "لا توجد ملفات في هذا المجلد.",
+                "nothing_selected": "لم يتم تحديد ملف أو مجلد",
+                "rename_file_folder": "إعادة تسمية ملف\/مجلد",
+                "success_uploaded_file": "تم رفع ملف جديد بنجاح!",
+                "success_uploading": "تم رفع الصورة بنجاح!",
+                "uploading_wrong_type": "فشل الرفع: تنسيق الملف غير مدعوم أو أنه كبير جدا لرفعه!",
+                "video_support": "متصفحك الحالي لا يدعم تشغيل الفيديو.",
+                "crop": "قص",
+                "crop_and_create": "قص وإنشاء",
+                "crop_override_confirm": "ستستبدل الصورة الأصلية, هل أنت متأكد؟",
+                "crop_image": "قص الصورة",
+                "success_crop_image": "تم قص الصورة بنجاح",
+                "height": "الارتفاع: ",
+                "width": "العرض: "
+            },
+            "menu_builder": {
+                "color": "اللون بصيغة RGB أو hex (اختياري)",
+                "color_ph": "اللون (مثل #ffffff أو rgb(255, 255, 255)",
+                "create_new_item": "إنشاء عنصر جديد",
+                "delete_item_confirm": "نعم، حذف هذا العنصر من القائمة",
+                "delete_item_question": "هل تريد بالتأكيد حذف هذا العنصر من القائمة؟",
+                "drag_drop_info": "سحب وإسقاط عناصر القائمة أدناه لإعادة ترتيبها.",
+                "dynamic_route": "موجه ديناميكي",
+                "edit_item": "تعديل عنصر القائمة",
+                "icon_class": "المعرف (class) لأيقونة عنصر القائمة (استخدم",
+                "icon_class2": "معرفات أيقونات فوياجر<\/a>)",
+                "icon_class_ph": "معرف الأيقونة (اختياري)",
+                "item_route": "Route الخاص بعنصر القائمة",
+                "item_title": "عنوان عنصر القائمة",
+                "link_type": "نوع الرابط",
+                "new_menu_item": "عنصر جديد",
+                "open_in": "فتح في",
+                "open_new": "تبويب\/نافذة جديدة",
+                "open_same": "نفس التبويب\/النافذة",
+                "route_parameter": "المتغيرات الخاصة بال Route  (إذا وجدت)",
+                "static_url": "رابط URL ثابت",
+                "successfully_created": "تم إنشاء عنصر جديد فى القائمة بنجاح.",
+                "successfully_deleted": "تم حذف عنصر القائمة بنجاح.",
+                "successfully_updated": "تم تحديث عنصر فى القائمة بنجاح.",
+                "updated_order": "تم تحديث ترتيب القائمة بنجاح.",
+                "url": "رابط URL لعنصر القائمة",
+                "usage_hint": "يمكنك عرض قائمة في أي مكان في موقعك من طريق استدعاء | يمكنك عرض هذه القائمة في أي مكان على موقعك عن طريق استدعاء"
+            },
+            "post": {
+                "category": "قسم المقال",
+                "content": "محتويات المقال",
+                "details": "تفاصيل المقال",
+                "excerpt": "مقتطف <small> وصف صغير لهذا المقال <\/small>",
+                "image": "صورة المقال",
+                "meta_description": "وصف",
+                "meta_keywords": "كلمات دلالية",
+                "new": "إنشاء مقال جديد",
+                "seo_content": "محتوى متوافق مع محركات البحث SEO",
+                "seo_title": "عنوان SEO",
+                "slug": "الرابط URL",
+                "status": "حالة المقال",
+                "status_draft": "مسودة",
+                "status_pending": "معلق",
+                "status_published": "منشور",
+                "title": "عنوان المقال",
+                "title_sub": "عنوان مقالك",
+                "update": "تحديث المقال"
+            },
+            "database": {
+                "add_bread": "أضف BREAD إلى هذا الجدول",
+                "add_new_column": "إضافة عمود جديد",
+                "add_softdeletes": "إضافة الحذف الناعم soft Deletes",
+                "add_timestamps": "إضافة الطوابع الزمنية Timestamps",
+                "already_exists": "موجود بالفعل",
+                "already_exists_table": "الجدول {table} موجود بالفعل",
+                "bread_crud_actions": "إجراءات BREAD\/CRUD",
+                "bread_info": "معلومات ال BREAD",
+                "browse_bread": "استعراض BREAD",
+                "column": "عمود",
+                "composite_warning": "تحذير: هذا العمود جزء من فهرس مركب",
+                "controller_name": "اسم وحدة التحكم Controller",
+                "controller_name_hint": "مثال PageController, إذا تركت فارغة ستستخدم ال BREAD Controller",
+                "create_bread_for_table": "إنشاء ال BREAD للجدول {table}",
+                "create_migration": "هل تريد إنشاء ملف تحديث قاعدة البيانات لهذا الجدول؟",
+                "create_model_table": "إنشاء نموذج Model لهذا الجدول؟",
+                "create_new_table": "إنشاء جدول جديد",
+                "create_your_new_table": "إنشاء جدولك الجديد",
+                "default": "افتراضي",
+                "delete_bread": "حذف ال BREAD",
+                "delete_bread_before_table": "الرجاء التأكد من إزالة ال BREAD الخاصة بهذا الجدول قبل حذف الجدول.",
+                "delete_table_bread_conf": "نعم، إزالة ال BREAD",
+                "delete_table_bread_quest": "هل أنت متأكد من حذف ال BREAD للجدول {table} ؟",
+                "delete_table_confirm": "نعم، احذف هذا الجدول",
+                "delete_table_question": "هل تريد بالتأكيد حذف الجدول {table} ؟",
+                "description": "الوصف",
+                "display_name": "اسم العرض",
+                "display_name_plural": "اسم العرض (جمع)",
+                "display_name_singular": "اسم العرض (مفرد)",
+                "edit_bread": "تعديل ال BREAD",
+                "edit_bread_for_table": "تعديل ال BREAD للجدول {table}",
+                "edit_rows": "تعديل الصفوف للجدول {table} أدناه",
+                "edit_table": "تعديل الجدول {table} أدناه",
+                "edit_table_not_exist": "الجدول الذي تريد تعديله غير موجود",
+                "error_creating_bread": "عذراً، يبدو أن هناك مشكلة في إنشاء هذا ال BREAD",
+                "error_removing_bread": "عذراً، يبدو أنه حدثت مشكلة أثناء إزالة ال BREAD",
+                "error_updating_bread": "عذرا، يبدو أنه قد حدثت مشكلة أثناء تحديث هذا ال BREAD",
+                "extra": "إضافي",
+                "field": "حقل",
+                "field_safe_failed": "أخفق حفظ {field} سيتم التراجع!",
+                "generate_permissions": "توليد الصلاحيات",
+                "icon_class": "رمز لاستخدامه لهذا الجدول",
+                "icon_hint": "رمز (اختياري) استخدم",
+                "icon_hint2": "معرفات أيقونات فوياجر",
+                "index": "فهرس",
+                "input_type": "نوع الإدخال",
+                "key": "مفتاح",
+                "model_class": "اسم فئة النموذج Model Class",
+                "model_name": "اسم النموذج Model",
+                "model_name_ph": "\u0645\u062B\u0627\u0644. \\App\\User, \u0625\u0630\u0627 \u062A\u0631\u0643\u062A \u0641\u0627\u0631\u063A\u0629 \u0633\u062A\u0633\u062A\u062E\u062F\u0645 \u0627\u0633\u0645 \u0627\u0644\u062C\u062F\u0648\u0644",
+                "name_warning": "يرجى تسمية العمود قبل إضافة فهرس",
+                "no_composites_warning": "يحتوي هذا الجدول على فهارس مركبة. يرجى ملاحظة أنها غير معتمدة في الوقت الراهن. كن حذرا عند محاولة إضافة \/ إزالة الفهارس.",
+                "null": "Null",
+                "optional_details": "تفاصيل اختيارية",
+                "policy_class": "اسم فئة السياسة",
+                "policy_name": "اسم السياسة Policy",
+                "policy_name_ph": "\u0645\u062B\u0644 \\App\\Policies\\UserPolicy, \u0627\u0630\u0627 \u062A\u0631\u0643 \u0641\u0627\u0631\u063A\u0627 \u0633\u064A\u062A\u0645 \u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0627\u0644\u0627\u0641\u062A\u0631\u0636\u064A",
+                "primary": "اساسي Primary",
+                "server_pagination": "ترقيم الصفحات من جانب الخادم",
+                "success_create_table": "تم إنشاء الجدول {table} بنجاح",
+                "success_created_bread": "تم إنشاء BREAD بنجاح",
+                "success_delete_table": "تم حذف الجدول {table} بنجاح",
+                "success_remove_bread": "تم إزالة ال BREAD من {datatype} بنجاح",
+                "success_update_bread": "تم تحديث ال BREAD الخاصة ب {datatype} بنجاح",
+                "success_update_table": "تم تحديث الدول {table} بنجاح",
+                "table_actions": "إجراءات الجدول",
+                "table_columns": "أعمدة الجدول",
+                "table_has_index": "يحتوي الجدول بالفعل على فهرس أساسي.",
+                "table_name": "اسم الجدول",
+                "table_no_columns": "لا يحتوي الجدول على أعمدة ...",
+                "type": "النوع",
+                "type_not_supported": "هذا النوع غير معتمد",
+                "unique": "فريد",
+                "unknown_type": "نوع غير معروف",
+                "update_table": "تحديث الجدول",
+                "url_slug": "رابط URL (يجب أن يكون فريد)",
+                "url_slug_ph": "رابط URL (مثل posts)",
+                "visibility": "الظهور",
+                "relationship": {
+                    "relationship": "علاقة",
+                    "relationships": "علاقات",
+                    "has_one": "لديه واحدة",
+                    "has_many": "لديه العديد",
+                    "belongs_to": "ينتمي إلى",
+                    "belongs_to_many": "ينتمي إلى العديد",
+                    "which_column_from": "أي عمود من ",
+                    "is_used_to_reference": "سيستخدم للدلالة إلى هذه",
+                    "pivot_table": "جدول محوري",
+                    "selection_details": "تفاصيل الاختيار",
+                    "display_the": "عرض العنصر",
+                    "store_the": "خزن العنصر",
+                    "easy_there": "تمهل قليلا",
+                    "before_create": "قبل أن تنشئ علاقة جديدة ستحتاج أن تنشئ BREAD أولا.<br>ثم عد لتعديل ال BREAD وستتمكن من إضافة العلاقات.<br>شكرا.",
+                    "cancel": "إلغاء",
+                    "add_new": "إضافة علاقة جديدة",
+                    "open": "فتح",
+                    "close": "إغلاق",
+                    "relationship_details": "تفاصيل العلاقة",
+                    "browse": "استعراض",
+                    "read": "معاينة",
+                    "edit": "تعديل",
+                    "add": "إضافة",
+                    "delete": "حذف",
+                    "create": "إنشاء علاقة",
+                    "namespace": "اسم النموذج Model (مثال App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "صفحات|صفحة",
+                "page_link_text": "عرض جميع الصفحات",
+                "page_text": "لديك {count} {string} في قاعدة البيانات الخاصة بك. انقر على الزر أدناه لعرض جميع الصفحات.",
+                "post": "مقالات|مقالة",
+                "post_link_text": "عرض جميع المقالات",
+                "post_text": "لديك {count} {string} في قاعدة البيانات الخاصة بك. انقر على الزر أدناه لعرض جميع المقالات.",
+                "user": "أعضاء|عضو",
+                "user_link_text": "عرض جميع المستخدمين",
+                "user_text": "لديك {count} {string} في قاعدة البيانات الخاصة بك. انقر على الزر أدناه لعرض جميع المستخدمين."
+            },
+            "form": {
+                "field_password_keep": "اتركه فارغ لعدم التعديل",
+                "field_select_dd_relationship": "تأكد من إعداد العلاقة المناسبة في الطريقة {method} الخاصة بالمعرف {class}",
+                "type_checkbox": "مربع اختيار Checkbox",
+                "type_codeeditor": "محرر أكواد Code Editor",
+                "type_file": "ملف",
+                "type_image": "صورة",
+                "type_radiobutton": "زر اختيار من متعدد Radio Button",
+                "type_richtextbox": "مربع نص منسق Rich Textbox",
+                "type_selectdropdown": "قائمة تحديد منسدلة Dropdown",
+                "type_textarea": "منطقة نص Text Area",
+                "type_textbox": "مربع نص Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "لا تتوفر بيانات في هذا الجدول",
+                "sInfo": "عرض من _START_ إلى _END_ من مجموع _TOTAL_ عنصر",
+                "sInfoEmpty": "عرض عناصر 0 إلى 0 من مجموع 0 عنصر",
+                "sInfoFiltered": "(تمت تصفية من مجموع _MAX_ عناصر)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "عرض _MENU_ عنصر",
+                "sLoadingRecords": "جار التحميل...",
+                "sProcessing": "جار المعالجة...",
+                "sSearch": "بحث:",
+                "sZeroRecords": "لم يتم العثور على سجلات مطابقة",
+                "oPaginate": {
+                    "sFirst": "الأول",
+                    "sLast": "الأخير",
+                    "sNext": "التالي",
+                    "sPrevious": "السابق"
+                },
+                "oAria": {
+                    "sSortAscending": ": فعل لترتيب العمود تصاعديا",
+                    "sSortDescending": ": فعل لترتيب العمود تنازليا"
+                }
+            },
+            "theme": {
+                "footer_copyright": "صنعت بـ <i class=\"voyager-heart\"><\/i> بواسطة",
+                "footer_copyright2": "مصنوعة باستخدام الكثير من القهوة والشاي بالنعناع"
+            },
+            "json": {
+                "invalid": "Json غير صالح",
+                "invalid_message": "يبدو أنك عرضت بعض Json الغير صالحة.",
+                "valid": "Json صالح",
+                "validation_errors": "أخطاء أثناء التحقق"
+            },
+            "analytics": {
+                "by_pageview": "حسب المشاهدات",
+                "by_sessions": "حسب الجلسات",
+                "by_users": "حسب المستخدمين",
+                "no_client_id": "لعرض التحليلات، ستحتاج إلى الحصول على معرف عميل google analytics وإضافته إلى إعدادات المفتاح <code> google_analytics_client_id <\/code>. احصل على المفتاح من لوحة تحكم مطوري جوجل:",
+                "set_view": "حدد طريقة العرض",
+                "this_vs_last_week": "هذا الأسبوع ضد الأسبوع الماضي",
+                "this_vs_last_year": "هذا العام ضد العام الماضي",
+                "top_browsers": "أفضل المتصفحات",
+                "top_countries": "أعلى البلدان",
+                "various_visualizations": "تصورات مختلفة"
+            },
+            "error": {
+                "symlink_created_text": "لقد أنشأنا للتو الاختصار symlink المفقود.",
+                "symlink_created_title": "تم إنشاء الاختصار المفقود symlink إلى storage",
+                "symlink_failed_text": "فشلنا في إنشاء الاختصار المفقود في تطبيقك. يبدو أن مزود خدمة الاستضافة لديك لا يدعمه.",
+                "symlink_failed_title": "تعذر إنشاء الاختصار المفقود symlink إلى مجلد التخزين",
+                "symlink_missing_button": "إصلاح المشكلة",
+                "symlink_missing_text": "لم نتمكن من العثور على اختصار symlink الى مجلد التخزين. قد يتسبب هذا في حدوث مشكلات في تحميل ملفات الوسائط من المتصفح.",
+                "symlink_missing_title": "الاختصار symlink إلى مجلد التخزين مفقود"
+            }
+        }
+    },
+    "cz": {
+        "voyager": {
+            "date": {
+                "last_week": "Minulý týden",
+                "last_year": "Minulý rok",
+                "this_week": "Tento týden",
+                "this_year": "Tento rok"
+            },
+            "generic": {
+                "action": "Akce",
+                "actions": "Akce",
+                "add": "Přidat",
+                "add_folder": "Přidat složku",
+                "add_new": "Vytvořit nový",
+                "all_done": "Hotovo",
+                "are_you_sure": "Jste si jist",
+                "are_you_sure_delete": "Jste si jist, že chcete odstranit",
+                "auto_increment": "Automatické zvýšení",
+                "browse": "Procházet",
+                "builder": "Konstruktor",
+                "bulk_delete": "Hromadné mazání",
+                "bulk_delete_confirm": "Ano, hromadně smazat",
+                "bulk_delete_nothing": "Nevybrali jste záznamy pro hromadné mazání",
+                "cancel": "Zrušit",
+                "choose_type": "Vyberte typ",
+                "click_here": "Klikněte sem",
+                "close": "Zavřít",
+                "compass": "Kompas",
+                "created_at": "Vytvořeno",
+                "custom": "Vlastní",
+                "dashboard": "Dashboard",
+                "database": "Databáze",
+                "default": "Výchozí",
+                "delete": "Odstranit",
+                "delete_confirm": "Ano, smazat!",
+                "delete_question": "Jste si jistý, že to chcete smazat?",
+                "delete_this_confirm": "Ano, smazat",
+                "deselect_all": "Zrušit výběr",
+                "download": "Stáhnout",
+                "edit": "Editovat",
+                "email": "E-mail",
+                "error_deleting": "Vypadá to, že se vyskytnul problém s mazáním tohoto záznamu",
+                "exception": "Vyjímka",
+                "featured": "Featured",
+                "field_does_not_exist": "Pole neexistuje",
+                "how_to_use": "Jak použít",
+                "index": "Index",
+                "internal_error": "Internal error",
+                "items": "položka\/y",
+                "keep_sidebar_open": "Yarr! Zakotvit! (a nechat otevřený boční panel)",
+                "key": "Klíč",
+                "last_modified": "Naposledy upraveno",
+                "length": "Délka",
+                "login": "Přihlásit",
+                "media": "Média",
+                "menu_builder": "Menu konstruktor",
+                "move": "Přesunout",
+                "name": "Název",
+                "new": "Nový",
+                "no": "Ne",
+                "no_thanks": "Ne, děkuji",
+                "not_null": "Nenulový",
+                "options": "Možnosti",
+                "password": "Heslo",
+                "permissions": "Oprávnění",
+                "profile": "Profil",
+                "public_url": "Veřejná URL",
+                "read": "Číst",
+                "rename": "Přejmenovat",
+                "required": "Požadováno",
+                "return_to_list": "Zpět na seznam",
+                "route": "Cesta",
+                "save": "Uložit",
+                "search": "Vyhledat",
+                "select_all": "Vybrat vše",
+                "select_group": "Vybrat existující skupinu nebo vytvořit novou",
+                "settings": "Nastavení",
+                "showing_entries": "Zobrazuji {from} - {to} ze {all} záznamů|Zobrazuji {from} - {to} ze {all} záznamů",
+                "submit": "Odeslat",
+                "successfully_added_new": "Úspěšně přidán nový",
+                "successfully_deleted": "Úspěšně smazáno",
+                "successfully_updated": "Úspěšně upraveno",
+                "timestamp": "Timestamp",
+                "title": "Nadpis",
+                "type": "Typ",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "Odkotvit boční panel",
+                "update": "Upravit",
+                "update_failed": "Úprava selhala",
+                "upload": "Upload",
+                "url": "URL",
+                "view": "Zobrazení",
+                "viewing": "Zobrazení",
+                "yes": "Ano",
+                "yes_please": "Ano, prosím"
+            },
+            "login": {
+                "loggingin": "Přihlašuji",
+                "signin_below": "Přihlašte se:",
+                "welcome": "Vítá vás Voyager, chybějící administrace pro Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Upravit profil",
+                "edit_user": "Upravit uživatele",
+                "password": "Heslo",
+                "password_hint": "Zanechte prázdné, pokud chcete uchovat stávající heslo",
+                "role": "Role",
+                "user_role": "Uživatelská role"
+            },
+            "settings": {
+                "usage_help": "Můžete získat hodnotu každého nastavení kdekoliv na stránce zavoláním",
+                "save": "Uložit nastavení",
+                "new": "Nové nastavení",
+                "help_name": "Název nastavení, např. \"Název stránky\"",
+                "help_key": "Klíč nastavení, např. \"nazev_stranky\"",
+                "help_option": "(nepovinné, vztahuje se pouze na věci jako dropdown menu nebo tlačítka)",
+                "add_new": "Přidat nové nastavení",
+                "delete_question": "Jste si jist, že chcete smazat {setting} ?",
+                "delete_confirm": "Ano, smazat toto nastavení",
+                "successfully_created": "Nastavení úspěšně vytvořeno",
+                "successfully_saved": "Nastavení úspěšně uloženo",
+                "successfully_deleted": "Nastavení úspěšně smazáno",
+                "already_at_top": "Toto již je na počátku seznamu",
+                "already_at_bottom": "Toto již je na konci seznamu",
+                "key_already_exists": "Klíč s názvem {key} již existuje",
+                "moved_order_up": "Nastavení {name} posunuto v pořadí výše",
+                "moved_order_down": "Nastavení {name} posunuto v pořadí níže",
+                "successfully_removed": "Úspěšně odstraněna hodnota {name}",
+                "group_general": "Hlavní",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Skupina",
+                "help_group": "Skupina tohoto nastavení je přiřazena"
+            },
+            "media": {
+                "add_new_folder": "Přidat složku",
+                "audio_support": "Váš prohlížeč nepodporuje zvukové prvky.",
+                "create_new_folder": "Vytvořit novou složku",
+                "delete_folder_question": "Smazáním složky se také smaže i obsah uvnitř",
+                "destination_folder": "Cílová složka",
+                "drag_drop_info": "Natáhněte soubory sem nebo použijte upload níže",
+                "error_already_exists": "Složka nebo soubor v tomto adresáři již existuje",
+                "error_creating_dir": "Něco se nezdařilo při vytváření složky, zkontrolujte prosím své oprávnění",
+                "error_deleting_file": "Něco se nezdařilo při mazání souboru, prosím zkontrolujte své oprávnění",
+                "error_deleting_folder": "Něco se nezdařilo při mazání složky, zkontrolujte prosím své oprávnění",
+                "error_may_exist": "Soubor nebo složka s tímto názvem již existuje, smažte prosím původní soubor.",
+                "error_moving": "Něco se nezdařilo při přesouvání dané složky nebo souboru, zkontrolujte své oprávnění.",
+                "error_uploading": "Vyskytla se chyba při nahrávání souboru",
+                "folder_exists_already": "Tato složka již existuje, prosím odstraňte ji, pokud ji chcete znovu vytvořit",
+                "image_does_not_exist": "Obrázek neexistuje",
+                "image_removed": "Obrázek byl smazán",
+                "library": "Knihovna souborů",
+                "loading": "NAČÍTÁM VAŠE SOUBORY",
+                "move_file_folder": "Přesunout složku\/soubor",
+                "new_file_folder": "Název souboru\/složky",
+                "new_folder_name": "Název složky",
+                "no_files_here": "Žádné soubory zde nejsou. Nic. Tečka.",
+                "no_files_in_folder": "Žádné soubory v této složce",
+                "nothing_selected": "Složky\/soubor nevybrány",
+                "rename_file_folder": "Přejmenovat složku\/soubor",
+                "success_uploaded_file": "Soubor úspěšně nahrán!",
+                "success_uploading": "Obrázek úspěšně nahrán!",
+                "uploading_wrong_type": "Vyskytla se chyba: nepodporovaný souborový typ nebo velikost souboru",
+                "video_support": "Váš prohlížeč nepodporuje video tag",
+                "crop": "Oříznout",
+                "crop_and_create": "Oříznout a vytvořit",
+                "crop_override_confirm": "Toto přepíše originální obrázek, jste si jist?",
+                "crop_image": "Oříznout obrázek",
+                "success_crop_image": "Obrázek úspěšně oříznut",
+                "height": "Výška: ",
+                "width": "Šířka: "
+            },
+            "menu_builder": {
+                "color": "Barva v zápisu RGB nebo hex (nepovinné)",
+                "color_ph": "Barva (např. #ffffff nebo rgb(255, 255, 255)",
+                "create_new_item": "Vytvořit novou položku menu",
+                "delete_item_confirm": "Ano, smazat položku",
+                "delete_item_question": "Jste si jist, že chcete smazat tuhle položku?",
+                "drag_drop_info": "Přetáhněte položky níže pro změnu pořadí.",
+                "dynamic_route": "Dynamická cesta",
+                "edit_item": "Upravit položku",
+                "icon_class": "Font Icon class pro položku (Použijte ",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Icon Class (nepovinné)",
+                "item_route": "Cesta pro položku",
+                "item_title": "Název položky",
+                "link_type": "Link type",
+                "new_menu_item": "Nová položka",
+                "open_in": "Otevřít v",
+                "open_new": "Novém okně\/záložce",
+                "open_same": "Stejném okně\/záložce",
+                "route_parameter": "Parametry pro cestu (pokud nějaké jsou)",
+                "static_url": "Statická URL",
+                "successfully_created": "Položka byla úspěšně vytvořena.",
+                "successfully_deleted": "Položka byla úspěšně smazána.",
+                "successfully_updated": "Položka byla úspěšně upravena.",
+                "updated_order": "Pořadí bylo úspěšně upraveno.",
+                "url": "URL pro položku",
+                "usage_hint": "Menu můžete zobrazit kdekoliv zavoláním|Toto menu můžete zobrazit kdekoliv na stránce zavoláním"
+            },
+            "post": {
+                "category": "Kategorie příspěvku",
+                "content": "Obsah příspěvku",
+                "details": "Detaily",
+                "excerpt": "Perex <small>Krátký popisek tohoto příspěvku<\/small>",
+                "image": "Obrázek",
+                "meta_description": "Meta Description",
+                "meta_keywords": "Meta Keywords",
+                "new": "Vytvořit nový příspěvek",
+                "seo_content": "SEO obsah",
+                "seo_title": "SEO nadpis",
+                "slug": "URL slug",
+                "status": "Status příspěvku",
+                "status_draft": "návrh",
+                "status_pending": "čekající",
+                "status_published": "publikován",
+                "title": "Název příspěvku",
+                "title_sub": "Název pro váš příspěvek",
+                "update": "Upravit příspěvek"
+            },
+            "database": {
+                "add_bread": "Přidat BREAD do této tabulky",
+                "add_new_column": "Přidat nový sloupec",
+                "add_softdeletes": "Přidat neúplné mazání (soft deletes)",
+                "add_timestamps": "Přidat Timestamps",
+                "already_exists": "již existuje",
+                "already_exists_table": "Tabulka {table} již existuje",
+                "bread_crud_actions": "BREAD\/CRUD akce",
+                "bread_info": "BREAD info",
+                "browse_bread": "Prozkoumat BREAD",
+                "column": "Sloupec",
+                "composite_warning": "Varování: tento sloupec je součástí composite index",
+                "controller_name": "Název controlleru",
+                "controller_name_hint": "např. PageController, pokud zůstane nevyplněno, bude použit BREAD Controller",
+                "create_bread_for_table": "Vytvořit BREAD pro {table}",
+                "create_migration": "Vytvořit migraci pro tuto tabulku?",
+                "create_model_table": "Vytvořit model pro tuto tabulku?",
+                "create_new_table": "Vytvořit novou tabulku",
+                "create_your_new_table": "Vytvořit tabulku",
+                "default": "Výchozí",
+                "delete_bread": "Smazat BREAD",
+                "delete_bread_before_table": "Prosím smažte nejdříve BREAD odkazující na tuto tabulku před jejím smazání.",
+                "delete_table_bread_conf": "Ano, smazat BREAD",
+                "delete_table_bread_quest": "Jste si jist, že chcete smazat BREAD pro tabulku {table}?",
+                "delete_table_confirm": "Ano, smazat tuto tabulku",
+                "delete_table_question": "Jste si jist, že chcete smazat tabulku {table}?",
+                "description": "Popis",
+                "display_name": "Název pro zobrazení",
+                "display_name_plural": "Název pro zobrazení (množné číslo)",
+                "display_name_singular": "Název pro zobrazení (jednotné číslo)",
+                "edit_bread": "Upravit BREAD",
+                "edit_bread_for_table": "Upravit BREAD pro tabulku {table}",
+                "edit_rows": "Upravit řádky pro tabulku {table} níže",
+                "edit_table": "Upravit tabulku {table} níže",
+                "edit_table_not_exist": "Tabulka, kterou chcete upravit, neexistuje",
+                "error_creating_bread": "Vypadá to, že nastal problém při vytváření tohoto BREADu",
+                "error_removing_bread": "Vypadá to, že nastal problém při mazání tohoto BREADu",
+                "error_updating_bread": "Vypadá to, že nastal problém při editaci tohoto BREADu",
+                "extra": "Extra",
+                "field": "Pole",
+                "field_safe_failed": "Nepodařilo se uložit pole {field}, vracíme změny zpět!",
+                "generate_permissions": "Vytvořit oprávnění",
+                "icon_class": "Ikona pro tuto tabulku",
+                "icon_hint": "Ikona (nepovinné) použijte",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Input Type",
+                "key": "Klíč",
+                "model_class": "Název třídy modelu",
+                "model_name": "Název modelu",
+                "model_name_ph": "nap\u0159. \\App\\User, pokud z\u016Fstane pr\xE1zdn\xE9, zkus\xED se vytvo\u0159it podle n\xE1zvu tabulky",
+                "name_warning": "Prosím pojmenujte sloupec před přidáním indexu",
+                "no_composites_warning": "Tato tabulka má složené indexy. Prosím vemte v potaz, že nejsou momentálně podporovány. Buďte opatrní při manipulaci s nimi.",
+                "null": "Null",
+                "optional_details": "Nepovinné detaily",
+                "policy_class": "Název třídy pro policy",
+                "policy_name": "Policy název",
+                "policy_name_ph": "nap\u0159. \\App\\Policies\\UserPolicy, pokud ponech\xE1no pr\xE1zdn\xE9, pokus\xED se pou\u017E\xEDt v\xFDchoz\xED",
+                "primary": "PRIMARY",
+                "server_pagination": "Server-side Pagination",
+                "success_create_table": "Úspěšně vytvořena tabulka {table}",
+                "success_created_bread": "Úspěšně vytvořen nový BREAD",
+                "success_delete_table": "Úspěšně smazána tabulka {table}",
+                "success_remove_bread": "Úspěšně smazán BREAD z {datatype}",
+                "success_update_bread": "Úspěšně upraven {datatype} BREAD",
+                "success_update_table": "Úspěšně upravena tabulka {table}",
+                "table_actions": "Akce pro tabulku",
+                "table_columns": "Sloupce tabulky",
+                "table_has_index": "Tabulka již má hlavní klíč.",
+                "table_name": "Název tabulky",
+                "table_no_columns": "Tabulka nemá žádné sloupce...",
+                "type": "Typ",
+                "type_not_supported": "Tento typ není podporován",
+                "unique": "UNIQUE",
+                "unknown_type": "Neznámý typ",
+                "update_table": "Upravit tabulku",
+                "url_slug": "URL Slug (musí být unikátní)",
+                "url_slug_ph": "URL slug (např. posts)",
+                "visibility": "Viditelnost",
+                "relationship": {
+                    "relationship": "Vztah",
+                    "relationships": "Vztahy",
+                    "has_one": "Obsahuje jeden",
+                    "has_many": "Obsahuje více",
+                    "belongs_to": "Spadá pod jeden",
+                    "belongs_to_many": "Spadá pod více",
+                    "which_column_from": "Který sloupec z",
+                    "is_used_to_reference": "je použito pro odkazování ",
+                    "pivot_table": "Pivot tabulka",
+                    "selection_details": "Detaily výběru",
+                    "display_the": "Zobrazit",
+                    "store_the": "Uložit",
+                    "easy_there": "Zlehka, kapitáne",
+                    "before_create": "Než vytvoříte nový vztah, musíte vytvořit nejdříve BREAD.<br> Poté se vraťte zpět pro editaci BREADu a teprve pak můžete vytvořit vztah.<br> Díky.",
+                    "cancel": "Zrušit",
+                    "add_new": "Přidat nový vztah",
+                    "open": "Otevřít",
+                    "close": "Zavřít",
+                    "relationship_details": "Detaily vazby",
+                    "browse": "Prozkoumat",
+                    "read": "Číst",
+                    "edit": "Upravit",
+                    "add": "Přidat",
+                    "delete": "Smazat",
+                    "create": "Vytvořit vztah",
+                    "namespace": "Namespace pro model (např. App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "Stránek|Stránky",
+                "page_link_text": "Zobrazit všechny stránky",
+                "page_text": "Máte {count} {string} ve vaší databázi. Klikněte na tlačítko níže pro zobrazení všech stránek.",
+                "post": "Příspěvků|Příspěvků",
+                "post_link_text": "Zobrazit všechny příspěvky",
+                "post_text": "Máte {count} {string} ve vaší databázi. Klikněte na tlačítko níže pro zobrazení všech příspěvků.",
+                "user": "Uživatelů|Uživatelů",
+                "user_link_text": "Zobrazit všechny uživatele",
+                "user_text": "Máte {count} {string} ve vaší databázi. Klikněte na tlačítko níže pro zobrazení všech uživatelů."
+            },
+            "form": {
+                "field_password_keep": "Zanechte prázdné pro zachování aktuálního hesla",
+                "field_select_dd_relationship": "Ujistěte se, že je nastavený správný vztah pro {method} metodu třídy {class}",
+                "type_checkbox": "Check Box",
+                "type_codeeditor": "Code Editor",
+                "type_file": "File",
+                "type_image": "Image",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Select Dropdown",
+                "type_textarea": "Text Area",
+                "type_textbox": "Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "Žádná dostupná data v tabulce",
+                "sInfo": "Zobrazuji _START_ - _END_ z _TOTAL_ záznamů",
+                "sInfoEmpty": "Zobrazuji 0 - 0 z 0 záznamů",
+                "sInfoFiltered": "(filtrováno z _MAX_ všech záznamů)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Zobrazit _MENU_ záznamů",
+                "sLoadingRecords": "Načítání...",
+                "sProcessing": "Zpracovávání...",
+                "sSearch": "Vyhledat:",
+                "sZeroRecords": "Žádné záznamy nenalezeny",
+                "oPaginate": {
+                    "sFirst": "První",
+                    "sLast": "Poslední",
+                    "sNext": "Další",
+                    "sPrevious": "Předchozí"
+                },
+                "oAria": {
+                    "sSortAscending": ": třídění sloupce vzestupně",
+                    "sSortDescending": ": třídění sloupce sestupně"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Vytvořeno s <i class=\"voyager-heart\"><\/i> od",
+                "footer_copyright2": "Vytvořeno s rumem"
+            },
+            "json": {
+                "invalid": "Neplatný Json",
+                "invalid_message": "Vypadá to, že jste zvolil neplatný JSON.",
+                "valid": "Platný Json",
+                "validation_errors": "Chyby validace"
+            },
+            "analytics": {
+                "by_pageview": "Podle zobrazení stránky",
+                "by_sessions": "Podle sezení",
+                "by_users": "Podle uživatelů",
+                "no_client_id": "Pro zobrazení analytických dat musíte znát klientské ID z Google Analytics a přidat ho pro konfiguraci pro klíč <code>google_analytics_client_id<\/code>. Obdržte svůj klíč z Google developer konzole:",
+                "set_view": "Vyberte zobrazení",
+                "this_vs_last_week": "tento týden vs minulý týden",
+                "this_vs_last_year": "tento rok vs minulý rok",
+                "top_browsers": "Top prohlížeče",
+                "top_countries": "Top země",
+                "various_visualizations": "Různé vizualizace"
+            },
+            "error": {
+                "symlink_created_text": "Vytvořili jsme chybějící symlink pro vás.",
+                "symlink_created_title": "Chybějící storage symlink vytvořen",
+                "symlink_failed_text": "Nepodařilo se nám vytvořit chybějící symlink pro vaši aplikaci. Vypadá to, že to váš hosting nepodporuje.",
+                "symlink_failed_title": "Nepodařilo se vytvořit storage symlink",
+                "symlink_missing_button": "Opravit to",
+                "symlink_missing_text": "Nemohli jsme najít storage symlink. To může dělat problémy s načítáním souborů z prohlížeče.",
+                "symlink_missing_title": "Chybějící storage symlink"
+            }
+        }
+    },
+    "de": {
+        "voyager": {
+            "date": {
+                "last_week": "Letzte Woche",
+                "last_year": "Letztes Jahr",
+                "this_week": "Diese Woche",
+                "this_year": "Dieses Jahr"
+            },
+            "generic": {
+                "action": "Aktion",
+                "actions": "Aktionen",
+                "add": "Hinzufügen",
+                "add_folder": "Ordner hinzufügen",
+                "add_new": "Neu hinzufügen",
+                "all_done": "Alles erledigt",
+                "are_you_sure": "Sind Sie sicher",
+                "are_you_sure_delete": "Sind Sie sicher dass Sie löschen möchten",
+                "auto_increment": "Automatische Werterhöhung",
+                "browse": "Browse",
+                "builder": "Builder",
+                "bulk_delete": "Massenlöschung",
+                "bulk_delete_confirm": "Ja, alle löschen",
+                "bulk_delete_nothing": "Sie haben nichts ausgewählt",
+                "cancel": "Abbruch",
+                "choose_type": "Typ auswählen",
+                "click_here": "Hier klicken",
+                "close": "Schließen",
+                "compass": "Kompass",
+                "created_at": "Angelegt",
+                "custom": "Custom",
+                "dashboard": "Dashboard",
+                "database": "Datenbank",
+                "default": "Defaultwert",
+                "delete": "Löschen",
+                "delete_confirm": "Ja, löschen!",
+                "delete_question": "Wirklich löschen",
+                "delete_this_confirm": "Ja, löschen",
+                "deselect_all": "Alles abwählen",
+                "download": "Herunterladen",
+                "edit": "Bearbeiten",
+                "email": "E-Mail",
+                "error_deleting": "Es gab ein Problem beim Versuch dies zu löschen",
+                "exception": "Exception",
+                "featured": "Featured",
+                "field_does_not_exist": "Feld existiert nicht",
+                "how_to_use": "Verwendung",
+                "index": "Index",
+                "internal_error": "Interner Fehler",
+                "items": "Element(e)",
+                "keep_sidebar_open": "Yarr! Anker werfen! (und Sidebar geöffnet lassen)",
+                "key": "Key",
+                "last_modified": "Zuletzt modifiziert",
+                "length": "Länge",
+                "login": "Login",
+                "media": "Medien",
+                "menu_builder": "Menü Editor",
+                "move": "Verschieben",
+                "name": "Name",
+                "new": "Neu",
+                "no": "Nein",
+                "no_thanks": "Nein Danke",
+                "no_results": "Keine Ergebnisse",
+                "not_null": "Not Null",
+                "options": "Optionen",
+                "password": "Passwort",
+                "permissions": "Rechte",
+                "profile": "Profil",
+                "public_url": "Öffentliche URL",
+                "read": "Lesen",
+                "rename": "Umbenennen",
+                "required": "Notwendig",
+                "return_to_list": "Zurück zur Liste",
+                "route": "Route",
+                "save": "Speichern",
+                "search": "Suchen",
+                "select_all": "Alles auswählen",
+                "select_group": "Bestehende Gruppe auswählen oder neue Gruppe hinzufügen",
+                "settings": "Einstellungen",
+                "showing_entries": "Zeige {from} bis {to} von {all} Eintrag|Zeige {from} bis {to} von {all} Einträgen",
+                "submit": "Absenden",
+                "successfully_added_new": "Erfolgreich neu hinzugefügt",
+                "successfully_deleted": "Erfolgreich gelöscht",
+                "successfully_updated": "Erfolgreich bearbeitet",
+                "timestamp": "Zeitstempel",
+                "title": "Titel",
+                "type": "Typ",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "Sidebar ablösen",
+                "update": "Aktualisierung",
+                "update_failed": "Aktualisierung fehlgeschlagen",
+                "upload": "Upload",
+                "url": "URL",
+                "view": "Anzeigen",
+                "viewing": "Zeige",
+                "yes": "Ja",
+                "yes_please": "Ja, Bitte"
+            },
+            "login": {
+                "loggingin": "Einloggen",
+                "signin_below": "Unten anmelden:",
+                "welcome": "Willkommen bei Voyager. Der fehlende Admin für Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Mein Profil bearbeiten",
+                "edit_user": "Benutzer bearbeiten",
+                "password": "Passwort",
+                "password_hint": "Leer lassen um das Bisherige zu behalten",
+                "role": "Rolle",
+                "user_role": "Benutzerrolle"
+            },
+            "settings": {
+                "usage_help": "Sie können den Wert jeder Einstellung überall auf der Seite erhalten durch den Aufruf von",
+                "save": "Einstellungen speichern",
+                "new": "Neue Einstellung",
+                "help_name": "Einstellungs-Name z.B. Admin Titel",
+                "help_key": "Einstellungs-Schlüssel z.B. title",
+                "help_option": "(optional, betrifft lediglich bestimmte Typen wie Dropdown Box oder Radio Button)",
+                "add_new": "Neue Einstellung hinzufügen",
+                "delete_question": "Wollen Sie die Einstellung {setting} wirklich löschen?",
+                "delete_confirm": "Ja, diese Einstellung löschen",
+                "successfully_created": "Einstellungen erfolgreich erstellt",
+                "successfully_saved": "Einstellungen erfolgreich gespeichert",
+                "successfully_deleted": "Einstellungen erfolgreich gelöscht",
+                "already_at_top": "Dies ist bereits an erster Stelle der Liste",
+                "already_at_bottom": "Dies ist bereits an letzter Stelle der Liste",
+                "key_already_exists": "Der Schlüssel {key} existiert bereits",
+                "moved_order_up": "Einstellung {name} wurde nach oben geschoben",
+                "moved_order_down": "Einstellung {name} wurde nach unten geschoben",
+                "successfully_removed": "Wert {name} wurde erfolgreich gelöscht",
+                "group_general": "General",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Gruppe",
+                "help_group": "Diese Einstellung ist zugewiesen zu"
+            },
+            "media": {
+                "add_new_folder": "Neuen Ordner hinzufügen",
+                "audio_support": "Ihr Browser unterstützt das Audio Element nicht.",
+                "create_new_folder": "Neuen Ordner erstellen",
+                "delete_folder_question": "Das Löschen des Ordners wird alle darin enthaltenen Dateien und Ordnder löschen.",
+                "destination_folder": "Ziel Ordner",
+                "drag_drop_info": "Dateien mit Drag und Drop hineinziehen oder unten klicken um hochzuladen",
+                "error_already_exists": "Es ist bereits eine Datei bzw. ein Ordner mit diesem Namen in diesem Ordner vorhanden.",
+                "error_creating_dir": "Beim Versuch das Verzeichnis anzulegen ist ein Fehler aufgetreten. Stellen Sie sicher, dass Sie ausreichende Zugriffsrechte dafür haben.",
+                "error_deleting_file": "Beim Versuch diese Datei zu löschen ist ein Fehler aufgetreten. Stellen Sie sicher, dass Sie ausreichende Zugriffsrechte dafür haben.",
+                "error_deleting_folder": "Beim Versuch diesen Ordner zu löschen ist ein Fehler aufgetreten. Stellen Siesicher, dass Sie ausreichende Zugriffsrechte dafür haben.",
+                "error_may_exist": "Datei oder Ordner unter diesem Namen können bereits existieren. Wählen Sie einen anderen Namen oder löschen Sie die andere Datei.",
+                "error_moving": "Beim Versuch diese Datei bzw. Ordner zu verschieben ist ein Fehler aufgetreten. Stellen Sie sicher, dass Sie ausreichende Zugriffsrechte dafür haben.",
+                "error_uploading": "Hochladen fehlgeschlagen: Unbekannter Fehler aufgetreten!",
+                "folder_exists_already": "Dieser Ordner existiert bereits. Bitte löschen Sie diesen Ordner falls Sie ihn neu anlegen möchten",
+                "image_does_not_exist": "Bild existiert nicht",
+                "image_removed": "Bild entfernt",
+                "library": "Medien Bibliothek",
+                "loading": "LADE IHRE MEDIEN DATEIEN",
+                "move_file_folder": "Datei\/Ordner verschieben",
+                "new_file_folder": "Datei\/Ordner anlegen",
+                "new_folder_name": "Name des neuen Ordners",
+                "no_files_here": "Hier sind keine Dateien vorhanden.",
+                "no_files_in_folder": "Keine Dateien in diesem Ordner.",
+                "nothing_selected": "Keine Datei oder Ordner ausgewählt",
+                "rename_file_folder": "Datei\/Ordner umbenennen",
+                "success_uploaded_file": "Neue Datei erfolgreich hochgeladen!",
+                "success_uploading": "Bild erfolgreich hochgeladen!",
+                "uploading_wrong_type": "Fehler beim Hochladen: Nicht unterstütztes Dateiformat oder Datei zu groß zum Hochladen",
+                "video_support": "Ihr Browser unterstützt das Video Tag nicht."
+            },
+            "menu_builder": {
+                "color": "Farbe in RGB oder hex (optional)",
+                "color_ph": "Farbe (z. B. #ffffff oder rgb(255, 255, 255)",
+                "create_new_item": "Erstelle einen neues Menü Element",
+                "delete_item_confirm": "Ja, lösche dieses Menü Element",
+                "delete_item_question": "Sind Sie sicher dass Sie dieses Menü Element löschen möchten?",
+                "drag_drop_info": "Sie können die Reihenfolge der Menü Elemente durch Drag und Drop verändern.",
+                "dynamic_route": "Dynamische Route",
+                "edit_item": "Menü Element bearbeiten",
+                "icon_class": "Font Icon CSS-Klasse für das Menü Element (Benutze ",
+                "icon_class2": "Voyager Font CSS-Klasse<\/a>)",
+                "icon_class_ph": "Icon CSS-Klasse (optional)",
+                "item_route": "Route für das Menü Element",
+                "item_title": "Titel für das Menü Element",
+                "link_type": "Link Typ",
+                "new_menu_item": "Neues Menü Element",
+                "open_in": "Öffnen in",
+                "open_new": "Neuem Tab\/Fenster",
+                "open_same": "Selber Tab\/Fenster",
+                "route_parameter": "Route Parameter (falls vorhanden)",
+                "static_url": "Statische URL",
+                "successfully_created": "Neues Menü Element erfolgreich erstellt.",
+                "successfully_deleted": "Menü Element erfolgreich gelöscht.",
+                "successfully_updated": "Menü Element erfolgreich aktualisiert.",
+                "updated_order": "Menü Reihenfolge erfolgreich aktualisiert.",
+                "url": "URL des Menü Elements",
+                "usage_hint": "Sie können ein Menü überall auf der Seite ausgeben durch den Aufruf von|Sie können dieses Menü überall auf der Seite ausgeben durch den Aufruf von"
+            },
+            "post": {
+                "category": "Post Kategorie",
+                "content": "Post Inhalt",
+                "details": "Post Details",
+                "excerpt": "Excerpt <small>Kurzbeschreibung dieses Posts<\/small>",
+                "image": "Post Bild",
+                "meta_description": "Meta Beschreibung",
+                "meta_keywords": "Meta Keywords",
+                "new": "Post anlegen",
+                "seo_content": "SEO Content",
+                "seo_title": "SEO Titel",
+                "slug": "URL Slug",
+                "status": "Post Status",
+                "status_draft": "Entwurf",
+                "status_pending": "Warten auf Freigabe",
+                "status_published": "veröffentlicht",
+                "title": "Post Titel",
+                "title_sub": "Der Titel des Posts",
+                "update": "Post aktualisieren"
+            },
+            "database": {
+                "add_bread": "BREAD zu Tabelle hinzufügen",
+                "add_new_column": "Neue Spalte hinzufügen",
+                "add_softdeletes": "Soft Deletes hinzufügen",
+                "add_timestamps": "Zeitstempel hinzufügen",
+                "already_exists": "existiert bereits",
+                "already_exists_table": "Tabelle {table} existiert bereits",
+                "bread_crud_actions": "BREAD\/CRUD Aktionen",
+                "bread_info": "BREAD Info",
+                "browse_bread": "BREAD ansehen",
+                "column": "Spalte",
+                "composite_warning": "Warnung: Diese Spalte ist Teil eines zusammengesetzten Indexes",
+                "controller_name": "Controller Name",
+                "controller_name_hint": "z.B. PageController, falls leer gelassen wird der BREAD Controller verwendet",
+                "create_bread_for_table": "BREAD erstellen für {table} Tabelle",
+                "create_migration": "Migration erstellen für diese Tabelle?",
+                "create_model_table": "Model für diese Tabelle erstellen?",
+                "create_new_table": "Neue Tabelle erstellen",
+                "create_your_new_table": "Erstellen Sie Ihre neue Tabelle",
+                "default": "Default",
+                "delete_bread": "BREAD löschen",
+                "delete_bread_before_table": "Sie müssen zuerst das BREAD dieser Tabelle entfernen bevor Sie die Tabelle löschen können.",
+                "delete_table_bread_conf": "Ja, BREAD entfernen",
+                "delete_table_bread_quest": "Sind Sie sicher, dass Sie das BREAD für Tabelle {table} löschen möchten?",
+                "delete_table_confirm": "Ja, diese Tabelle löschen",
+                "delete_table_question": "Sind Sie sicher, dass Sie die Tabelle {table} löschen möchten?",
+                "description": "Beschreibung",
+                "display_name": "Anzeigename",
+                "display_name_plural": "Anzeigename (Plural)",
+                "display_name_singular": "Anzeigename (Singular)",
+                "edit_bread": "BREAD bearbeiten",
+                "edit_bread_for_table": "Bearbeite BREAD für Tabelle {table}",
+                "edit_rows": "Bearbeite die Zeilen der Tabelle {table}",
+                "edit_table": "Bearbeite die Tabelle {table}",
+                "edit_table_not_exist": "Die Tabelle welche Sie bearbeiten möchten existiert nicht",
+                "error_creating_bread": "Es ist ein Fehler aufgetreten beim Versuch dieses BREAD anzulegen",
+                "error_removing_bread": "Es ist ein Fehler aufgetreten beim Versuch dieses BREAD zu löschen",
+                "error_updating_bread": "Es ist ein Fehler aufgetreten beim Versuch dieses BREAD zu aktualisieren",
+                "extra": "Extra",
+                "field": "Feld",
+                "field_safe_failed": "Konnte Feld {field} nicht speichern, Änderungen zurückgerollt!",
+                "generate_permissions": "Zugriffsrechte generieren",
+                "icon_class": "Icon CSS-Klasse für diese Tabelle",
+                "icon_hint": "Icon (optional) benutze",
+                "icon_hint2": "Voyager Font CSS-Klasse",
+                "index": "INDEX",
+                "input_type": "Eingabe-Typ",
+                "key": "Key",
+                "model_class": "Name der Model Klasse",
+                "model_name": "Model Name",
+                "model_name_ph": "z. B. \\App\\User, falls leer gelassen wird versucht den Namen der Tabelle zu verwenden",
+                "name_warning": "Sie müssen einen Namen für die Spalte vergeben,  bevor Sie einen Index hinzufügen",
+                "no_composites_warning": "Hinweis: Diese Tabelle hat zusammengesetzte Indexe. Diese werden momentan nicht unterstützt. Seien Sie vorsichtig beim Hinzufügen\/Ändern von Indexen.",
+                "null": "Null",
+                "optional_details": "Optionale Details",
+                "policy_class": "Policy Klassenname",
+                "policy_name": "Policy Name",
+                "policy_name_ph": "Bspw. \\App\\Policies\\UserPolicy, falls leer gelassen wird versucht den Default Wert zu Verwenden.",
+                "primary": "PRIMARY",
+                "server_pagination": "Serverseitige Pagination",
+                "success_create_table": "Tabelle {table} erfolgreich erstellt",
+                "success_created_bread": "Neues BREAD erfolgreich erstellt",
+                "success_delete_table": "Tabelle {table} erfolgreich erstellt",
+                "success_remove_bread": "BREAD erfolgreich von {datatype} entfernt",
+                "success_update_bread": "{datatype} BREAD erfolgreich aktualisiert",
+                "success_update_table": "Tabelle {table} erfolgreich aktualisiert",
+                "table_actions": "Tabellen Aktionen",
+                "table_columns": "Tabellen Spalten",
+                "table_has_index": "Die Tabelle hat bereits einen primären Index.",
+                "table_name": "Tabellenname",
+                "table_no_columns": "Die Tabelle hat keine Spalten...",
+                "type": "Typ",
+                "type_not_supported": "Dieser Typ wird nicht unterstützt",
+                "unique": "UNIQUE",
+                "unknown_type": "Unbekannter Typ",
+                "update_table": "Tabelle aktualisieren",
+                "url_slug": "URL Slug (muss einzigartig sein)",
+                "url_slug_ph": "URL Slug (z.B. posts)",
+                "visibility": "Sichtbarkeit",
+                "relationship": {
+                    "relationship": "Beziehung",
+                    "relationships": "Beziehungen",
+                    "has_one": "Hat eine\/n",
+                    "has_many": "Hat viele",
+                    "belongs_to": "Gehört zu",
+                    "belongs_to_many": "Gehört zu vielen",
+                    "which_column_from": "Welche Spalte von",
+                    "is_used_to_reference": "referenziert",
+                    "pivot_table": "Pivot-Tabelle",
+                    "selection_details": "Auswahl-Details",
+                    "display_the": "Zeige",
+                    "store_the": "Speichert",
+                    "easy_there": "Ruhig Kapitän",
+                    "before_create": "Bevor Sie eine neue Beziehung erstellen können müssen Sie das BREAD erstellen.<br>Kommen Sie dann zurück und Sie werden Beziehungen hinzufügen können.<br>Danke.",
+                    "cancel": "Abbrechen",
+                    "add_new": "Neue Beziehung hinzufügen",
+                    "open": "Öffne",
+                    "close": "Schließe",
+                    "relationship_details": "Beziehungs-Details",
+                    "browse": "Browse",
+                    "read": "Lesen",
+                    "edit": "Bearbeiten",
+                    "add": "Hinzufügen",
+                    "delete": "Löschen",
+                    "create": "Beziehung erstellen",
+                    "namespace": "Model Namespace (z.B. App\\Category)",
+                    "cant_create": "Konnte Beziehung nicht herstellen weil {model} nicht existiert."
+                }
+            },
+            "dimmer": {
+                "page": "Seite|Seiten",
+                "page_link_text": "Alle Seiten anzeigen",
+                "page_text": "Sie haben {count} {string} in Ihrer Datenbank.",
+                "post": "Post|Posts",
+                "post_link_text": "Alle Posts anzeigen",
+                "post_text": "Sie haben {count} {string} in Ihrer Datenbank.",
+                "user": "Benutzer|Benutzer",
+                "user_link_text": "Alle Benutzer anzeigen",
+                "user_text": "Sie haben {count} {string} in Ihrer Datenbank."
+            },
+            "form": {
+                "field_password_keep": "Leer lassen um das aktuelle Passwort zu behalten",
+                "field_select_dd_relationship": "Stellen Sie sicher, dass Sie die entsprechende Relation in der {method} Methode der {class} Klasse setzen.",
+                "type_checkbox": "Check Box",
+                "type_codeeditor": "Code Editor",
+                "type_file": "Datei",
+                "type_image": "Bild",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Select Dropdown",
+                "type_textarea": "Text Area",
+                "type_textbox": "Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "Keine Daten in der Tabelle vorhanden",
+                "sInfo": "Zeige _START_ bis _END_ von _TOTAL_ Einträgen",
+                "sInfoEmpty": "Zeige 0 von 0 Einträgen",
+                "sInfoFiltered": "(gefiltert von _MAX_ Einträgen)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "Zeige _MENU_ Einträge",
+                "sLoadingRecords": "Wird geladen...",
+                "sProcessing": "Bitte warten...",
+                "sSearch": "Suche:",
+                "sZeroRecords": "Keine Einträge vorhanden.",
+                "oPaginate": {
+                    "sFirst": "Erste",
+                    "sLast": "Letzte",
+                    "sNext": "Nächste",
+                    "sPrevious": "Zurück"
+                },
+                "oAria": {
+                    "sSortAscending": ": aktivieren, um Spalte aufsteigend zu sortieren",
+                    "sSortDescending": ": aktivieren, um Spalte absteigend zu sortieren"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Gemacht mit <i class=\"voyager-heart\"><\/i> von",
+                "footer_copyright2": "Gemacht mit Rum und noch mehr Rum"
+            },
+            "json": {
+                "invalid": "Ungültiges JSON",
+                "invalid_message": "Es scheint Sie haben ungültiges JSON eingebracht.",
+                "valid": "Gültiges JSON",
+                "validation_errors": "Validierungsfehler"
+            },
+            "analytics": {
+                "by_pageview": "nach Pageviews",
+                "by_sessions": "nach Sessions",
+                "by_users": "nach Benutzern",
+                "no_client_id": "Um Analytics zu sehen müssen Sie Ihre Google Analytics Client ID zu Ihren Einstellungen unter dem Schlüssel <code>google_analytics_client_id<\/code> hinzufügen. Holen Sie sich Ihren Key in der Google Developer Console:",
+                "set_view": "eine Ansicht wählen",
+                "this_vs_last_week": "Diese Woche im Vergleich zu letzter Woche",
+                "this_vs_last_year": "Dieses Jahr im Vergleich zum letzten Jahr",
+                "top_browsers": "Top Browser",
+                "top_countries": "Top Länder",
+                "various_visualizations": "verschiedenartige Visualisierungen"
+            },
+            "error": {
+                "symlink_created_text": "Wir haben soeben den fehlenden Symlink für Sie angelegt.",
+                "symlink_created_title": "Fehlender Storage Symlink angelegt",
+                "symlink_failed_text": "Fehlender Symlink für Ihre Anwendung konnte nicht angelegt werden. Es scheint so als würde Ihr Hosting Provider dies nicht anbieten.",
+                "symlink_failed_title": "Fehlender Storage Symlink konnte nicht angelegt werden",
+                "symlink_missing_button": "Bereinigen",
+                "symlink_missing_text": "Wir konnten keinen Storage Symlink finden. Dies könnte zu Problemen führen beim Laden von Medien Dateien aus dem Browser.",
+                "symlink_missing_title": "Fehlender Storage Symlink"
+            }
+        }
+    },
+    "en": {
+        "auth": {
+            "failed": "These credentials do not match our records.",
+            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+        },
+        "index": {
+            "welcome": "Welcome",
+            "welcome_message": "The online registration form for the Belgian Bahá'í Summer School.",
+            "family_name": "Family Name",
+            "address": "Address Name",
+            "phone": "Tel\/GSM",
+            "email": "Email",
+            "add_person": "Add Person",
+            "submit": "Submit",
+            "first_name": "First Name",
+            "name": "Name",
+            "date_of_birth": "Date of Birth",
+            "gender": "Gender",
+            "select_option": "select an option",
+            "male": "Male",
+            "female": "Female",
+            "attendance_language": "Attendance Language",
+            "english": "English",
+            "dutch": "Dutch",
+            "french": "French",
+            "diet": "Diet",
+            "standard": "Standard",
+            "vegetarian": "Vegetarian",
+            "self_catering": "Self-catering",
+            "stay": "Stay",
+            "stay_message": "The Summer School lasts from Friday 6th of July noon, to Tuesday 10th of July 4 pm. A commemoration for the martydom of the Báb will be held on Tuesday at 1 pm.",
+            "duration_stay": "Duration of Stay",
+            "entire_stay": "Entire Stay",
+            "partial_stay": "Partial Stay",
+            "arrival": "Arrival",
+            "days": "Days",
+            "before_lunch": "Before Lunch",
+            "bring_own_lunch": "Please bring your own lunch",
+            "before_dinner": "Before Dinner",
+            "after_dinner": "After Dinner",
+            "accommodation": "Accommodation",
+            "accommodation_message": "This year, you have the choice between a regular room in the main building (La Ferme) or a deluxe room in the Bed&Breakfast across the street.",
+            "show_prices": "Show Prices",
+            "regular": "Regular",
+            "deluxe": "Deluxe",
+            "no_accommodation": "No Accommodation",
+            "full_with_meal": "Full (incl. meals)",
+            "partial_with_meal": "Partial (per day, incl. meals)",
+            "per_day_without_meal": "Per day, excl. meals",
+            "excl_meals": "excl. meals",
+            "meal_prices": "Meal Prices",
+            "meal_warning": "The meals have to be reserved before the 20th of June. After this date, no meals can be ordered.",
+            "lunch": "Lunch",
+            "dinner": "Dinner",
+            "adults_and_kids": "Adults and children over 13",
+            "euros": "euros",
+            "children_3_5": "Children from 3 to 5",
+            "children_6_12": "Children from 6 to 12",
+            "children_2": "Children under 2",
+            "free": "Free",
+            "type": "Type",
+            "single_room_preferred": "Single-room preferred",
+            "child_with_parent": "This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per parent)",
+            "departure": "Departure",
+            "information": "Information",
+            "success": "Success",
+            "success_message": "Thank you. Your preregistration was successful. The logistics committee of the Summer School\r\n            will send you your invoice. Once you have paid the 50% down payment, your registration will be complete."
+        },
+        "pagination": {
+            "previous": "&laquo; Previous",
+            "next": "Next &raquo;"
+        },
+        "passwords": {
+            "password": "Passwords must be at least six characters and match the confirmation.",
+            "reset": "Your password has been reset!",
+            "sent": "We have e-mailed your password reset link!",
+            "token": "This password reset token is invalid.",
+            "user": "We can't find a user with that e-mail address."
+        },
+        "validation": {
+            "accepted": "The {attribute} must be accepted.",
+            "active_url": "The {attribute} is not a valid URL.",
+            "after": "The {attribute} must be a date after {date}.",
+            "after_or_equal": "The {attribute} must be a date after or equal to {date}.",
+            "alpha": "The {attribute} may only contain letters.",
+            "alpha_dash": "The {attribute} may only contain letters, numbers, and dashes.",
+            "alpha_num": "The {attribute} may only contain letters and numbers.",
+            "array": "The {attribute} must be an array.",
+            "before": "The {attribute} must be a date before {date}.",
+            "before_or_equal": "The {attribute} must be a date before or equal to {date}.",
+            "between": {
+                "numeric": "The {attribute} must be between {min} and {max}.",
+                "file": "The {attribute} must be between {min} and {max} kilobytes.",
+                "string": "The {attribute} must be between {min} and {max} characters.",
+                "array": "The {attribute} must have between {min} and {max} items."
+            },
+            "boolean": "The {attribute} field must be true or false.",
+            "confirmed": "The {attribute} confirmation does not match.",
+            "date": "The {attribute} is not a valid date.",
+            "date_format": "The {attribute} does not match the format {format}.",
+            "different": "The {attribute} and {other} must be different.",
+            "digits": "The {attribute} must be {digits} digits.",
+            "digits_between": "The {attribute} must be between {min} and {max} digits.",
+            "dimensions": "The {attribute} has invalid image dimensions.",
+            "distinct": "The {attribute} field has a duplicate value.",
+            "email": "The {attribute} must be a valid email address.",
+            "exists": "The selected {attribute} is invalid.",
+            "file": "The {attribute} must be a file.",
+            "filled": "The {attribute} field must have a value.",
+            "image": "The {attribute} must be an image.",
+            "in": "The selected {attribute} is invalid.",
+            "in_array": "The {attribute} field does not exist in {other}.",
+            "integer": "The {attribute} must be an integer.",
+            "ip": "The {attribute} must be a valid IP address.",
+            "ipv4": "The {attribute} must be a valid IPv4 address.",
+            "ipv6": "The {attribute} must be a valid IPv6 address.",
+            "json": "The {attribute} must be a valid JSON string.",
+            "max": {
+                "numeric": "The {attribute} may not be greater than {max}.",
+                "file": "The {attribute} may not be greater than {max} kilobytes.",
+                "string": "The {attribute} may not be greater than {max} characters.",
+                "array": "The {attribute} may not have more than {max} items."
+            },
+            "mimes": "The {attribute} must be a file of type: {values}.",
+            "mimetypes": "The {attribute} must be a file of type: {values}.",
+            "min": {
+                "numeric": "The {attribute} must be at least {min}.",
+                "file": "The {attribute} must be at least {min} kilobytes.",
+                "string": "The {attribute} must be at least {min} characters.",
+                "array": "The {attribute} must have at least {min} items."
+            },
+            "not_in": "The selected {attribute} is invalid.",
+            "numeric": "The {attribute} must be a number.",
+            "present": "The {attribute} field must be present.",
+            "regex": "The {attribute} format is invalid.",
+            "required": "The {attribute} field is required.",
+            "required_if": "The {attribute} field is required when {other} is {value}.",
+            "required_unless": "The {attribute} field is required unless {other} is in {values}.",
+            "required_with": "The {attribute} field is required when {values} is present.",
+            "required_with_all": "The {attribute} field is required when {values} is present.",
+            "required_without": "The {attribute} field is required when {values} is not present.",
+            "required_without_all": "The {attribute} field is required when none of {values} are present.",
+            "same": "The {attribute} and {other} must match.",
+            "size": {
+                "numeric": "The {attribute} must be {size}.",
+                "file": "The {attribute} must be {size} kilobytes.",
+                "string": "The {attribute} must be {size} characters.",
+                "array": "The {attribute} must contain {size} items."
+            },
+            "string": "The {attribute} must be a string.",
+            "timezone": "The {attribute} must be a valid zone.",
+            "unique": "The {attribute} has already been taken.",
+            "uploaded": "The {attribute} failed to upload.",
+            "url": "The {attribute} format is invalid.",
+            "custom": {
+                "attribute-name": {
+                    "rule-name": "custom-message"
+                }
+            },
+            "attributes": []
+        },
+        "voyager": {
+            "date": {
+                "last_week": "Last Week",
+                "last_year": "Last Year",
+                "this_week": "This Week",
+                "this_year": "This Year"
+            },
+            "generic": {
+                "action": "Action",
+                "actions": "Actions",
+                "add": "Add",
+                "add_folder": "Add Folder",
+                "add_new": "Add New",
+                "all_done": "All done",
+                "are_you_sure": "Are you sure",
+                "are_you_sure_delete": "Are you sure you want to delete",
+                "auto_increment": "Auto Increment",
+                "browse": "Browse",
+                "builder": "Builder",
+                "bulk_delete": "Bulk Delete",
+                "bulk_delete_confirm": "Yes, Delete These",
+                "bulk_delete_nothing": "You haven't selected anything to delete",
+                "cancel": "Cancel",
+                "choose_type": "Choose Type",
+                "click_here": "Click Here",
+                "close": "Close",
+                "compass": "Compass",
+                "created_at": "Created at",
+                "custom": "Custom",
+                "dashboard": "Dashboard",
+                "database": "Database",
+                "default": "Default",
+                "delete": "Delete",
+                "delete_confirm": "Yes, Delete it!",
+                "delete_question": "Are you sure you want to delete this",
+                "delete_this_confirm": "Yes, Delete This",
+                "deselect_all": "Deselect All",
+                "download": "Download",
+                "edit": "Edit",
+                "email": "E-mail",
+                "error_deleting": "Sorry it appears there was a problem deleting this",
+                "exception": "Exception",
+                "featured": "Featured",
+                "field_does_not_exist": "Field does not exist",
+                "how_to_use": "How To Use",
+                "index": "Index",
+                "internal_error": "Internal error",
+                "items": "item(s)",
+                "keep_sidebar_open": "Yarr! Drop the anchors! (and keep the sidebar open)",
+                "key": "Key",
+                "last_modified": "Last modified",
+                "length": "Length",
+                "login": "Login",
+                "media": "Media",
+                "menu_builder": "Menu Builder",
+                "move": "Move",
+                "name": "Name",
+                "new": "New",
+                "no": "No",
+                "no_thanks": "No Thanks",
+                "not_null": "Not Null",
+                "options": "Options",
+                "password": "Password",
+                "permissions": "Permissions",
+                "profile": "Profile",
+                "public_url": "Public URL",
+                "read": "Read",
+                "rename": "Rename",
+                "required": "Required",
+                "return_to_list": "Return to List",
+                "route": "Route",
+                "save": "Save",
+                "search": "Search",
+                "select_all": "Select All",
+                "select_group": "Select Existing Group or Add New",
+                "settings": "Settings",
+                "showing_entries": "Showing {from} to {to} of {all} entry|Showing {from} to {to} of {all} entries",
+                "submit": "Submit",
+                "successfully_added_new": "Successfully Added New",
+                "successfully_deleted": "Successfully Deleted",
+                "successfully_updated": "Successfully Updated",
+                "timestamp": "Timestamp",
+                "title": "Title",
+                "type": "Type",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "Unstick the sidebar",
+                "update": "Update",
+                "update_failed": "Update Failed",
+                "upload": "Upload",
+                "url": "URL",
+                "view": "View",
+                "viewing": "Viewing",
+                "yes": "Yes",
+                "yes_please": "Yes, Please"
+            },
+            "login": {
+                "loggingin": "Logging in",
+                "signin_below": "Sign In Below:",
+                "welcome": "Welcome to Voyager. The Missing Admin for Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Edit My Profile",
+                "edit_user": "Edit User",
+                "password": "Password",
+                "password_hint": "Leave empty to keep the same",
+                "role": "Role",
+                "user_role": "User Role"
+            },
+            "settings": {
+                "usage_help": "You can get the value of each setting anywhere on your site by calling",
+                "save": "Save Settings",
+                "new": "New Setting",
+                "help_name": "Setting name ex: Admin Title",
+                "help_key": "Setting key ex: admin_title",
+                "help_option": "(optional, only applies to certain types like dropdown box or radio button)",
+                "add_new": "Add New Setting",
+                "delete_question": "Are you sure you want to delete the {setting} Setting?",
+                "delete_confirm": "Yes, Delete This Setting",
+                "successfully_created": "Successfully Created Settings",
+                "successfully_saved": "Successfully Saved Settings",
+                "successfully_deleted": "Successfully Deleted Setting",
+                "already_at_top": "This is already at the top of the list",
+                "already_at_bottom": "This is already at the bottom of the list",
+                "key_already_exists": "The key {key} already exists",
+                "moved_order_up": "Moved {name} setting order up",
+                "moved_order_down": "Moved {name} setting order down",
+                "successfully_removed": "Successfully removed {name} value",
+                "group_general": "General",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Group",
+                "help_group": "Group this setting is assigned to"
+            },
+            "media": {
+                "add_new_folder": "Add New Folder",
+                "audio_support": "Your browser does not support the audio element.",
+                "create_new_folder": "Create New Folder",
+                "delete_folder_question": "Deleting a folder will remove all files and folders contained inside",
+                "destination_folder": "Destination Folder",
+                "drag_drop_info": "Drag and drop files or click below to upload",
+                "error_already_exists": "Sorry there is already a file\/folder with that existing name in that folder.",
+                "error_creating_dir": "Sorry something seems to have gone wrong with creating the directory, please check your permissions",
+                "error_deleting_file": "Sorry something seems to have gone wrong deleting this file, please check your permissions",
+                "error_deleting_folder": "Sorry something seems to have gone wrong when deleting this folder, please check your permissions",
+                "error_may_exist": "File or Folder may already exist with that name. Please choose another name or delete the other file.",
+                "error_moving": "Sorry there seems to be a problem moving that file\/folder, please make sure you have the correct permissions.",
+                "error_uploading": "Upload Fail: Unknown error occurred!",
+                "folder_exists_already": "Sorry that folder already exists, please delete that folder if you wish to re-create it",
+                "image_does_not_exist": "Image does not exist",
+                "image_removed": "Image removed",
+                "library": "Media Library",
+                "loading": "LOADING YOUR MEDIA FILES",
+                "move_file_folder": "Move File\/Folder",
+                "new_file_folder": "New File\/Folder Name",
+                "new_folder_name": "New Folder Name",
+                "no_files_here": "No files here.",
+                "no_files_in_folder": "No files in this folder.",
+                "nothing_selected": "No file or folder selected",
+                "rename_file_folder": "Rename File\/Folder",
+                "success_uploaded_file": "Successfully uploaded new file!",
+                "success_uploading": "Image successfully uploaded!",
+                "uploading_wrong_type": "Upload Fail: Unsupported file format or It is too large to upload!",
+                "video_support": "Your browser does not support the video tag.",
+                "crop": "Crop",
+                "crop_and_create": "Crop & Create",
+                "crop_override_confirm": "It will override the original image, are you sure?",
+                "crop_image": "Crop Image",
+                "success_crop_image": "Successfully crop the image",
+                "height": "Height: ",
+                "width": "Width: "
+            },
+            "menu_builder": {
+                "color": "Color in RGB or hex (optional)",
+                "color_ph": "Color (ex. #ffffff or rgb(255, 255, 255)",
+                "create_new_item": "Create a New Menu Item",
+                "delete_item_confirm": "Yes, Delete This Menu Item",
+                "delete_item_question": "Are you sure you want to delete this menu item?",
+                "drag_drop_info": "Drag and drop the menu Items below to re-arrange them.",
+                "dynamic_route": "Dynamic Route",
+                "edit_item": "Edit Menu Item",
+                "icon_class": "Font Icon class for the Menu Item (Use a",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Icon Class (optional)",
+                "item_route": "Route for the menu item",
+                "item_title": "Title of the Menu Item",
+                "link_type": "Link type",
+                "new_menu_item": "New Menu Item",
+                "open_in": "Open In",
+                "open_new": "New Tab\/Window",
+                "open_same": "Same Tab\/Window",
+                "route_parameter": "Route parameters (if any)",
+                "static_url": "Static URL",
+                "successfully_created": "Successfully Created New Menu Item.",
+                "successfully_deleted": "Successfully Deleted Menu Item.",
+                "successfully_updated": "Successfully Updated Menu Item.",
+                "updated_order": "Successfully updated menu order.",
+                "url": "URL for the Menu Item",
+                "usage_hint": "You can output a menu anywhere on your site by calling|You can output this menu anywhere on your site by calling"
+            },
+            "post": {
+                "category": "Post Category",
+                "content": "Post Content",
+                "details": "Post Details",
+                "excerpt": "Excerpt <small>Small description of this post<\/small>",
+                "image": "Post Image",
+                "meta_description": "Meta Description",
+                "meta_keywords": "Meta Keywords",
+                "new": "Create New Post",
+                "seo_content": "SEO Content",
+                "seo_title": "Seo Title",
+                "slug": "URL slug",
+                "status": "Post Status",
+                "status_draft": "draft",
+                "status_pending": "pending",
+                "status_published": "published",
+                "title": "Post Title",
+                "title_sub": "The title for your post",
+                "update": "Update Post"
+            },
+            "database": {
+                "add_bread": "Add BREAD to this table",
+                "add_new_column": "Add New Column",
+                "add_softdeletes": "Add Soft Deletes",
+                "add_timestamps": "Add Timestamps",
+                "already_exists": "already exists",
+                "already_exists_table": "Table {table} already exists",
+                "bread_crud_actions": "BREAD\/CRUD Actions",
+                "bread_info": "BREAD info",
+                "browse_bread": "Browse BREAD",
+                "column": "Column",
+                "composite_warning": "Warning: this column is part of a composite index",
+                "controller_name": "Controller Name",
+                "controller_name_hint": "ex. PageController, if left empty will use the BREAD Controller",
+                "create_bread_for_table": "Create BREAD for {table} table",
+                "create_migration": "Create migration for this table?",
+                "create_model_table": "Create model for this table?",
+                "create_new_table": "Create New Table",
+                "create_your_new_table": "Create Your New Table",
+                "default": "Default",
+                "delete_bread": "Delete BREAD",
+                "delete_bread_before_table": "Please make sure to remove the BREAD on this table before deleting the table.",
+                "delete_table_bread_conf": "Yes, remove the BREAD",
+                "delete_table_bread_quest": "Are you sure you want to delete the BREAD for the {table} table?",
+                "delete_table_confirm": "Yes, delete this table",
+                "delete_table_question": "Are you sure you want to delete the {table} table?",
+                "description": "Description",
+                "display_name": "Display Name",
+                "display_name_plural": "Display Name (Plural)",
+                "display_name_singular": "Display Name (Singular)",
+                "edit_bread": "Edit BREAD",
+                "edit_bread_for_table": "Edit BREAD for {table} table",
+                "edit_rows": "Edit the rows for the {table} table below",
+                "edit_table": "Edit the {table} table below",
+                "edit_table_not_exist": "The table you want to edit doesn't exist",
+                "error_creating_bread": "Sorry it appears there may have been a problem creating this BREAD",
+                "error_removing_bread": "Sorry it appears there was a problem removing this BREAD",
+                "error_updating_bread": "Sorry it appears there may have been a problem updating this BREAD",
+                "extra": "Extra",
+                "field": "Field",
+                "field_safe_failed": "Failed to save field {field}, we're rolling back!",
+                "generate_permissions": "Generate Permissions",
+                "icon_class": "Icon to use for this Table",
+                "icon_hint": "Icon (optional) Use a",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Input Type",
+                "key": "Key",
+                "model_class": "Model Class Name",
+                "model_name": "Model Name",
+                "model_name_ph": "ex. \\App\\User, if left empty will try and use the table name",
+                "name_warning": "Please name the column before adding an index",
+                "no_composites_warning": "This table has composite indexes. Please note that they are not supported at the moment. Be careful when trying to add\/remove indexes.",
+                "null": "Null",
+                "optional_details": "Optional Details",
+                "policy_class": "Policy Class Name",
+                "policy_name": "Policy Name",
+                "policy_name_ph": "ex. \\App\\Policies\\UserPolicy, if left empty will try and use the default",
+                "primary": "PRIMARY",
+                "server_pagination": "Server-side Pagination",
+                "success_create_table": "Successfully created {table} table",
+                "success_created_bread": "Successfully created new BREAD",
+                "success_delete_table": "Successfully deleted {table} table",
+                "success_remove_bread": "Successfully removed BREAD from {datatype}",
+                "success_update_bread": "Successfully updated the {datatype} BREAD",
+                "success_update_table": "Successfully updated {table} table",
+                "table_actions": "Table Actions",
+                "table_columns": "Table Columns",
+                "table_has_index": "The table already has a primary index.",
+                "table_name": "Table Name",
+                "table_no_columns": "The table has no columns...",
+                "type": "Type",
+                "type_not_supported": "This type is not supported",
+                "unique": "UNIQUE",
+                "unknown_type": "Unknown Type",
+                "update_table": "Update Table",
+                "url_slug": "URL Slug (must be unique)",
+                "url_slug_ph": "URL slug (ex. posts)",
+                "visibility": "Visibility",
+                "relationship": {
+                    "relationship": "Relationship",
+                    "relationships": "Relationships",
+                    "has_one": "Has One",
+                    "has_many": "Has Many",
+                    "belongs_to": "Belongs To",
+                    "belongs_to_many": "Belongs To Many",
+                    "which_column_from": "Which column from the",
+                    "is_used_to_reference": "is used to reference the",
+                    "pivot_table": "Pivot Table",
+                    "selection_details": "Selection Details",
+                    "display_the": "Display the",
+                    "store_the": "Store the",
+                    "easy_there": "Easy there Captain",
+                    "before_create": "Before you can create a new relationship you will need to create the BREAD first.<br> Then, return back to edit the BREAD and you will be able to add relationships.<br> Thanks.",
+                    "cancel": "Cancel",
+                    "add_new": "Add New relationship",
+                    "open": "Open",
+                    "close": "Close",
+                    "relationship_details": "Relationship Details",
+                    "browse": "Browse",
+                    "read": "Read",
+                    "edit": "Edit",
+                    "add": "Add",
+                    "delete": "Delete",
+                    "create": "Create a Relationship",
+                    "namespace": "Model Namespace (ex. App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "Page|Pages",
+                "page_link_text": "View all pages",
+                "page_text": "You have {count} {string} in your database. Click on button below to view all pages.",
+                "post": "Post|Posts",
+                "post_link_text": "View all posts",
+                "post_text": "You have {count} {string} in your database. Click on button below to view all posts.",
+                "user": "User|Users",
+                "user_link_text": "View all users",
+                "user_text": "You have {count} {string} in your database. Click on button below to view all users."
+            },
+            "form": {
+                "field_password_keep": "Leave empty to keep the same",
+                "field_select_dd_relationship": "Make sure to setup the appropriate relationship in the {method} method of the {class} class.",
+                "type_checkbox": "Check Box",
+                "type_codeeditor": "Code Editor",
+                "type_file": "File",
+                "type_image": "Image",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Select Dropdown",
+                "type_textarea": "Text Area",
+                "type_textbox": "Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "No data available in table",
+                "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+                "sInfoEmpty": "Showing 0 to 0 of 0 entries",
+                "sInfoFiltered": "(filtered from _MAX_ total entries)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Show _MENU_ entries",
+                "sLoadingRecords": "Loading...",
+                "sProcessing": "Processing...",
+                "sSearch": "Search:",
+                "sZeroRecords": "No matching records found",
+                "oPaginate": {
+                    "sFirst": "First",
+                    "sLast": "Last",
+                    "sNext": "Next",
+                    "sPrevious": "Previous"
+                },
+                "oAria": {
+                    "sSortAscending": ": activate to sort column ascending",
+                    "sSortDescending": ": activate to sort column descending"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Made with <i class=\"voyager-heart\"><\/i> by",
+                "footer_copyright2": "Made with rum and even more rum"
+            },
+            "json": {
+                "invalid": "Invalid Json",
+                "invalid_message": "Seems like you introduced some invalid JSON.",
+                "valid": "Valid Json",
+                "validation_errors": "Validation errors"
+            },
+            "analytics": {
+                "by_pageview": "By pageview",
+                "by_sessions": "By sessions",
+                "by_users": "By users",
+                "no_client_id": "To view analytics you'll need to get a google analytics client id and add it to your settings for the key <code>google_analytics_client_id<\/code>. Get your key in your Google developer console:",
+                "set_view": "Select a View",
+                "this_vs_last_week": "This Week vs Last Week",
+                "this_vs_last_year": "This Year vs Last Year",
+                "top_browsers": "Top Browsers",
+                "top_countries": "Top Countries",
+                "various_visualizations": "Various visualizations"
+            },
+            "error": {
+                "symlink_created_text": "We just created the missing symlink for you.",
+                "symlink_created_title": "Missing storage symlink created",
+                "symlink_failed_text": "We failed to generate the missing symlink for your application. It seems like your hosting provider does not support it.",
+                "symlink_failed_title": "Could not create missing storage symlink",
+                "symlink_missing_button": "Fix it",
+                "symlink_missing_text": "We could not find a storage symlink. This could cause problems with loading media files from the browser.",
+                "symlink_missing_title": "Missing storage symlink"
+            }
+        }
+    },
+    "es": {
+        "voyager": {
+            "date": {
+                "last_week": "La semana pasada",
+                "last_year": "El año pasado",
+                "this_week": "Esta semana",
+                "this_year": "Este año"
+            },
+            "generic": {
+                "action": "Acción",
+                "actions": "Acciones",
+                "add": "Añadir",
+                "add_folder": "Añadir carpeta",
+                "add_new": "Añadir nuevo",
+                "all_done": "Todo listo",
+                "are_you_sure": "Estás seguro",
+                "are_you_sure_delete": "Estás seguro que quieres borrarlo",
+                "auto_increment": "Autoincremento",
+                "browse": "Navegar",
+                "builder": "Constructor",
+                "bulk_delete": "Borrado masivo",
+                "bulk_delete_confirm": "Sí, ¡Bórralo!",
+                "bulk_delete_nothing": "Debe seleccionar al menos un registro antes de usar el borrado masivo.",
+                "cancel": "Cancelar",
+                "choose_type": "Elegir tipo",
+                "click_here": "Haga clic aquí",
+                "close": "Cerrar",
+                "compass": "Compás",
+                "created_at": "Creado en",
+                "custom": "Personalizado",
+                "dashboard": "Tablero",
+                "database": "Base de datos",
+                "default": "Defecto",
+                "delete": "Borrar",
+                "delete_confirm": "Sí, ¡Bórralo!",
+                "delete_question": "Estás seguro que quieres eliminar esto",
+                "delete_this_confirm": "Sí, eliminar esto",
+                "deselect_all": "Deseleccionar todo",
+                "download": "Descargar",
+                "edit": "Editar",
+                "email": "Email",
+                "error_deleting": "Lo siento, parece que se ha producido un problema al eliminar",
+                "exception": "Excepción",
+                "featured": "Destacados",
+                "field_does_not_exist": "El campo no existe",
+                "how_to_use": "Cómo utilizar",
+                "index": "Índice",
+                "internal_error": "Error interno",
+                "items": "Ítem(s)",
+                "keep_sidebar_open": "¡Yarr! ¡Suelta las anclas! (Y mantén la barra lateral abierta) ",
+                "key": "Clave",
+                "last_modified": "Última modificación",
+                "length": "Longitud",
+                "login": "Iniciar sesión",
+                "media": "Medios",
+                "menu_builder": "Constructor de menús",
+                "move": "Mover",
+                "name": "Nombre",
+                "new": "Nuevo",
+                "no": "No",
+                "no_thanks": "No, gracias",
+                "not_null": "No nulo",
+                "options": "Opciones",
+                "password": "Contraseña",
+                "permissions": "Permisos",
+                "profile": "Perfil",
+                "public_url": "URL pública",
+                "read": "Leer",
+                "rename": "Renombrar",
+                "required": "Necesario",
+                "return_to_list": "Volver a la lista",
+                "route": "Ruta",
+                "save": "Guardar",
+                "search": "Buscar",
+                "select_all": "Seleccionar todo",
+                "select_group": "Seleccione un grupo existente o añada uno",
+                "settings": "Ajustes",
+                "showing_entries": "Mostrando de {from} a {to} de {all} entradas | Mostrando de {from} a {to} de todas las entradas",
+                "submit": "Enviar",
+                "successfully_added_new": "Añadido exitosamente",
+                "successfully_deleted": "Eliminado exitosamente",
+                "successfully_updated": "Actualizado exitosamente",
+                "timestamp": "Timestamp",
+                "title": "Título",
+                "type": "Tipo",
+                "unsigned": "No signado",
+                "unstick_sidebar": "Despegar la barra lateral",
+                "update": "Actualizar",
+                "update_failed": "Actualización fallida",
+                "upload": "Subir",
+                "url": "URL",
+                "view": "Ver",
+                "viewing": "Viendo",
+                "yes": "Sí",
+                "yes_please": "Sí, por favor"
+            },
+            "login": {
+                "loggingin": "Iniciando sesión",
+                "signin_below": "Ingresar abajo:",
+                "welcome": "Bienvenido a Voyager. El administrador desaparecido de Laravel "
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Editar mi perfil",
+                "edit_user": "Editar usuario",
+                "password": "Contraseña",
+                "password_hint": "Dejar vacío para mantener el mismo",
+                "role": "Rol",
+                "user_role": "Rol del usuario"
+            },
+            "settings": {
+                "usage_help": "Puede obtener el valor de cada parámetro en cualquier lugar de su sitio llamando",
+                "save": "Guardar parámetro",
+                "new": "Nuevo parámetro",
+                "help_name": "Nombre del parámetro Ej: Titulo de Pagina",
+                "help_key": "Clave del parámetro Ej: pag_titulo",
+                "help_option": "(Opcional, sólo se aplica a ciertos tipos como cuadro desplegable o botón de opción)",
+                "add_new": "Añadir nuevo parámetro",
+                "delete_question": "¿Está seguro de que desea eliminar el parámetro {setting}?",
+                "delete_confirm": "Sí, eliminar este parámetro",
+                "successfully_created": "Parámetro creado exitosamente",
+                "successfully_saved": "Parámetro guardado exitosamente",
+                "successfully_deleted": "Parámetro eliminado exitosamente",
+                "already_at_top": "Esto ya está en la parte superior de la lista",
+                "already_at_bottom": "Esto ya está en la parte inferior de la lista",
+                "key_already_exists": "Esta opción ya ha sido creada",
+                "moved_order_up": "Orden del parámetro {name} aumentado",
+                "moved_order_down": "Orden del parámetro {name} disminuido",
+                "successfully_removed": "Eliminado correctamente parámetro {name} ",
+                "group_general": "General",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Grupo",
+                "help_group": "Esta opción está asignada a"
+            },
+            "media": {
+                "add_new_folder": "Añadir nueva carpeta",
+                "audio_support": "Su navegador no admite el elemento de audio.",
+                "create_new_folder": "Crear nueva carpeta",
+                "delete_folder_question": "Eliminar una carpeta eliminará todos los archivos y carpetas contenidos dentro",
+                "destination_folder": "Carpeta de destino",
+                "drag_drop_info": "Arrastre y suelte archivos o haga clic abajo para cargar",
+                "error_already_exists": "Lo siento, ya hay un archivo\/carpeta existente con ese nombre en esa carpeta.",
+                "error_creating_dir": "Lo siento, algo parece haber ido mal con la creación del directorio,por favor revise sus permisos",
+                "error_deleting_file": "Lo siento, algo parece haber ido mal con en el borrado del archivo,por favor revise sus permisos",
+                "error_deleting_folder": "Lo siento, algo parece haber fallado al eliminar esta carpeta,por favor revise sus permisos",
+                "error_may_exist": "Puede que ya exista un archivo o carpeta con ese nombre. Por favor, elige otro nombre o borre el otro archivo.",
+                "error_moving": "Lo siento, parece que hay un problema al mover ese archivo\/carpeta, por favor asegúrese de tener los permisos correctos.",
+                "error_uploading": "Carga Fallida: Ocurrió un error desconocido!",
+                "folder_exists_already": "Lo siento, la carpeta ya existe, por favor, elimine esa carpeta si desea crearla nuevamente",
+                "image_does_not_exist": "La imagen no existe",
+                "image_removed": "Imagen eliminada",
+                "library": "Mediateca",
+                "loading": "CARGANDO SUS ARCHIVOS DE MEDIOS",
+                "move_file_folder": "Mover Archivo\/Carpeta",
+                "new_file_folder": "Nuevo nombre de archivo\/carpeta",
+                "new_folder_name": "Nombre de nueva carpeta",
+                "no_files_here": "No hay archivos aquí.",
+                "no_files_in_folder": "No hay archivos en esta carpeta.",
+                "nothing_selected": "No se ha seleccionado ningún archivo o carpeta",
+                "rename_file_folder": "Renombrar archivo\/carpeta",
+                "success_uploaded_file": "Nuevo archivo subido exitosamente!",
+                "success_uploading": "Imagen cargada exitosamente!",
+                "uploading_wrong_type": "Falla de carga: formato de archivo no soportado o es demasiado grande para cargar!",
+                "video_support": "Su navegador no soporta la etiqueta de vídeo.",
+                "crop": "Cortar",
+                "crop_and_create": "Cortar & Crear",
+                "crop_override_confirm": "Se anulará la imagen original, ¿está seguro?",
+                "crop_image": "Recortar imagen",
+                "success_crop_image": "Imagen recortada con éxito",
+                "height": "Alto: ",
+                "width": "Ancho: "
+            },
+            "menu_builder": {
+                "color": "Color en RGB o hex (opcional)",
+                "color_ph": "Color (por ejemplo, #ffffff o rgb (255, 255, 255)",
+                "create_new_item": "Crear una nueva opción de menú",
+                "delete_item_confirm": "Sí, eliminar esta opción de menú",
+                "delete_item_question": "¿Está seguro de que desea eliminar esta opción del menú?",
+                "drag_drop_info": "Arraste y suelte las opciones de menú para reogranizarlas",
+                "dynamic_route": "Ruta Dinámica",
+                "edit_item": "Editar opción del menú",
+                "icon_class": "Icono para la opción de menú (Use una",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Icono (opcional)",
+                "item_route": "Ruta para la opción de menú",
+                "item_title": "Título de la opción de menú",
+                "link_type": "Tipo de enlace",
+                "new_menu_item": "Nueva opción de menú",
+                "open_in": "Ábrelo",
+                "open_new": "Nueva pestaña \/ ventana",
+                "open_same": "Misma pestaña \/ ventana",
+                "route_parameter": "Parámetros de ruta (si existen)",
+                "static_url": "URL estática",
+                "successfully_created": "Se creó una nueva opción de menú.",
+                "successfully_deleted": "Opción de menú eliminada exitosamente.",
+                "successfully_updated": "Opción de menú actualizada exitosamente.",
+                "updated_order": "Orden actualizado exitosamente.",
+                "url": "URL para la opción de menú",
+                "usage_hint": "Puede emitir un menú en cualquier lugar de su sitio llamando a "
+            },
+            "post": {
+                "category": "Categoría del Post",
+                "content": "Contenido del Post",
+                "details": "Detalles del Post",
+                "excerpt": "Extracto<small> Pequeña descripción de este post <\/small>",
+                "image": "Publicar imagen",
+                "meta_description": "Meta Descripción",
+                "meta_keywords": "Meta palabras clave",
+                "new": "Crear nuevo post",
+                "seo_content": "Contenido SEO",
+                "seo_title": "Título Seo",
+                "slug": "URL slug",
+                "status": "Estado del Post",
+                "status_draft": "borrador",
+                "status_pending": "pendiente",
+                "status_published": "publicado",
+                "title": "Título del Post",
+                "title_sub": "El título de Post",
+                "update": "Actualizar Post"
+            },
+            "database": {
+                "add_bread": "Añadir BREAD a esta tabla",
+                "add_new_column": "Añadir nueva columna",
+                "add_softdeletes": "Añadir Soft Deletes",
+                "add_timestamps": "Añadir Timestamps",
+                "already_exists": "ya existe",
+                "already_exists_table": "Tabla {table} ya existe",
+                "bread_crud_actions": "Acciones BREAD \/ CRUD",
+                "bread_info": "Información de BREAD",
+                "column": "Columna",
+                "composite_warning": "Advertencia: esta columna forma parte de un índice compuesto",
+                "controller_name": "Nombre del Controlador",
+                "controller_name_hint": "Ejemplo. PageController, si se deja vacío, utilizará el controlador BREAD ",
+                "create_bread_for_table": "Crear BREAD para la tabla {table}",
+                "create_migration": "¿Crear migración para esta tabla?",
+                "create_model_table": "¿Crear un modelo para esta tabla?",
+                "create_new_table": "Crear nueva tabla",
+                "create_your_new_table": "Cree su nueva tabla",
+                "default": "Defecto",
+                "delete_bread": "Eliminar BREAD",
+                "delete_bread_before_table": "Asegúrese de quitar el BREAD de esta tabla antes de borrar la tabla.",
+                "delete_table_bread_conf": "Sí, retire el BREAD",
+                "delete_table_bread_quest": "¿Está seguro de que desea eliminar el BREAD para la tabla {table}?",
+                "delete_table_confirm": "Sí, borrar esta tabla",
+                "delete_table_question": "¿Está seguro de que desea eliminar la tabla {table}?",
+                "description": "Descripción",
+                "display_name": "Nombre para mostrar",
+                "display_name_plural": "Nombre de visualización (Plural)",
+                "display_name_singular": "Nombre de visualización (Singular)",
+                "edit_bread": "Editar BREAD",
+                "edit_bread_for_table": "Editar BREAD para la tabla {table}",
+                "edit_rows": "Editar las filas de la tabla siguiente",
+                "edit_table": "Editar la tabla siguiente:",
+                "edit_table_not_exist": "La tabla que desea editar no existe",
+                "error_creating_bread": "Lo siento, parece que puede haber habido un problema al crear el BREAD",
+                "error_removing_bread": "Lo siento, parece que hubo un problema al eliminar el BREAD",
+                "error_updating_bread": "Lo siento, parece que puede haber habido un problema al actualizar el BREAD",
+                "extra": "Extra",
+                "field": "Campo",
+                "field_safe_failed": "No se pudo guardar el campo {field}, ¡Estamos retrocediendo! ",
+                "generate_permissions": "Generar permisos",
+                "icon_class": "Icono a utilizar para esta tabla",
+                "icon_hint": "Icono (opcional) Utilice una ",
+                "icon_hint2": "Voyager Font Class",
+                "index": "ÍNDICE",
+                "input_type": "Tipo de entrada",
+                "key": "Clave",
+                "model_class": "Nombre de clase del modelo",
+                "model_name": "Nombre del modelo",
+                "model_name_ph": "ej. \\App\\User, si se deja vac\xEDo intentar\xE1 usar el nombre de la tabla ",
+                "name_warning": "Por favor, nombre la columna antes de añadir un índice",
+                "no_composites_warning": "Esta tabla tiene índices compuestos. Tenga en cuenta que en este momentono se admiten. Tenga cuidado al intentar agregar\/quitar índices.",
+                "null": "Nulo",
+                "optional_details": "Detalles opcionales",
+                "policy_class": "Clase de restricciones",
+                "policy_name": "Nombre de restricciones",
+                "policy_name_ph": "ej. \\App\\Policies\\UserPolicy, si se deja vac\xEDo, intentar\xE1 usar el valor predeterminado",
+                "primary": "PRIMARIO",
+                "server_pagination": "Paginación del servidor",
+                "success_create_table": "Tabla {table} creada exitosamente",
+                "success_created_bread": "BREAD creado exitosamente",
+                "success_delete_table": "Tabla {table} eliminada exitosamente",
+                "success_remove_bread": "BREAD de tipo {datatype} borrado exitosamente",
+                "success_update_bread": "Se actualizó correctamente el BREAD {datatype}",
+                "success_update_table": "Tabla {table} actualizada exitosamente",
+                "table_actions": "Acciones de la tabla",
+                "table_columns": "Columnas de la tabla",
+                "table_has_index": "La tabla ya tiene un índice primario.",
+                "table_name": "Nombre de la tabla",
+                "table_no_columns": "La tabla no tiene columnas ...",
+                "type": "Tipo",
+                "type_not_supported": "Este tipo no es compatible",
+                "unique": "ÚNICO",
+                "unknown_type": "Tipo desconocido",
+                "update_table": "Actualizar tabla",
+                "url_slug": "URL Slug (debe ser único)",
+                "url_slug_ph": "URL slug (ej posts)",
+                "visibility": "Visibilidad",
+                "relationship": {
+                    "relationship": "Relación",
+                    "relationships": "Relaciones",
+                    "has_one": "Has One",
+                    "has_many": "Has Many",
+                    "belongs_to": "Belongs To",
+                    "belongs_to_many": "Belongs To Many",
+                    "which_column_from": "¿Qué columna de",
+                    "is_used_to_reference": "se usara para hacer referencia a",
+                    "pivot_table": "Tabla Pivote",
+                    "selection_details": "Selección de Detalles",
+                    "display_the": "Ver de",
+                    "store_the": "Guardar de",
+                    "easy_there": "Fácil, Capitán",
+                    "before_create": "Antes de que pueda crear una nueva relación, primero deberá crear el BREAD. <br> Luego, regrese para editar el BREAD y podrá agregar relaciones. Gracias.",
+                    "cancel": "Cancelar",
+                    "add_new": "Agregar Nueva Relación",
+                    "open": "Abrir",
+                    "close": "Cerrar",
+                    "relationship_details": "Detalles de Relación",
+                    "browse": "Ver",
+                    "read": "Leer",
+                    "edit": "Editar",
+                    "add": "Agregar",
+                    "delete": "Eliminar",
+                    "create": "Crear una Relación",
+                    "namespace": "Nombre de Espacio de Modelo (ej. App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "Página|Páginas",
+                "page_link_text": "Ver todas las páginas",
+                "page_text": "Tiene {count} {string} en su base de datos. Haga clic en el botón de abajo para ver todas las páginas. ",
+                "post": "Post|Posts",
+                "post_link_text": "Ver todos los posts",
+                "post_text": "Tiene {count} {string} en su base de datos. Haga clic en el botón de abajo para ver todos los posts. ",
+                "user": "Usuario|Usuarios",
+                "user_link_text": "Ver todos los usuarios",
+                "user_text": "Tiene {count} {string} en su base de datos. Haga clic en el botón de abajo para ver todos los usuarios. "
+            },
+            "form": {
+                "field_password_keep": "Dejar vacío para mantener el mismo",
+                "field_select_dd_relationship": "Asegúrese de configurar la relación apropiada en el método {method} dela clase {class}.",
+                "type_checkbox": "Casilla de verificación",
+                "type_codeeditor": "Editor de código",
+                "type_file": "Archivo",
+                "type_image": "Imagen",
+                "type_radiobutton": "Botón de radio",
+                "type_richtextbox": "Caja de texto enriquecido",
+                "type_selectdropdown": "Seleccionar Desplegable",
+                "type_textarea": "Área de texto",
+                "type_textbox": "Caja de texto"
+            },
+            "datatable": {
+                "sEmptyTable": "No hay datos disponibles en la tabla",
+                "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                "sInfoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "sInfoFiltered": "(Filtrada de _MAX_ entradas totales)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostrar _MENU_ entradas",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "sSearch": "Buscar:",
+                "sZeroRecords": "No se encontraron registros coincidentes",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna descendente"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Hecho con <i class = \"voyager-heart\"> <\/i> por",
+                "footer_copyright2": "Hecho con ron e incluso más ron"
+            },
+            "json": {
+                "invalid": "Json inválido",
+                "invalid_message": "Parece que has introducido algún JSON inválido.",
+                "valid": "Json Válido",
+                "validation_errors": "Errores de validación"
+            },
+            "analytics": {
+                "by_pageview": "Por página",
+                "by_sessions": "Por sesiones",
+                "by_users": "Por usuarios",
+                "no_client_id": "Para ver los análisis, necesitará obtener una ID de cliente de Google Analytics yañadirla a su configuración para la clave <code>google_analytics_client_id<\/code>. Obtenga su clave en la consola de desarrolladores de Google: ",
+                "set_view": "Seleccionar una vista",
+                "this_vs_last_week": "Esta semana vs la semana pasada",
+                "this_vs_last_year": "Este Año vs el Año pasado",
+                "top_browsers": "Principales Navegadores",
+                "top_countries": "Principales países",
+                "various_visualizations": "Varias visualizaciones"
+            },
+            "error": {
+                "symlink_created_text": "Acabamos de crear el enlace simbólico que faltaba para usted.",
+                "symlink_created_title": "Enlace simbólico de almacenamiento faltante creado",
+                "symlink_failed_text": "No hemos podido generar el enlace simbólico perdido para su aplicación. Parece que su proveedor de alojamiento no lo admite.",
+                "symlink_failed_title": "No se pudo crear un enlace simbólico de almacenamiento faltante",
+                "symlink_missing_button": "Arréglalo",
+                "symlink_missing_text": "No pudimos encontrar un enlace simbólico de almacenamiento. Esto podría causar problemas con la carga de archivos multimedia desde el navegador.",
+                "symlink_missing_title": "Falta el enlace simbólico de almacenamiento"
+            }
+        }
+    },
+    "fr": {
+        "index": {
+            "welcome": "Bienvenue"
+        },
+        "validation": {
+            "accepted": "Le champ {attribute} doit être accepté.",
+            "active_url": "Le champ {attribute} n'est pas une URL valide.",
+            "after": "Le champ {attribute} doit être une date postérieure au {date}.",
+            "after_or_equal": "Le champ {attribute} doit être une date postérieure ou égale au {date}.",
+            "alpha": "Le champ {attribute} doit contenir uniquement des lettres.",
+            "alpha_dash": "Le champ {attribute} doit contenir uniquement des lettres, des chiffres et des tirets.",
+            "alpha_num": "Le champ {attribute} doit contenir uniquement des chiffres et des lettres.",
+            "array": "Le champ {attribute} doit être un tableau.",
+            "before": "Le champ {attribute} doit être une date antérieure au {date}.",
+            "before_or_equal": "Le champ {attribute} doit être une date antérieure ou égale au {date}.",
+            "between": {
+                "numeric": "La valeur de {attribute} doit être comprise entre {min} et {max}.",
+                "file": "La taille du fichier de {attribute} doit être comprise entre {min} et {max} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir entre {min} et {max} caractères.",
+                "array": "Le tableau {attribute} doit contenir entre {min} et {max} éléments."
+            },
+            "boolean": "Le champ {attribute} doit être vrai ou faux.",
+            "confirmed": "Le champ de confirmation {attribute} ne correspond pas.",
+            "date": "Le champ {attribute} n'est pas une date valide.",
+            "date_format": "Le champ {attribute} ne correspond pas au format {format}.",
+            "different": "Les champs {attribute} et {other} doivent être différents.",
+            "digits": "Le champ {attribute} doit contenir {digits} chiffres.",
+            "digits_between": "Le champ {attribute} doit contenir entre {min} et {max} chiffres.",
+            "dimensions": "La taille de l'image {attribute} n'est pas conforme.",
+            "distinct": "Le champ {attribute} a une valeur en double.",
+            "email": "Le champ {attribute} doit être une adresse courriel valide.",
+            "exists": "Le champ {attribute} sélectionné est invalide.",
+            "file": "Le champ {attribute} doit être un fichier.",
+            "filled": "Le champ {attribute} doit avoir une valeur.",
+            "image": "Le champ {attribute} doit être une image.",
+            "in": "Le champ {attribute} est invalide.",
+            "in_array": "Le champ {attribute} n'existe pas dans {other}.",
+            "integer": "Le champ {attribute} doit être un entier.",
+            "ip": "Le champ {attribute} doit être une adresse IP valide.",
+            "ipv4": "Le champ {attribute} doit être une adresse IPv4 valide.",
+            "ipv6": "Le champ {attribute} doit être une adresse IPv6 valide.",
+            "json": "Le champ {attribute} doit être un document JSON valide.",
+            "max": {
+                "numeric": "La valeur de {attribute} ne peut être supérieure à {max}.",
+                "file": "La taille du fichier de {attribute} ne peut pas dépasser {max} kilo-octets.",
+                "string": "Le texte de {attribute} ne peut contenir plus de {max} caractères.",
+                "array": "Le tableau {attribute} ne peut contenir plus de {max} éléments."
+            },
+            "mimes": "Le champ {attribute} doit être un fichier de type : {values}.",
+            "mimetypes": "Le champ {attribute} doit être un fichier de type : {values}.",
+            "min": {
+                "numeric": "La valeur de {attribute} doit être supérieure ou égale à {min}.",
+                "file": "La taille du fichier de {attribute} doit être supérieure à {min} kilo-octets.",
+                "string": "Le texte {attribute} doit contenir au moins {min} caractères.",
+                "array": "Le tableau {attribute} doit contenir au moins {min} éléments."
+            },
+            "not_in": "Le champ {attribute} sélectionné n'est pas valide.",
+            "numeric": "Le champ {attribute} doit contenir un nombre.",
+            "present": "Le champ {attribute} doit être présent.",
+            "regex": "Le format du champ {attribute} est invalide.",
+            "required": "Le champ {attribute} est obligatoire.",
+            "required_if": "Le champ {attribute} est obligatoire quand la valeur de {other} est {value}.",
+            "required_unless": "Le champ {attribute} est obligatoire sauf si {other} est {values}.",
+            "required_with": "Le champ {attribute} est obligatoire quand {values} est présent.",
+            "required_with_all": "Le champ {attribute} est obligatoire quand {values} est présent.",
+            "required_without": "Le champ {attribute} est obligatoire quand {values} n'est pas présent.",
+            "required_without_all": "Le champ {attribute} est requis quand aucun de {values} n'est présent.",
+            "same": "Les champs {attribute} et {other} doivent être identiques.",
+            "size": {
+                "numeric": "La valeur de {attribute} doit être {size}.",
+                "file": "La taille du fichier de {attribute} doit être de {size} kilo-octets.",
+                "string": "Le texte de {attribute} doit contenir {size} caractères.",
+                "array": "Le tableau {attribute} doit contenir {size} éléments."
+            },
+            "string": "Le champ {attribute} doit être une chaîne de caractères.",
+            "timezone": "Le champ {attribute} doit être un fuseau horaire valide.",
+            "unique": "La valeur du champ {attribute} est déjà utilisée.",
+            "uploaded": "Le fichier du champ {attribute} n'a pu être téléversé.",
+            "url": "Le format de l'URL de {attribute} n'est pas valide.",
+            "custom": {
+                "attribute-name": {
+                    "rule-name": "custom-message"
+                }
+            },
+            "attributes": {
+                "name": "nom",
+                "username": "nom d'utilisateur",
+                "email": "adresse courriel",
+                "first_name": "prénom",
+                "last_name": "nom",
+                "password": "mot de passe",
+                "password_confirmation": "confirmation du mot de passe",
+                "city": "ville",
+                "country": "pays",
+                "address": "adresse",
+                "phone": "téléphone",
+                "mobile": "portable",
+                "age": "âge",
+                "sex": "sexe",
+                "gender": "genre",
+                "day": "jour",
+                "month": "mois",
+                "year": "année",
+                "hour": "heure",
+                "minute": "minute",
+                "second": "seconde",
+                "title": "titre",
+                "content": "contenu",
+                "description": "description",
+                "excerpt": "extrait",
+                "date": "date",
+                "time": "heure",
+                "available": "disponible",
+                "size": "taille"
+            }
+        },
+        "voyager": {
+            "date": {
+                "last_week": "La semaine dernière",
+                "last_year": "L'année dernière",
+                "this_week": "Cette semaine",
+                "this_year": "Cette année"
+            },
+            "generic": {
+                "action": "Action",
+                "actions": "Actions",
+                "add": "Ajouter",
+                "add_folder": "Ajouter un dossier",
+                "add_new": "Ajouter nouveau",
+                "all_done": "Terminé",
+                "are_you_sure": "Etes-vous sûr",
+                "are_you_sure_delete": "Etes-vous sûr que vous voulez supprimer",
+                "auto_increment": "Incrémentation automatique",
+                "browse": "Naviguer",
+                "builder": "Constructeur",
+                "bulk_delete": "Supprimer la sélection",
+                "bulk_delete_confirm": "Oui, supprimer ces",
+                "bulk_delete_nothing": "Vous n'avez sélectionné aucun élément à supprimer",
+                "cancel": "Annuler",
+                "choose_type": "Choisir le type",
+                "click_here": "Cliquez ici",
+                "close": "Fermer",
+                "compass": "Boussole",
+                "created_at": "Créé le",
+                "custom": "Personnaliser",
+                "dashboard": "Tableau de bord",
+                "database": "Base de données",
+                "default": "Par défaut",
+                "delete": "Supprimer",
+                "delete_confirm": "Oui, supprimer !",
+                "delete_question": "Êtes-vous sûr de vouloir supprimer",
+                "delete_this_confirm": "Oui, le supprimer",
+                "deselect_all": "Tout désélectionner",
+                "download": "Télécharger",
+                "edit": "Editer",
+                "email": "Adresse email",
+                "error_deleting": "Désolé, il semble qu'il y ait eu un problème de suppression",
+                "exception": "Exception",
+                "featured": "Mis en avant",
+                "field_does_not_exist": "Le champ n'existe pas",
+                "how_to_use": "Comment utiliser",
+                "index": "Index",
+                "internal_error": "Erreur interne",
+                "items": "élément(s)",
+                "keep_sidebar_open": "Lâchez l'ancre ! (gardez la barre latérale ouverte)",
+                "key": "Clé",
+                "last_modified": "Dernière modification",
+                "length": "longueur",
+                "login": "S'identifier",
+                "media": "Média",
+                "menu_builder": "Constructeur de menu",
+                "move": "Déplacer",
+                "name": "Nom",
+                "new": "Nouveau",
+                "no": "Non",
+                "no_thanks": "Non merci",
+                "not_null": "Pas nul",
+                "options": "Options",
+                "password": "Mot de passe",
+                "permissions": "Permissions",
+                "profile": "Profil",
+                "public_url": "URL publique",
+                "read": "Lire",
+                "rename": "renommer",
+                "required": "Obligatoire",
+                "return_to_list": "Retourner à la liste",
+                "route": "Route",
+                "save": "Enregistrer",
+                "search": "Chercher",
+                "select_all": "Tout sélectionner",
+                "select_group": "Sélectionner un groupe ou en créer un nouveau",
+                "settings": "Paramètres",
+                "showing_entries": "Affichage {from} à {to} de {all} entrées|Affichage {from} à {to} de {all} entrées",
+                "submit": "Soumettre",
+                "successfully_added_new": "Ajouté avec succès",
+                "successfully_deleted": "Supprimer avec succès",
+                "successfully_updated": "Mis à jour avec succès",
+                "timestamp": "Timestamp",
+                "title": "Titre",
+                "type": "Type",
+                "unsigned": "Non signé (unsigned)",
+                "unstick_sidebar": "Dé-ancrer la barre latérale",
+                "update": "Mise à jour",
+                "update_failed": "Echèc de la mise à jour",
+                "upload": "Télécharger",
+                "url": "URL",
+                "view": "Vue",
+                "viewing": "Affichage",
+                "yes": "Oui",
+                "yes_please": "Oui SVP"
+            },
+            "login": {
+                "loggingin": "Se connecter",
+                "signin_below": "Connectez-vous ci-dessous :",
+                "welcome": "Bienvenue dans Voyager, l'espace admin qui manquait à Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Editer mon profil",
+                "edit_user": "Editer l'utilisateur",
+                "password": "Mot de passe",
+                "password_hint": "Laissez vide pour garder le même",
+                "role": "Rôle",
+                "user_role": "Rôle utilisateur"
+            },
+            "settings": {
+                "usage_help": "Vous pouvez obtenir la valeur de chaque paramètre n'importe où sur votre site en appelant",
+                "save": "Enregistrer les paramètres",
+                "new": "Nouveau paramètre",
+                "help_name": "Nom du paramètre, exemple : Titre de l'espace d'administration",
+                "help_key": "Clé de paramètre, exemple : titre_admin",
+                "help_option": "(en option. S'applique uniquement à certains types, comme un menu déroulant ou un bouton radio)",
+                "add_new": "Ajouter un nouveau paramètre",
+                "delete_question": "Êtes-vous sûr de vouloir supprimer le paramètre : {setting} ?",
+                "delete_confirm": "Oui, supprimer ce paramètre",
+                "successfully_created": "Paramètres créés avec succès",
+                "successfully_saved": "Paramètres enregistrés avec succès",
+                "successfully_deleted": "Paramètres supprimés avec succès",
+                "already_at_top": "Déjà en haut de la liste",
+                "already_at_bottom": "Déjà en bas de la liste",
+                "moved_order_up": "Trier le paramètre {name} en ordre croissant",
+                "moved_order_down": "Trier le paramètre {name} en ordre décroissant",
+                "successfully_removed": "Valeur {name} supprimée avec succès"
+            },
+            "media": {
+                "add_new_folder": "Ajouter un dossier",
+                "audio_support": "Votre navigateur ne supporte pas l'élément audio.",
+                "create_new_folder": "Créer un nouveau dossier",
+                "delete_folder_question": "La suppression d'un dossier supprime tout son contenu !",
+                "destination_folder": "Dossier de destination",
+                "drag_drop_info": "Glissez\/déposez des fichiers ou cliquez ci-dessous pour télécharger",
+                "error_already_exists": "Désolé, il existe déjà un fichier\/dossier avec ce nom dans ce dossier.",
+                "error_creating_dir": "Désolé, quelque chose n'a pas fonctionné lors de la création du dossier, vérifiez les autorisations SVP",
+                "error_deleting_file": "Désolé, quelque chose n'a pas fonctionné lors de la suppression du fichier, vérifiez les autorisations SVP",
+                "error_deleting_folder": "Désolé, quelque chose n'a pas fonctionné lors de la suppression du dossier, vérifiez les autorisations SVP",
+                "error_may_exist": "Un fichier ou un dossier avec ce nom existe déjà. Choisissez un autre nom ou supprimez le fichier\/dossier existant.",
+                "error_moving": "Désolé, il y a un problème pour déplacer ce fichier\/dossier, vérifiez les autorisations SVP",
+                "error_uploading": "Échec du téléchargement : une erreur inconnue s'est produite !",
+                "folder_exists_already": "Désolé, ce dossier existe déjà. Supprimez-le pour le récréer ou choisissez un autre nom",
+                "image_does_not_exist": "L'image n'existe pas",
+                "image_removed": "Image supprimée",
+                "library": "Médiathèque",
+                "loading": "CHARGEMENT DES FICHIERS MULTIMEDIA",
+                "move_file_folder": "Déplacer fichier\/dossier",
+                "new_file_folder": "Nouveau nom de fichier\/dossier",
+                "new_folder_name": "Nouveau nom de dossier",
+                "no_files_here": "Nouveau fichier ici.",
+                "no_files_in_folder": "Il n'y a pas de fichier dans ce dossier.",
+                "nothing_selected": "Aucun fichier ou dossier sélectionné",
+                "rename_file_folder": "renommer le fichier\/dossier",
+                "success_uploaded_file": "Téléchargement du fichier réussi !",
+                "success_uploading": "Image téléchargée avec succès !",
+                "uploading_wrong_type": "Échec du téléchargement : type de fichier non pris en charge ou trop volumineux",
+                "video_support": "Votre navigateur ne prend pas en charge la balise vidéo.",
+                "crop": "Rogner",
+                "crop_and_create": "Rogner et créer",
+                "crop_override_confirm": "Cela remplacera l'image originale, êtes-vous sûr ?",
+                "crop_image": "Rogner l\\image",
+                "success_crop_image": "L'image a bien été rognée",
+                "height": "Hauteur : ",
+                "width": "Largeur : "
+            },
+            "menu_builder": {
+                "color": "Couleur en RVB ou hexadécimal (optionnel)",
+                "color_ph": "Couleur (ex. #ffffff ou rgb(255, 255, 255)",
+                "create_new_item": "Créer un nouvel élément de menu",
+                "delete_item_confirm": "Oui, supprimez cet élément de menu",
+                "delete_item_question": "Êtes-vous sûr de vouloir supprimer cet élément de menu ?",
+                "drag_drop_info": "Glissez\/déposez les éléments du menu ci-dessous pour les réorganiser.",
+                "dynamic_route": "Route dynamique",
+                "edit_item": "Editer l'élément du menu",
+                "icon_class": "Icône pour l'élément de menu (utilisez la ",
+                "icon_class2": "police d'icône Voyager<\/a>)",
+                "icon_class_ph": "Classe d'icône (optionnel)",
+                "item_route": "Route pour l'élément de menu",
+                "item_title": "Titre pour l'élément de menu",
+                "link_type": "Type de lien",
+                "new_menu_item": "Nouvel élément de menu",
+                "open_in": "Ouvrir dans",
+                "open_new": "Nouvel onglet\/fenêtre",
+                "open_same": "Même onglet\/fenêtre",
+                "route_parameter": "Paramètres de Route (le cas échéant)",
+                "static_url": "URL statique",
+                "successfully_created": "Nouvel élément de menu créé avec succès.",
+                "successfully_deleted": "Elément de menu supprimé avec succès.",
+                "successfully_updated": "Elément de menu édité avec succès.",
+                "updated_order": "Elément de menu réordonné avec succès.",
+                "url": "URL pour l'élément de menu",
+                "usage_hint": "Vous pouvez afficher un menu n'importe où sur le site en appelant|Vous pouvez afficher ce menu n'importe où sur le site en appelant"
+            },
+            "post": {
+                "category": "Catégorie de l'article",
+                "content": "Contenu de l'article",
+                "details": "Détails de l'article",
+                "excerpt": "Extrait <small>courte description de l'article<\/small>",
+                "image": "Image de l'article",
+                "meta_description": "Meta déscription",
+                "meta_keywords": "Meta mots clés",
+                "new": "Créé un nouvel article",
+                "seo_content": "Contenu SEO",
+                "seo_title": "Titre SEO",
+                "slug": "Slug URL",
+                "status": "Statut de l'article",
+                "status_draft": "brouillon",
+                "status_pending": "en attente",
+                "status_published": "publié",
+                "title": "Titre de l'article",
+                "title_sub": "Le titre de votre article",
+                "update": "Mettre à jour l'article"
+            },
+            "database": {
+                "add_bread": "Ajouter le BREAD à cette table",
+                "add_new_column": "Ajouter une nouvelle colonne",
+                "add_softdeletes": "Ajouter la suppression en cascade (soft deletes)",
+                "add_timestamps": "Ajouter les Timestamps",
+                "already_exists": "existe déjà",
+                "already_exists_table": "La table {table} existe déjà",
+                "bread_crud_actions": "Actions du BREAD\/CRUD",
+                "bread_info": "Information du BREAD",
+                "browse_bread": "Parcourir BREAD",
+                "column": "Colonne",
+                "composite_warning": "Avertissement : cette colonne fait partie d'un indice composite (composite index)",
+                "controller_name": "Nom du controleur",
+                "controller_name_hint": "exemple : PageController. Si laissé vide, utilisera le contrôleur BREAD",
+                "create_bread_for_table": "Créer un BREAD pour la table {table}",
+                "create_migration": "Créer une migration pour cette table ?",
+                "create_model_table": "Créer un modèle pour cette table ?",
+                "create_new_table": "Créer une nouvelle table",
+                "create_your_new_table": "Créez votre nouvelle table",
+                "default": "Par défaut",
+                "delete_bread": "Supprimer le BREAD",
+                "delete_bread_before_table": "Assurez-vous de supprimer le BREAD avant de supprimer sa table.",
+                "delete_table_bread_conf": "Oui, supprimer le BREAD",
+                "delete_table_bread_quest": "Êtes-vous sûr de vouloir supprimer le BREAD de la table : {table} ?",
+                "delete_table_confirm": "Oui, supprimer cette table",
+                "delete_table_question": "Êtes-vous sûr de vouloir supprimer la table : {table} ?",
+                "description": "Description",
+                "display_name": "Nom affiché",
+                "display_name_plural": "Nom affiché (au pluriel)",
+                "display_name_singular": "Nom affiché (au singulier)",
+                "edit_bread": "Editer le BREAD",
+                "edit_bread_for_table": "Editer le BREAD de la table : {table}",
+                "edit_rows": "Modifier les rangs pour la table {table} ci-dessous",
+                "edit_table": "Editer la table {table} ci-dessous",
+                "edit_table_not_exist": "La table que vous souhaitez éditer n'existe pas",
+                "error_creating_bread": "Désolé, il semble qu'il y ait eu un problème pour créer ce BREAD",
+                "error_removing_bread": "Désolé, il semble qu'il y ait eu un problème pour supprimer ce BREAD",
+                "error_updating_bread": "Désolé, il semble qu'il y ait eu un problème pour mettre à jour ce BREAD",
+                "extra": "Extra",
+                "field": "Champ",
+                "field_safe_failed": "Échec de l'enregistrement du champ : {field}. Nous sommes revenu en arrière !",
+                "generate_permissions": "Générer les permissions",
+                "icon_class": "Icône à utiliser pour cette table",
+                "icon_hint": "Icône (optionel), utiliser une",
+                "icon_hint2": "police d'icône Voyager",
+                "index": "INDEX",
+                "input_type": "Type d'entrée (input)",
+                "key": "Clé",
+                "model_class": "Nom de la classe du modèle (model)",
+                "model_name": "Nom du modèle (model)",
+                "model_name_ph": "exemple : \\App\\User. Si laiss\xE9 vide, essayera d'utiliser le nom de la table",
+                "name_warning": "Nommez la colonne avant d'ajouter un index SVP",
+                "no_composites_warning": "Cette table comporte des index composites. Notez qu'ils ne sont pas pris en charge pour le moment. Faites attention lorsque vous essayez d'ajouter\/supprimer des index.",
+                "null": "Null",
+                "optional_details": "Détails facultatifs",
+                "policy_class": "Nom de la classe de stratégie (Policy)",
+                "policy_name": "Nom de la stratégie (Policy)",
+                "policy_name_ph": "ex. \\App\\Policies\\UserPolicy. Si vide, essaiera la valeur par d\xE9faut",
+                "primary": "PRIMARY",
+                "server_pagination": "Pagination côté serveur",
+                "success_create_table": "Table : {table} créée avec succès",
+                "success_created_bread": "Nouveau BREAD créé avec succès",
+                "success_delete_table": "Table : {table} supprimée avec succès",
+                "success_remove_bread": "{datatype} BREAD supprimé avec succès",
+                "success_update_bread": "{datatype} BREAD mis à jour avec succès",
+                "success_update_table": "Table {table} mise à jour avec succès",
+                "table_actions": "Actions sur le tableau",
+                "table_columns": "Colonnes de table",
+                "table_has_index": "La table comporte déjà un indice primaire (primary index).",
+                "table_name": "Nom de la table",
+                "table_no_columns": "La table n\\a pas de colonnes...",
+                "type": "Type",
+                "type_not_supported": "Type non supporté",
+                "unique": "UNIQUE",
+                "unknown_type": "Type inconnu",
+                "update_table": "Mettre la table à jour",
+                "url_slug": "URL Slug (doit être unique)",
+                "url_slug_ph": "URL slug (exemple : articles)",
+                "visibility": "Visibilité",
+                "relationship": {
+                    "relationship": "Relation (Relationship)",
+                    "relationships": "Relations (Relationships)",
+                    "has_one": "En a un (Has One)",
+                    "has_many": "En a pluieurs (Has Many)",
+                    "belongs_to": "Appartient à (Belongs To)",
+                    "belongs_to_many": "Appartient à pluieurs (Belongs To Many)",
+                    "which_column_from": "Quelle colonne du",
+                    "is_used_to_reference": "est utilisée pour référencer le",
+                    "pivot_table": "Tableau croisée dynamique (Pivot Table)",
+                    "selection_details": "Détails de la sélection",
+                    "display_the": "Afficher le",
+                    "store_the": "Enregistrer le",
+                    "easy_there": "Facile mon capitaine",
+                    "before_create": "Avant de créer une nouvelle relation, vous devez créer le BREAD !<br>Revenez ensuite éditer le BREAD, vous pourrez y ajouter des relations.<br>Merci.",
+                    "cancel": "Annuler",
+                    "add_new": "Ajouter une relation",
+                    "open": "Ouvrir",
+                    "close": "Fermer",
+                    "relationship_details": "Détails de la relation",
+                    "browse": "Parcourir",
+                    "read": "Lire",
+                    "edit": "Editer",
+                    "add": "Ajouter",
+                    "delete": "Supprimer",
+                    "create": "Créer une relation",
+                    "namespace": "Espace de nom du modèle (Namespace. Ex. App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "Page|Pages",
+                "page_link_text": "Voir toutes les pages",
+                "page_text": "Vous avez {count} {string} enregistrées. Cliquez sur le bouton ci-dessous pour afficher toutes les pages.",
+                "post": "Article|Articles",
+                "post_link_text": "Voir tous les articles",
+                "post_text": "Vous avez {count} {string} enregistrés. Cliquez sur le bouton ci-dessous pour afficher tous les articles.",
+                "user": "Utilisateur|Utilisateur",
+                "user_link_text": "Voir tous les utilisateurs",
+                "user_text": "Vous avez {count} {string} enregistrés. Cliquez sur le bouton ci-dessous pour afficher tous les utilisateurs."
+            },
+            "form": {
+                "field_password_keep": "Laissez vide pour garder le même",
+                "field_select_dd_relationship": "Assurez-vous de configurer la relation appropriée dans la méthode {method} de la classe {class}.",
+                "type_checkbox": "Case à cocher",
+                "type_codeeditor": "Editeur de code",
+                "type_file": "Fichier",
+                "type_image": "Image",
+                "type_radiobutton": "Bouton radio",
+                "type_richtextbox": "Champ texte enrichie",
+                "type_selectdropdown": "Menu déroulant",
+                "type_textarea": "Aire de texte",
+                "type_textbox": "Champ texte"
+            },
+            "datatable": {
+                "sEmptyTable": "Aucune donnée disponible",
+                "sInfo": "Affichage _START_ à _END_ de _TOTAL_ entréees",
+                "sInfoEmpty": "Affichage 0 à 0 de 0 entréees",
+                "sInfoFiltered": "(filtré de _MAX_ entréees totales)",
+                "sInfoPostFix": "",
+                "sInfoThousands": " ",
+                "sLengthMenu": "Afficher les entréees : _MENU_",
+                "sLoadingRecords": "Chargement...",
+                "sProcessing": "En traitement...",
+                "sSearch": "Recherche :",
+                "sZeroRecords": "Aucun enregistrement correspondant trouvé",
+                "oPaginate": {
+                    "sFirst": "Premier",
+                    "sLast": "Dernier",
+                    "sNext": "Suivant",
+                    "sPrevious": "Précedent"
+                },
+                "oAria": {
+                    "sSortAscending": ": Trier la colonne en ordre croissant",
+                    "sSortDescending": ": Trier la colonne en ordre décroissant"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Fait avec <i class=\"voyager-heart\"><\/i> par",
+                "footer_copyright2": "Fait avec du rhum et encore plus de rhum {p}"
+            },
+            "json": {
+                "invalid": "Json invalide",
+                "invalid_message": "Il semble que votre JSON soit invalide.",
+                "valid": "Json valide",
+                "validation_errors": "Erreurs de validation"
+            },
+            "analytics": {
+                "by_pageview": "Par pages vues",
+                "by_sessions": "Par sessions",
+                "by_users": "Par utilisateurs",
+                "no_client_id": "Pour afficher Google Analytics, vous devrez obtenir un identifiant et  l'ajouter à vos paramètres clé : <code>google_analytics_client_id<\/code>. Obtenez une clé dans l'espace développeur Google :",
+                "set_view": "Sélectionner une vue",
+                "this_vs_last_week": "Cette semaine contre la semaine dernière",
+                "this_vs_last_year": "Cette année contre l'année dernière",
+                "top_browsers": "Top navigateurs",
+                "top_countries": "Top pays",
+                "various_visualizations": "Visualisations diverses"
+            },
+            "error": {
+                "symlink_created_text": "Nous avons créé le lien symbolique manquant pour vous.",
+                "symlink_created_title": "Le lien symbolique de stockage manquant a été créé",
+                "symlink_failed_text": "Nous n'avons pu généré le lien symbolique manquant pour votre application. Il semble que votre hébergeur ne supporte pas cette fonction.",
+                "symlink_failed_title": "Impossible de créer un lien symbolique de stockage manquant",
+                "symlink_missing_button": "Le réparer !",
+                "symlink_missing_text": "Nous n'avons pu trouver le lien symbolique de stockage. Cela pourrait causer des problèmes de chargement des fichiers multimédias.",
+                "symlink_missing_title": "Le lien symbolique de stockage est manquant"
+            }
+        }
+    },
+    "gl": {
+        "voyager": {
+            "date": {
+                "last_week": "A semana pasada",
+                "last_year": "O ano pasado",
+                "this_week": "Esta semana",
+                "this_year": "Este ano"
+            },
+            "generic": {
+                "action": "Acción",
+                "actions": "Accions",
+                "add": "Engadir",
+                "add_folder": "Engadir carpeta",
+                "add_new": "Engadir novo",
+                "all_done": "Todo listo",
+                "are_you_sure": "Estás seguro",
+                "are_you_sure_delete": "Estás seguro que queres borralo",
+                "auto_increment": "Autoincremento",
+                "browse": "Navegar",
+                "builder": "Construtor",
+                "bulk_delete": "Borrado masivo",
+                "bulk_delete_confirm": "Sí, bórrao!",
+                "bulk_delete_nothing": "Debe seleccionar polo menos un rexistro antes de usar o borrado masivo.",
+                "cancel": "Cancelar",
+                "choose_type": "Elixir tipo",
+                "click_here": "Faga clic aquí",
+                "close": "Pechar",
+                "compass": "Compás",
+                "created_at": "Creado en",
+                "custom": "Personalizado",
+                "dashboard": "Taboleiro",
+                "database": "Base de datos",
+                "default": "Defecto",
+                "delete": "Borrar",
+                "delete_confirm": "Sí, bórrao!",
+                "delete_question": "Estás seguro que queres eliminar isto",
+                "delete_this_confirm": "Sí, eliminar isto",
+                "deselect_all": "Deseleccionar todo",
+                "download": "Descargar",
+                "edit": "Editar",
+                "email": "Email",
+                "error_deleting": "Sintoo, parece que se produciu un problema ao eliminar",
+                "exception": "Excepción",
+                "featured": "Destacados",
+                "field_does_not_exist": "O campo non existe",
+                "how_to_use": "Cómo empregar",
+                "index": "Índice",
+                "internal_error": "Erro interno",
+                "items": "Elemento(s)",
+                "keep_sidebar_open": "Gharr! Solta as áncoras! (E mantén a barra lateral aberta) ",
+                "key": "Clave",
+                "last_modified": "Última modificación",
+                "length": "Lonxitude",
+                "login": "Iniciar sesión",
+                "media": "Medios",
+                "menu_builder": "Constructor de menús",
+                "move": "Mover",
+                "name": "Nome",
+                "new": "Novo",
+                "no": "Non",
+                "no_thanks": "Non, grazas",
+                "not_null": "Non nulo",
+                "options": "Opcións",
+                "password": "Contrasinal",
+                "permissions": "Permisos",
+                "profile": "Perfil",
+                "public_url": "URL pública",
+                "read": "Ler",
+                "rename": "Renomear",
+                "required": "Necesario",
+                "return_to_list": "Volver á lista",
+                "route": "Ruta",
+                "save": "Gardar",
+                "search": "Buscar",
+                "select_all": "Seleccionar todo",
+                "select_group": "Seleccione un grupo existente ou engada un",
+                "settings": "Axustes",
+                "showing_entries": "Mostrando de {from} a {to} de {all} entradas | Mostrando de {from} a {to} de tódalas entradas",
+                "submit": "Enviar",
+                "successfully_added_new": "Engadido exitosamente",
+                "successfully_deleted": "Eliminado exitosamente",
+                "successfully_updated": "Actualizado exitosamente",
+                "timestamp": "Timestamp",
+                "title": "Título",
+                "type": "Tipo",
+                "unsigned": "Non signado",
+                "unstick_sidebar": "Despegar a barra lateral",
+                "update": "Actualizar",
+                "update_failed": "Actualización errada",
+                "upload": "Subir",
+                "url": "URL",
+                "view": "Ver",
+                "viewing": "Vendo",
+                "yes": "Sí",
+                "yes_please": "Sí, por favor"
+            },
+            "login": {
+                "loggingin": "Iniciando sesión",
+                "signin_below": "Ingresar abaixo:",
+                "welcome": "Benvido a Voyager. O administrador desaparecido de Laravel "
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Editar o meu perfil",
+                "edit_user": "Editar usuario",
+                "password": "Contrasinal",
+                "password_hint": "Deixar baleiro para manter o mesmo",
+                "role": "Rol",
+                "user_role": "Rol do usuario"
+            },
+            "settings": {
+                "usage_help": "Pode obter o valor de cada parámetro en calqueira lugar do seu sitio chamando",
+                "save": "Gardar parámetro",
+                "new": "Novo parámetro",
+                "help_name": "Nome do parámetro Ex: Título de Páxina",
+                "help_key": "Clave do parámetro Ex: pag_titulo",
+                "help_option": "(Opcional, só se aplica a certos tipos como cadro desplegable ou botón de opción)",
+                "add_new": "Engadir novo parámetro",
+                "delete_question": "¿Está seguro de que desexa eliminar o parámetro {setting}?",
+                "delete_confirm": "Sí, eliminar este parámetro",
+                "successfully_created": "Parámetro creado exitosamente",
+                "successfully_saved": "Parámetro gardado exitosamente",
+                "successfully_deleted": "Parámetro eliminado exitosamente",
+                "already_at_top": "Isto xa está na parte superior da lista",
+                "already_at_bottom": "Isto xa está na parte inferior da lista",
+                "key_already_exists": "Esta opción xa foi creada",
+                "moved_order_up": "Orde do parámetro {name} aumentado",
+                "moved_order_down": "Orde do parámetro {name} diminuido",
+                "successfully_removed": "Eliminado correctamente parámetro {name} ",
+                "group_general": "Xeral",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Grupo",
+                "help_group": "Esta opción está asignada a"
+            },
+            "media": {
+                "add_new_folder": "Engadir nova carpeta",
+                "audio_support": "O seu navegador non admite o elemento de audio.",
+                "create_new_folder": "Crear nova carpeta",
+                "delete_folder_question": "Eliminar unha carpeta eliminará tódoslos arquivos e carpetas contidas dentro",
+                "destination_folder": "Carpeta de destino",
+                "drag_drop_info": "Arrastre e solte arquivos ou faga clic abaixo para cargar",
+                "error_already_exists": "Síntoo, xa hai un arquivo\/carpeta existente con ese nome nesa carpeta.",
+                "error_creating_dir": "Síntoo, algo parece que foi mal coa creación da carpeta,por favor revise os seus permisos",
+                "error_deleting_file": "Síntoo, algo parece que foi mal co borrado do arquivo,por favor revise os permisos",
+                "error_deleting_folder": "Síntoo, algo parece que fallou ao eliminar esta carpeta,por favor revise os seus permisos",
+                "error_may_exist": "Pode que xa exista un arquivo ou carpeta con ese nome. Por favor, elixe otro nome ou borre o outro arquivo.",
+                "error_moving": "Síntoo, parece que hai un problema ao mover ese arquivo\/carpeta, por favor asegúrese de ter os permisos correctos.",
+                "error_uploading": "Carga errada: Ocurriu un erro descoñecido!",
+                "folder_exists_already": "Síntoo, a carpeta xa existe, por favor, elimine esa carpeta se desexa creala novamente",
+                "image_does_not_exist": "A imaxe non existe",
+                "image_removed": "Imaxe eliminada",
+                "library": "Mediateca",
+                "loading": "CARGANDO OS ARQUIVOS DE MEDIOS",
+                "move_file_folder": "Mover Arquivo\/Carpeta",
+                "new_file_folder": "Novo nome de Arquivo\/carpeta",
+                "new_folder_name": "Nome de nova carpeta",
+                "no_files_here": "Non hai arquivos aquí.",
+                "no_files_in_folder": "Non hai arquivos nesta carpeta.",
+                "nothing_selected": "Non se seleccionou ningún arquivo ou carpeta",
+                "rename_file_folder": "Renomear arquivo\/cartafol",
+                "success_uploaded_file": "Novo arquivo subido exitosamente!",
+                "success_uploading": "Imaxe cargada exitosamente!",
+                "uploading_wrong_type": "Erro de carga: formato de arquivo non soportado ou é demasiado grande para cargar!",
+                "video_support": "O seu navegador non soporta a etiqueta de vídeo.",
+                "crop": "Cortar",
+                "crop_and_create": "Cortar e Crear",
+                "crop_override_confirm": "Anularase a imaxe orixinal, está seguro?",
+                "crop_image": "Recortar imaxe",
+                "success_crop_image": "Imaxe recortada con éxito",
+                "height": "Alto: ",
+                "width": "Ancho: "
+            },
+            "menu_builder": {
+                "color": "Cor en RGB ou hex (opcional)",
+                "color_ph": "Cor (por exemplo, #ffffff ou rgb (255, 255, 255)",
+                "create_new_item": "Crear unha nova opción de menú",
+                "delete_item_confirm": "Sí, eliminar esta opción de menú",
+                "delete_item_question": "Está seguro de que desexa eliminar esta opción do menú?",
+                "drag_drop_info": "Arraste e solte as opcións de menú para reogranizalas",
+                "dynamic_route": "Ruta Dinámica",
+                "edit_item": "Editar opción do menú",
+                "icon_class": "Icono para a opción do menú (Use unha",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Icono (opcional)",
+                "item_route": "Ruta para a opción de menú",
+                "item_title": "Título da opción de menú",
+                "link_type": "Tipo de enlace",
+                "new_menu_item": "Nova opción de menú",
+                "open_in": "Ábreo",
+                "open_new": "Nova pestana \/ ventá",
+                "open_same": "Mesma pestana \/ ventá",
+                "route_parameter": "Parámetros de ruta (se existen)",
+                "static_url": "URL estática",
+                "successfully_created": "Creouse unha nova opción de menú.",
+                "successfully_deleted": "Opción de menú eliminada exitosamente.",
+                "successfully_updated": "Opción de menú actualizada exitosamente.",
+                "updated_order": "Orde actualizado exitosamente.",
+                "url": "URL para a opción de menú",
+                "usage_hint": "Pode xerar un menú en calqueira lugar do seu sitio chamando a|Pode mostrar este menú en calqueira lugar do seu sitio chamando a"
+            },
+            "post": {
+                "category": "Categoría do Post",
+                "content": "Contido do Post",
+                "details": "Detalles do Post",
+                "excerpt": "Extracto<small> Pequena descripción deste post <\/small>",
+                "image": "Publicar imaxe",
+                "meta_description": "Meta Descripción",
+                "meta_keywords": "Meta palabras clave",
+                "new": "Crear novo post",
+                "seo_content": "Contido SEO",
+                "seo_title": "Título Seo",
+                "slug": "URL slug",
+                "status": "Estado do Post",
+                "status_draft": "borrador",
+                "status_pending": "pendente",
+                "status_published": "publicado",
+                "title": "Título do Post",
+                "title_sub": "O título de Post",
+                "update": "Actualizar Post"
+            },
+            "database": {
+                "add_bread": "Engadir BREAD a esta táboa",
+                "add_new_column": "Engadir nova columna",
+                "add_softdeletes": "Engadir Soft Deletes",
+                "add_timestamps": "Engadir Timestamps",
+                "already_exists": "xa existe",
+                "already_exists_table": "Táboa {table} xa existe",
+                "bread_crud_actions": "Accións BREAD \/ CRUD",
+                "bread_info": "Información de BREAD",
+                "browse_bread": "Explorar BREAD",
+                "column": "Columna",
+                "composite_warning": "Advertencia: esta columna forma parte dun índice composto",
+                "controller_name": "Nome do Controlador",
+                "controller_name_hint": "Exemplo. PageController, se se deixa valeiro, empregará o controlador BREAD ",
+                "create_bread_for_table": "Crear BREAD para a táboa {table}",
+                "create_migration": "Crear migración para esta táboa?",
+                "create_model_table": "Crear un modelo para esta táboa?",
+                "create_new_table": "Crear nova táboa",
+                "create_your_new_table": "Cree a súa nova táboa",
+                "default": "Defecto",
+                "delete_bread": "Eliminar BREAD",
+                "delete_bread_before_table": "Asegúrese de quitar o BREAD desta táboa antes de borrar a táboa.",
+                "delete_table_bread_conf": "Sí, retire o BREAD",
+                "delete_table_bread_quest": "Está seguro de que desexa eliminar o BREAD para a táboa {table}?",
+                "delete_table_confirm": "Sí, borrar esta táboa",
+                "delete_table_question": "Está seguro de que desexa eliminar a táboa {table}?",
+                "description": "Descripción",
+                "display_name": "Nome para mostrar",
+                "display_name_plural": "Nome de visualización (Plural)",
+                "display_name_singular": "Nome de visualización (Singular)",
+                "edit_bread": "Editar BREAD",
+                "edit_bread_for_table": "Editar BREAD para a táboa {table}",
+                "edit_rows": "Editar as filas da táboa seguinte",
+                "edit_table": "Editar a táboa seguinte:",
+                "edit_table_not_exist": "A táboa que desexa editar non existe",
+                "error_creating_bread": "Síntoo, parece que pode haber un problema ao crear o BREAD",
+                "error_removing_bread": "Síntoo, parece que houbo un problema ao eliminar o BREAD",
+                "error_updating_bread": "Síntoo, parece que pode haber un problema ao actualizar o BREAD",
+                "extra": "Extra",
+                "field": "Campo",
+                "field_safe_failed": "Non se pudo gardar o campo {field}, Estamos retrocedendo! ",
+                "generate_permissions": "Xerar permisos",
+                "icon_class": "Icono a empregar para esta táboa",
+                "icon_hint": "Icono (opcional) Utilice unha ",
+                "icon_hint2": "Voyager Font Class",
+                "index": "ÍNDICE",
+                "input_type": "Tipo de entrada",
+                "key": "Clave",
+                "model_class": "Nome de clase do modelo",
+                "model_name": "Nome do modelo",
+                "model_name_ph": "ex. \\App\\User, se se deixa valeiro intentar\xE1 empregar o nombre da t\xE1boa ",
+                "name_warning": "Por favor, nomee a columna antes de engadir un índice",
+                "no_composites_warning": "Esta táboa ten índices compostos. Teña en conta que en este momento non se admiten. Teña coidado ao intentar agregar\/quitar índices.",
+                "null": "Nulo",
+                "optional_details": "Detalles opcionais",
+                "policy_class": "Clase das restricións",
+                "policy_name": "Nome da restricións",
+                "policy_name_ph": "ex. \\App\\Policies\\UserPolicy, se se deixa valeiro, intentar\xE1 empregar o valor predeterminado",
+                "primary": "PRIMARIO",
+                "server_pagination": "Paxinación do servidor",
+                "success_create_table": "Táboa {table} creada exitosamente",
+                "success_created_bread": "BREAD creado exitosamente",
+                "success_delete_table": "Táboa {table} eliminada exitosamente",
+                "success_remove_bread": "BREAD de tipo {datatype} borrado exitosamente",
+                "success_update_bread": "Actualizouse correctamente o BREAD {datatype}",
+                "success_update_table": "Táboa {table} actualizada exitosamente",
+                "table_actions": "Accións da táboa",
+                "table_columns": "Columnas da táboa",
+                "table_has_index": "A táboa xa ten un índice primario.",
+                "table_name": "Nome da táboa",
+                "table_no_columns": "A táboa non ten columnas ...",
+                "type": "Tipo",
+                "type_not_supported": "Este tipo non é compatible",
+                "unique": "ÚNICO",
+                "unknown_type": "Tipo descoñecido",
+                "update_table": "Actualizar táboa",
+                "url_slug": "URL Slug (debe ser único)",
+                "url_slug_ph": "URL slug (ex posts)",
+                "visibility": "Visibilidade",
+                "relationship": {
+                    "relationship": "Relación",
+                    "relationships": "Relacións",
+                    "has_one": "Has One",
+                    "has_many": "Has Many",
+                    "belongs_to": "Belongs To",
+                    "belongs_to_many": "Belongs To Many",
+                    "which_column_from": "Qué columna de",
+                    "is_used_to_reference": "se empregará para facer referencia a",
+                    "pivot_table": "Tabla Pivote",
+                    "selection_details": "Selección de Detalles",
+                    "display_the": "Ver de",
+                    "store_the": "Gardar de",
+                    "easy_there": "Fácil, Capitán",
+                    "before_create": "Antes de que poida crear unha nova relación, primeiro deberá crear o BREAD. <br> Despois, regrese para editar o BREAD e poderá agregar relacións. Grazas.",
+                    "cancel": "Cancelar",
+                    "add_new": "Agregar Nova Relación",
+                    "open": "Abrir",
+                    "close": "Pechar",
+                    "relationship_details": "Detalles de Relación",
+                    "browse": "Ver",
+                    "read": "Ler",
+                    "edit": "Editar",
+                    "add": "Agregar",
+                    "delete": "Eliminar",
+                    "create": "Crear unha Relación",
+                    "namespace": "Nome do Espazo de Modelo (ex. App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "Páxina|Páxinas",
+                "page_link_text": "Ver tódalas páxinas",
+                "page_text": "Ten {count} {string} na súa base de datos. Faga clic no botón de abaixo para ver tódalas páxinas. ",
+                "post": "Post|Posts",
+                "post_link_text": "Ver tódolos posts",
+                "post_text": "Ten {count} {string} na súa base de datos. Faga clic no botón de abaixo para ver tódolos posts. ",
+                "user": "Usuario|Usuarios",
+                "user_link_text": "Ver tódolos usuarios",
+                "user_text": "Ten {count} {string} na súa base de datos. Faga clic no botón de abaixo para ver tódolos usuarios. "
+            },
+            "form": {
+                "field_password_keep": "Deixar baleiro para mantener o mesmo",
+                "field_select_dd_relationship": "Asegúrese de configurar a relación apropiada no método {method} daclase {class}.",
+                "type_checkbox": "Casilla de verificación",
+                "type_codeeditor": "Editor de código",
+                "type_file": "Arquivo",
+                "type_image": "Imaxe",
+                "type_radiobutton": "Botón de radio",
+                "type_richtextbox": "Caixa de texto enriquecido",
+                "type_selectdropdown": "Seleccionar despregable",
+                "type_textarea": "Área de texto",
+                "type_textbox": "Caixa de texto"
+            },
+            "datatable": {
+                "sEmptyTable": "Non hai datos dispoñibles na táboa",
+                "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                "sInfoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "sInfoFiltered": "(Filtrada de _MAX_ entradas totais)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostrar _MENU_ entradas",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "sSearch": "Procurar:",
+                "sZeroRecords": "Non se atoparon rexistros coincidentes",
+                "oPaginate": {
+                    "sFirst": "Primeiro",
+                    "sLast": "Último",
+                    "sNext": "Seguinte",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar a columna ascendente",
+                    "sSortDescending": ": Activar para ordenar a columna descendente"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Feito con <i class = \"voyager-heart\"> <\/i> por",
+                "footer_copyright2": "Feito con ron e incluso máis ron"
+            },
+            "json": {
+                "invalid": "Json inválido",
+                "invalid_message": "Parece que introduciches algún JSON inválido.",
+                "valid": "Json Válido",
+                "validation_errors": "Errores de validación"
+            },
+            "analytics": {
+                "by_pageview": "Por páxina",
+                "by_sessions": "Por sesións",
+                "by_users": "Por usuarios",
+                "no_client_id": "Para ver os análisis, necesitará obter unha ID de cliente de Google Analytics eengadila á súa configuración para a clave <code>google_analytics_client_id<\/code>. Obteña a súa clave na consola de desarrolladores de Google: ",
+                "set_view": "Seleccionar unha vista",
+                "this_vs_last_week": "Esta semana vs a semana pasada",
+                "this_vs_last_year": "Este Ano vs o Ano pasado",
+                "top_browsers": "Principais Navegadores",
+                "top_countries": "Principais países",
+                "various_visualizations": "Varias visualizacións"
+            },
+            "error": {
+                "symlink_created_text": "Acabamos de crear o enlace simbólico que faltaba para vostede.",
+                "symlink_created_title": "Enlace simbólico de almacenamento faltante creado",
+                "symlink_failed_text": "Non poidemos xerar o enlace simbólico perdido para a súa aplicación. Parece que o proveedor de aloxamento non o admite.",
+                "symlink_failed_title": "Non se poido crear un enlace simbólico de almacenamento faltante",
+                "symlink_missing_button": "Arránxao",
+                "symlink_missing_text": "Non pudemos atopar un enlace simbólico de almacenamento. Isto podría causar problemas coa carga de arquivos multimedia dende o navegador.",
+                "symlink_missing_title": "Falta o enlace simbólico de almacenamento"
+            }
+        }
+    },
+    "id": {
+        "voyager": {
+            "date": {
+                "last_week": "Minggu Lalu",
+                "last_year": "Tahun Lalu",
+                "this_week": "Minggu Ini",
+                "this_year": "Tahun Ini"
+            },
+            "generic": {
+                "action": "Aksi",
+                "actions": "Aksi",
+                "add": "Tambah",
+                "add_folder": "Buat Folder",
+                "add_new": "Buat Baru",
+                "all_done": "Selesai",
+                "are_you_sure": "Apa kamu yakin",
+                "are_you_sure_delete": "Yakin untuk menghapus",
+                "auto_increment": "Auto Increment",
+                "browse": "Lihat",
+                "builder": "Builder",
+                "bulk_delete": "Hapus Sekaligus",
+                "bulk_delete_confirm": "Ya, hapus semua",
+                "bulk_delete_nothing": "Kamu belum memilih apapun untuk dihapus",
+                "cancel": "Batal",
+                "choose_type": "Pilih Tipe",
+                "click_here": "Klik disini",
+                "close": "Tutup",
+                "compass": "Compass",
+                "created_at": "Dibuat pada",
+                "custom": "Custom",
+                "dashboard": "Dashboard",
+                "database": "Database",
+                "default": "Default",
+                "delete": "Hapus",
+                "delete_confirm": "Ya, Hapus!",
+                "delete_question": "Kamu yakin untuk menghapus ini",
+                "delete_this_confirm": "Ya, hapus ini",
+                "deselect_all": "Tidak pilih semua",
+                "download": "Unduh",
+                "edit": "Ubah",
+                "email": "E-mail",
+                "error_deleting": "Maaf, ada masalah ketika hendak menghapus ini",
+                "exception": "Exception",
+                "featured": "Featured",
+                "field_does_not_exist": "Field tidak ditemukan",
+                "how_to_use": "Cara Penggunaan",
+                "index": "Index",
+                "internal_error": "Internal error",
+                "items": "item(s)",
+                "keep_sidebar_open": "Yarr! Drop the anchors! (and keep the sidebar open)",
+                "key": "Key",
+                "last_modified": "Terakhir diubah",
+                "length": "Panjang",
+                "login": "Masuk",
+                "media": "Media",
+                "menu_builder": "Menu Builder",
+                "move": "Pindah",
+                "name": "Nama",
+                "new": "Baru",
+                "no": "Tidak",
+                "no_thanks": "Tidak, terima kasih",
+                "not_null": "Not Null",
+                "options": "Options",
+                "password": "Password",
+                "permissions": "Permissions",
+                "profile": "Profile",
+                "public_url": "Public URL",
+                "read": "Baca",
+                "rename": "Ubah Nama",
+                "required": "Dibutuhkan",
+                "return_to_list": "Kembali ke Daftar",
+                "route": "Route",
+                "save": "Simpan",
+                "search": "Cari",
+                "select_all": "Pilih semua",
+                "select_group": "Pilih Group atau Buat Baru",
+                "settings": "Pengaturan",
+                "showing_entries": "Lihat dari {from} hingga {to} dari {all} masukan",
+                "submit": "Submit",
+                "successfully_added_new": "Berhasil Buat Baru",
+                "successfully_deleted": "Berhasil Dihapus",
+                "successfully_updated": "Berhasil Diperbaharui",
+                "timestamp": "Timestamp",
+                "title": "Judul",
+                "type": "Tipe",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "Sidebar tidak menempel",
+                "update": "Perbaharui",
+                "update_failed": "Perbaharui Gagal",
+                "upload": "Unggah",
+                "url": "URL",
+                "view": "Lihat",
+                "viewing": "Melihat",
+                "yes": "Ya",
+                "yes_please": "Ya, Silahkan"
+            },
+            "login": {
+                "loggingin": "Sedang login",
+                "signin_below": "Sign In Dibawah:",
+                "welcome": "Selamat datang di Voyager. Admin untuk Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Ubah Profil",
+                "edit_user": "Ubah User",
+                "password": "Password",
+                "password_hint": "Kosongkan apabila sama",
+                "role": "Role",
+                "user_role": "User Role"
+            },
+            "settings": {
+                "usage_help": "Kamu dapat menggunakan value dari setiap pengaturan dimanapun di website dengan memanggil",
+                "save": "Simpan Pengaturan",
+                "new": "Pengaturan Baru",
+                "help_name": "Nama pengaturan cth: Judul Admin",
+                "help_key": "Key pengaturan cth: judul_admin",
+                "help_option": "(optional, hanya berlaku untuk tipe tertentu seperti dropdown box atau radio button)",
+                "add_new": "Buat Pengaturan Baru",
+                "delete_question": "Apakah kamu yakin untuk menghapus pengaturan {setting}?",
+                "delete_confirm": "Ya, hapus pengaturan ini",
+                "successfully_created": "Berhasil membuat pengaturan",
+                "successfully_saved": "Berhasil menyimpan pengaturan",
+                "successfully_deleted": "Berhasil menghapus pengaturan",
+                "already_at_top": "Ini sudah berada pada daftar teratas",
+                "already_at_bottom": "Ini sudah berada pada daftar terbawah",
+                "key_already_exists": "Key {key} telah digunakan",
+                "moved_order_up": "Pindah pengaturan {name} keatas",
+                "moved_order_down": "Pindah pengaturan {name} kebawah",
+                "successfully_removed": "Berhasil menghapus {name}",
+                "group_general": "General",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Grup",
+                "help_group": "Grup dimana pengaturan ini berlaku"
+            },
+            "media": {
+                "add_new_folder": "Buat Folder Baru",
+                "audio_support": "Browser kamu tidak mendukung elemen\/tag audio.",
+                "create_new_folder": "Buat Folder Baru",
+                "delete_folder_question": "Menghapus folder akan mengahapus semua file dan folder didalamnya",
+                "destination_folder": "Folder Tujuan",
+                "drag_drop_info": "Drag and drop file atau klik dibawah untuk unggah",
+                "error_already_exists": "Maaf, terdapat nama file\/folder yang sama didalam folder tersebut.",
+                "error_creating_dir": "Maaf terjadi masalah ketika membuat folder, mohon cek folder permission kamu",
+                "error_deleting_file": "Maaf, terjadi masalah ketika hendak menghapus file ini, mohon cek file permission kamu",
+                "error_deleting_folder": "Maaf, terjadi masalah ketika hendak menghapus folder ini, mohon cek folder permission kamu",
+                "error_may_exist": "File atau folder sudah menggunakan nama ini. Silahkan pilih nama lain atau hapus file dengan nama yang sama.",
+                "error_moving": "Maaf, terjadi masalah ketika hendak memindahkan file\/folder ini, pastikan folder permission benar",
+                "error_uploading": "Unggah gagal: Terjadi error yang tidak diketahui!",
+                "folder_exists_already": "Maaf, folder sudah ada, silahkan hapus folder tersebut jika ingin membuat lagi",
+                "image_does_not_exist": "Gambar tidak tersedia",
+                "image_removed": "Gambar dihapus",
+                "library": "Media Library",
+                "loading": "MENUNGGU MEDIA FILE KAMU",
+                "move_file_folder": "Pindah File\/Folder",
+                "new_file_folder": "Nama File\/Folder Baru",
+                "new_folder_name": "Nama Folder Baru",
+                "no_files_here": "Tidak ada file.",
+                "no_files_in_folder": "Tidak ada file di dalam folder ini.",
+                "nothing_selected": "Tidak ada file atau folder terpilih",
+                "rename_file_folder": "Ubah nama File\/Folder",
+                "success_uploaded_file": "Berhasil unggah file baru!",
+                "success_uploading": "Gambar berhasil diunggah!",
+                "uploading_wrong_type": "Unggah gagal: Format file tidak didukung atau terlalu besar untuk diunggah!",
+                "video_support": "Browser kamu tidak mendukung tag video.",
+                "crop": "Potong",
+                "crop_and_create": "Potong & Buat",
+                "crop_override_confirm": "Ini akan menggantikan file asli, kamu yakin?",
+                "crop_image": "Potong Gambar",
+                "success_crop_image": "Berhasil memotong gambar",
+                "height": "Tinggi: ",
+                "width": "Lebar: "
+            },
+            "menu_builder": {
+                "color": "Warna dalam RGB atau hex (optional)",
+                "color_ph": "Warna (cth. #ffffff atau rgb(255, 255, 255)",
+                "create_new_item": "Buat Menu Item Baru",
+                "delete_item_confirm": "Ya, Hapus Menu Item Ini",
+                "delete_item_question": "Kamu yakin menghapus menu item ini?",
+                "drag_drop_info": "Drag and drop menu item dibawah ini untuk mengurutkannya.",
+                "dynamic_route": "Dynamic Route",
+                "edit_item": "Ubah Menu Item",
+                "icon_class": "Font Icon class untuk Menu Item (Gunakan",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Icon Class (optional)",
+                "item_route": "Route dari menu item",
+                "item_title": "Title dari Menu Item",
+                "link_type": "Tipe Link",
+                "new_menu_item": "Menu Item Baru",
+                "open_in": "Buka di",
+                "open_new": "Tab\/Window Baru",
+                "open_same": "Tab\/Window Yang Sama",
+                "route_parameter": "Route parameter (jika ada)",
+                "static_url": "URL Statis",
+                "successfully_created": "Berhasil Membuat Menu Item Baru.",
+                "successfully_deleted": "Berhasil Menghapus Menu Item.",
+                "successfully_updated": "Berhasil Memperbaharui Menu Item.",
+                "updated_order": "Berhasil Mengurutkan Menu Item.",
+                "url": "URL dari Menu Item",
+                "usage_hint": "Kamu dapat mempertunjukkan menu ini dimanapun pada website dengan memanggil"
+            },
+            "post": {
+                "category": "Kategori Post",
+                "content": "Konten Post",
+                "details": "Detil Post",
+                "excerpt": "Kutipan <small>Deskripsi pendek dari post ini<\/small>",
+                "image": "Gambar Post",
+                "meta_description": "Meta Deskripsi",
+                "meta_keywords": "Meta Kata Kunci",
+                "new": "Buat Post Baru",
+                "seo_content": "Konten SEO",
+                "seo_title": "SEO Title",
+                "slug": "URL slug",
+                "status": "Status Post",
+                "status_draft": "draft",
+                "status_pending": "pending",
+                "status_published": "published",
+                "title": "Post Title",
+                "title_sub": "Title dari post",
+                "update": "Perbaharui Post"
+            },
+            "database": {
+                "add_bread": "Tambahkan BREAD pada tabel ini",
+                "add_new_column": "Tambah kolom baru",
+                "add_softdeletes": "Tambah Soft Deletes",
+                "add_timestamps": "Tambah Timestamps",
+                "already_exists": "sudah ada",
+                "already_exists_table": "Tabel {table} sudah ada",
+                "bread_crud_actions": "BREAD\/CRUD Actions",
+                "bread_info": "BREAD info",
+                "browse_bread": "Browse BREAD",
+                "column": "Kolom",
+                "composite_warning": "Peringatan: kolom ini merupakan bagian dari composite index",
+                "controller_name": "Nama Controller",
+                "controller_name_hint": "cth. PageController, jika dikosongkan akan memakai BREAD Controller",
+                "create_bread_for_table": "Buat BREAD untuk table {table}",
+                "create_migration": "Buat migration untuk tabel ini?",
+                "create_model_table": "Buat model untuk tabel ini?",
+                "create_new_table": "Buat Table Baru",
+                "create_your_new_table": "Buat Table Baru",
+                "default": "Default",
+                "delete_bread": "Hapus BREAD",
+                "delete_bread_before_table": "Pastikan untuk menghapus BREAD pada tabel ini terlebih dahulu sebelum menghapus tabel.",
+                "delete_table_bread_conf": "Ya, hapus BREAD",
+                "delete_table_bread_quest": "Kamu yakin untuk menghapus BREAD untuk tabel {table}?",
+                "delete_table_confirm": "Ya, hapus tabel ini",
+                "delete_table_question": "Kamu yakin untuk menghapus tabel {table} ?",
+                "description": "Deskripsi",
+                "display_name": "Display Name",
+                "display_name_plural": "Display Name (Plural)",
+                "display_name_singular": "Display Name (Singular)",
+                "edit_bread": "Ubah BREAD",
+                "edit_bread_for_table": "Ubah BREAD untuk tabel {table}",
+                "edit_rows": "Ubah baris untuk tabel {table} dibawah",
+                "edit_table": "Ubah tabel {table} dibawah",
+                "edit_table_not_exist": "Tabel yang hendak kamu hapus tidak ditemukan",
+                "error_creating_bread": "Maaf, sepertinya terjadi masalah ketika membuat BREAD",
+                "error_removing_bread": "Maaf, sepertinya terjadi masalah ketika menghapus BREAD",
+                "error_updating_bread": "Maaf, sepertinya terjadi masalah ketika mengubah BREAD",
+                "extra": "Ekstra",
+                "field": "Field",
+                "field_safe_failed": "Gagal menyimpan field {field}, kita roll back!",
+                "generate_permissions": "Generate Permissions",
+                "icon_class": "Icon untuk tabel ini",
+                "icon_hint": "Icon (optional) Gunakan",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Input Type",
+                "key": "Key",
+                "model_class": "Nama Class Model",
+                "model_name": "Nama Model",
+                "model_name_ph": "cth. \\App\\User, jika dikosongkan akan menggunakan nama tabel",
+                "name_warning": "Silahkan menamai kolom sebelum memberikan index",
+                "no_composites_warning": "Tabel ini mempunyai composite index. Mohon dicatat fitur ini belum didukung saat ini. Berhati-hatilah saat menambahkan\/menghapus index.",
+                "null": "Null",
+                "optional_details": "Optional Details",
+                "policy_class": "Policy Class Name",
+                "policy_name": "Policy Name",
+                "policy_name_ph": "cth. \\App\\Policies\\UserPolicy, jika dikosongkan akan coba menggunakan default",
+                "primary": "PRIMARY",
+                "server_pagination": "Server-side Pagination",
+                "success_create_table": "Berhasil membuat tabel {table}",
+                "success_created_bread": "Berhasil membuat BREAD baru",
+                "success_delete_table": "Berhasil menghapus {table}",
+                "success_remove_bread": "Berhasil menghapus BREAD dari {datatype}",
+                "success_update_bread": "Berhasil mengubah {datatype} BREAD",
+                "success_update_table": "Berhasil mengubah tabel {table}",
+                "table_actions": "Aksi Tabel",
+                "table_columns": "Kolom Tabel",
+                "table_has_index": "Tabel mempunyai primary index.",
+                "table_name": "Nama Tabel",
+                "table_no_columns": "Tabel tidak memiliki kolom...",
+                "type": "Tipe",
+                "type_not_supported": "Tipe ini tidak didukung",
+                "unique": "UNIQUE",
+                "unknown_type": "Unknown Type",
+                "update_table": "Perbaharui Table",
+                "url_slug": "URL Slug (harus unique)",
+                "url_slug_ph": "URL slug (cth. posts)",
+                "visibility": "Visibility",
+                "relationship": {
+                    "relationship": "Relationship",
+                    "relationships": "Relationships",
+                    "has_one": "Has One",
+                    "has_many": "Has Many",
+                    "belongs_to": "Belongs To",
+                    "belongs_to_many": "Belongs To Many",
+                    "which_column_from": "Kolom mana dari",
+                    "is_used_to_reference": "yang digunakan sebagai referensi untuk",
+                    "pivot_table": "Pivot Table",
+                    "selection_details": "Selection Details",
+                    "display_the": "Lihat",
+                    "store_the": "Simpan",
+                    "easy_there": "Sabar Kapten",
+                    "before_create": "Sebelum membuat relationship kamu harus membuat BREAD terlebih dahulu.<br> Lalu, kembali untuk mengubah BREAD dan kamu dapat menambahkan relationships.<br> Terima kasih.",
+                    "cancel": "Batal",
+                    "add_new": "Tambah relationship baru",
+                    "open": "Buka",
+                    "close": "Tutup",
+                    "relationship_details": "Detil Relationship",
+                    "browse": "Lihat",
+                    "read": "Baca",
+                    "edit": "Ubah",
+                    "add": "Tambah",
+                    "delete": "Hapus",
+                    "create": "Buat Relationship",
+                    "namespace": "Model Namespace (cth. App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "Halaman",
+                "page_link_text": "Lihat semua halaman",
+                "page_text": "Kamu mempunyai {count} {string} dalam database. Klik tombol dibawah untuk melihat semua halaman.",
+                "post": "Post",
+                "post_link_text": "Lihat semua post",
+                "post_text": "Kamu mempunyai {count} {string} dalam database. Klik tombol dibawah untuk melihat semua post.",
+                "user": "User",
+                "user_link_text": "Lihat semua user",
+                "user_text": "Kamu mempunyai {count} {string} dalam database. Klik tombol dibawah untuk melihat semua user."
+            },
+            "form": {
+                "field_password_keep": "Kosongkan untuk menggunakan data yang sama",
+                "field_select_dd_relationship": "Pastikan untuk mengatur relationship yang benar pada memthod {method} dari class {class} .",
+                "type_checkbox": "Check Box",
+                "type_codeeditor": "Code Editor",
+                "type_file": "File",
+                "type_image": "Image",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Select Dropdown",
+                "type_textarea": "Text Area",
+                "type_textbox": "Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "Tidak ada data pada tabel",
+                "sInfo": "Lihat mulai _START_ hingga _END_ dari _TOTAL_ entri",
+                "sInfoEmpty": "Lihat mulai 0 hingga 0 dari 0 entri",
+                "sInfoFiltered": "(menyaring dari _MAX_ total entri)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Lihat _MENU_ entri",
+                "sLoadingRecords": "Menunggu...",
+                "sProcessing": "Memproses...",
+                "sSearch": "Cari:",
+                "sZeroRecords": "Tidak ada data yang sesuai",
+                "oPaginate": {
+                    "sFirst": "Pertama",
+                    "sLast": "Terakhir",
+                    "sNext": "Selanjutnya",
+                    "sPrevious": "Sebelumnya"
+                },
+                "oAria": {
+                    "sSortAscending": ": aktivasi untuk mengurutkan dari kecil ke besar",
+                    "sSortDescending": ": aktivasi untuk mengurutkan dari besar ke kecil"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Dibuat dengan <i class=\"voyager-heart\"><\/i> oleh",
+                "footer_copyright2": "Dibuat dengan rum dan lebih banyak rum"
+            },
+            "json": {
+                "invalid": "Json tidak valid",
+                "invalid_message": "Sepertinya JSON kamu tidak valid.",
+                "valid": "Json Valid",
+                "validation_errors": "Validasi error"
+            },
+            "analytics": {
+                "by_pageview": "By pageview",
+                "by_sessions": "By sessions",
+                "by_users": "By users",
+                "no_client_id": "Untuk melihat analytics kamu membutuhkan google analytics client id dan menambahkannya ke pengaturan dengan menggunakan key <code>google_analytics_client_id<\/code>. Dapatkan key dari Google developer console:",
+                "set_view": "Pilih View",
+                "this_vs_last_week": "Minggu ini vs Minggu lalu",
+                "this_vs_last_year": "Tahun ini vs Tahun lalu",
+                "top_browsers": "Top Browsers",
+                "top_countries": "Top Countries",
+                "various_visualizations": "Bermacam visualisasi"
+            },
+            "error": {
+                "symlink_created_text": "Kamu telh membuatkan symlink untukmu.",
+                "symlink_created_title": "Kekurangan storage symlink telah diperbaiki",
+                "symlink_failed_text": "Kami gagal membuat storage symlink untuk aplikasi kamu. Sepertinya provider hosting kamu tidak mendukungnya.",
+                "symlink_failed_title": "Tidak dapat membuat storage symlink",
+                "symlink_missing_button": "Perbaiki",
+                "symlink_missing_text": "Kami tidak dapat menemukan storage symlink. Ini dapat mengakibatkan masalah ketika melihat file pada browser.",
+                "symlink_missing_title": "Tidak terdapat storage symlink"
+            }
+        }
+    },
+    "it": {
+        "voyager": {
+            "date": {
+                "last_week": "Ultima Settimana",
+                "last_year": "Ultimo Anno",
+                "this_week": "Questa Settimana",
+                "this_year": "Questo Anno"
+            },
+            "generic": {
+                "action": "Azione",
+                "actions": "Azioni",
+                "add": "Aggiungi",
+                "add_folder": "Aggiungi Cartella",
+                "add_new": "Aggiungi Nuovo",
+                "all_done": "Tutto Fatto",
+                "are_you_sure": "Sei sicuro",
+                "are_you_sure_delete": "Sei sicuro di voler eliminare",
+                "auto_increment": "Incremento Automatico",
+                "browse": "Sfoglia",
+                "builder": "Costruttore",
+                "bulk_delete": "Elimina in blocco",
+                "bulk_delete_confirm": "Sì, elimina questi",
+                "bulk_delete_nothing": "Non hai selezionato nulla da eliminare",
+                "cancel": "Annulla",
+                "choose_type": "Scegli il tipo",
+                "click_here": "Clicca qui",
+                "close": "Chiudi",
+                "compass": "Bussola",
+                "created_at": "Creato il",
+                "custom": "Custom",
+                "dashboard": "Bacheca",
+                "database": "Database",
+                "default": "Default",
+                "delete": "Elimina",
+                "delete_confirm": "Sì, elimina!",
+                "delete_question": "Sei sicuro di volerlo eliminare",
+                "delete_this_confirm": "Sì, eliminalo",
+                "deselect_all": "Deseleziona TUTTO",
+                "download": "Scarica",
+                "edit": "Modifica",
+                "email": "E-mail",
+                "error_deleting": "Spiacenti sembra ci sia stato un problema durante l'eliminazione",
+                "exception": "Eccezione",
+                "featured": "In primo piano",
+                "field_does_not_exist": "Campo non esiste",
+                "how_to_use": "Come Usare",
+                "index": "Indice",
+                "internal_error": "Errore interno",
+                "items": "item(s)",
+                "keep_sidebar_open": "Yarr! Calate le ancore! (e lascia la barra laterale aperta)",
+                "key": "Chiave",
+                "last_modified": "Ultima modifica",
+                "length": "Lunghezza",
+                "login": "Login",
+                "media": "Media",
+                "menu_builder": "Costruttore del menù",
+                "move": "Sposta",
+                "name": "Nome",
+                "new": "Nuovo",
+                "no": "No",
+                "no_thanks": "No Grazie",
+                "not_null": "Non Null",
+                "options": "Opzioni",
+                "password": "Password",
+                "permissions": "Permessi",
+                "profile": "Profilo",
+                "public_url": "URL Pubblico",
+                "read": "Leggi",
+                "rename": "Rinomina",
+                "required": "Richiesto",
+                "return_to_list": "Torna alla Lista",
+                "route": "Percorso",
+                "save": "Salva",
+                "search": "Cerca",
+                "select_all": "Seleziona Tutto",
+                "select_group": "Seleziona un Gruppo Esistente o Aggiungi un Nuovo Gruppo",
+                "settings": "Impostazioni",
+                "showing_entries": "Visualizzazione dei risultati da {from} a {to} di {all}|Visualizzazione dei risultati da {from} a {to} di {all}",
+                "submit": "Invia",
+                "successfully_added_new": "Aggiunto con successo",
+                "successfully_deleted": "Eliminato con successo",
+                "successfully_updated": "Aggiornato con successo",
+                "timestamp": "Timestamp",
+                "title": "Titolo",
+                "type": "Tipo",
+                "unsigned": "Valore Assoluto",
+                "unstick_sidebar": "Sbloccare la barra laterale",
+                "update": "Aggiorna",
+                "update_failed": "Aggiornamento fallito",
+                "upload": "Carica",
+                "url": "URL",
+                "view": "Visualizza",
+                "viewing": "Visualizzando",
+                "yes": "Sì",
+                "yes_please": "Sì, Per favore"
+            },
+            "login": {
+                "loggingin": "Collegati",
+                "signin_below": "Accedi Qui Sotto:",
+                "welcome": "Benvenuti in Voyager. L'Admin panel che mancava per Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Modifica il mio profilo",
+                "edit_user": "Modifica Utente",
+                "password": "Password",
+                "password_hint": "Lasciare vuoto per mantenere lo stesso",
+                "role": "Ruolo",
+                "user_role": "Ruolo Utente"
+            },
+            "settings": {
+                "usage_help": "Puoi ottenere il valore di ogni impostazione in qualsiasi punto del tuo sito chiamando",
+                "save": "Salva Impostazioni",
+                "new": "Nuova Impostazione",
+                "help_name": "Es Nome Setting: Titolo Admin",
+                "help_key": "Es Chiave Setting: titolo_admin",
+                "help_option": "(facoltativo, si applica solo a determinati tipi come il riquadro a discesa o il pulsante di scelta rapida)",
+                "add_new": "Aggiungi Nuova Impostazione",
+                "delete_question": "Sei sicuro di voler eliminare l'impostazione {setting} ?",
+                "delete_confirm": "Sì, Elimina questa Impostazione",
+                "successfully_created": "Impostazione Creata con Successo",
+                "successfully_saved": "Impostazione Salvata con Successo",
+                "successfully_deleted": "Impostazione Eliminata con Successo",
+                "already_at_top": "Questo è già in cima all'elenco",
+                "already_at_bottom": "Questo è già in fondo all'elenco",
+                "key_already_exists": "La Chiave {key} è già esistente",
+                "moved_order_up": "Impostazione {name} spostato in sù",
+                "moved_order_down": "Impostazione {name} spostato in giù",
+                "successfully_removed": "Il valore dell'Impostazione {name} è stato eliminato",
+                "group_general": "Generale",
+                "group_admin": "Amministratore",
+                "group_site": "Sito",
+                "group": "Gruppo",
+                "help_group": "Questa impostazione è assegnata a"
+            },
+            "media": {
+                "add_new_folder": "Aggiungi Nuova Cartella",
+                "audio_support": "Il tuo browser non supporta l'elemento audio.",
+                "create_new_folder": "Crea Nuova Cartella",
+                "delete_folder_question": "Eliminando una cartella verranno eliminati anche i file e le cartelle al suo interno",
+                "destination_folder": "Cartella di Destinazione",
+                "drag_drop_info": "Trascina e rilascia i file o premi sotto per caricare",
+                "error_already_exists": "Spiacenti esiste già un file o una cartella con questo nome in questa cartella.",
+                "error_creating_dir": "Spiacenti qualcosa è andato storto nella creazione della cartella, per favore controllate i vostri permessi",
+                "error_deleting_file": "Spiacenti qualcosa è andato storto nell'eliminazione di questo file, per favore controllate i vostri permessi",
+                "error_deleting_folder": "Spiacenti qualcosa è andato storto nell'eliminazione di questa cartella, per favore controllate i vostri permessi",
+                "error_may_exist": "Un File o una cartella potrebbero già esistere con quel nome. Scegli un altro nome oppure elimina l'altro file.",
+                "error_moving": "Spiacenti, sembra che ci sia un problema nello spostare quel file \/ cartella, per favore controllate di avere i permessi corretti.",
+                "error_uploading": "Caricamento Fallito: Errore sconosciuto!",
+                "folder_exists_already": "Spiacenti questa cartella è già esistente, si prega di eliminarla se si desira ricrearla",
+                "image_does_not_exist": "L'immagine non esiste",
+                "image_removed": "Immagine rimossa",
+                "library": "Libreria Media",
+                "loading": "CARICAMENTO DEI VOSTRI MEDIA FILES",
+                "move_file_folder": "Sposta File\/Cartella",
+                "new_file_folder": "Nuovo nome di File\/Cartella",
+                "new_folder_name": "Nuovo Nome di Cartella",
+                "no_files_here": "Nessun file presente.",
+                "no_files_in_folder": "Nessun file in questa cartella.",
+                "nothing_selected": "Nessun file o cartella selezionata",
+                "rename_file_folder": "Rinomina File\/Cartella",
+                "success_uploaded_file": "Il nuovo file è stato caricato con successo!",
+                "success_uploading": "Immagine caricata con successo!",
+                "uploading_wrong_type": "Caricamento Fallito: File non supportato o troppo grande per essere caricato!",
+                "video_support": "Il tuo browser non supporta il tag video."
+            },
+            "menu_builder": {
+                "color": "Colore in RGB o hex (opzionale)",
+                "color_ph": "Colore (es. #ffffff o rgb(255, 255, 255)",
+                "create_new_item": "Crea un nuovo elemento del Menù",
+                "delete_item_confirm": "Sì, Elimina questo elemento del Menù",
+                "delete_item_question": "Sei sicuro di voler eliminare questo elemento del menù?",
+                "drag_drop_info": "Trascina gli elementi del menù qui sotto per riordinarli.",
+                "dynamic_route": "Percorso Dinamico",
+                "edit_item": "Modifica Elemento di Menù",
+                "icon_class": "Classe Font Icon per l'elemento del menù (usare una",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Icon Class (opzionale)",
+                "item_route": "Percorso per l'elemento del menù",
+                "item_title": "Titolo dell'elemento del menù",
+                "link_type": "Tipo Link",
+                "new_menu_item": "Nuovo Elemento di Menù",
+                "open_in": "Apri in",
+                "open_new": "Nuova Tab\/Finestra",
+                "open_same": "Stessa Tab\/Finestra",
+                "route_parameter": "Parametri percorso (se necessari)",
+                "static_url": "URL Statico",
+                "successfully_created": "Elemento del Menù Creato con Successo.",
+                "successfully_deleted": "Elemento del Menù Eliminato con Successo.",
+                "successfully_updated": "Elemento del Menù Aggiornato con Successo.",
+                "updated_order": "Ordine menù aggiornato con successo.",
+                "url": "URL per l'Elemento del Menù",
+                "usage_hint": "È possibile stampare un menu ovunque nel tuo sito chiamando|Puoi stampare questo menu ovunque nel tuo sito chiamando"
+            },
+            "post": {
+                "category": "Categoria Articolo",
+                "content": "Contenuto Articolo",
+                "details": "Dettagli Articolo",
+                "excerpt": "Estratto <small>Piccola descrizione di questo articolo<\/small>",
+                "image": "Immagine Articolo",
+                "meta_description": "Meta Description",
+                "meta_keywords": "Meta Keywords",
+                "new": "Crea Nuovo Articolo",
+                "seo_content": "Contenuto SEO",
+                "seo_title": "Titolo SEO",
+                "slug": "URL slug",
+                "status": "Stato Articolo",
+                "status_draft": "bozza",
+                "status_pending": "in attesa",
+                "status_published": "pubblicato",
+                "title": "Titolo Articolo",
+                "title_sub": "Il titolo per il tuo articolo",
+                "update": "Aggiorna Articolo"
+            },
+            "database": {
+                "add_bread": "Aggiungi BREAD a questa tabella",
+                "add_new_column": "Aggiungi Nuova Colonna",
+                "add_softdeletes": "Aggiungi Eliminazioni soft",
+                "add_timestamps": "Aggiungi Timestamps",
+                "already_exists": "già esistente",
+                "already_exists_table": "La tabella {table} esiste già",
+                "bread_crud_actions": "Azioni BREAD\/CRUD",
+                "bread_info": "Informazioni BREAD",
+                "column": "Colonna",
+                "composite_warning": "Avviso: questa colonna fa parte di un indice composito",
+                "controller_name": "Nome Controller",
+                "controller_name_hint": "es. PageController, se lasciato vuoto verrà usato il BREAD Controller",
+                "create_bread_for_table": "Crea BREAD per la tabella {table}",
+                "create_migration": "Creare una migrazione per questa tabella?",
+                "create_model_table": "Creare un model per questa tabella?",
+                "create_new_table": "Crea Nuova Tabella",
+                "create_your_new_table": "Crea la tua Nuova Tabella",
+                "default": "Default",
+                "delete_bread": "Elimina BREAD",
+                "delete_bread_before_table": "Assicurati di eliminare il BREAD in questa tabella prima di eliminare la tabella.",
+                "delete_table_bread_conf": "Sì, elimina il BREAD",
+                "delete_table_bread_quest": "Sei sicuro di voler eliminare il BREAD per la tabella {table}?",
+                "delete_table_confirm": "Sì, elimina questa tabella",
+                "delete_table_question": "Sei sicuro di voler eliminare la tabella {table}?",
+                "description": "Descrizione",
+                "display_name": "Nome Visualizzato",
+                "display_name_plural": "Nome Visualizzato (Plurale)",
+                "display_name_singular": "Nome Visualizzato (Singolare)",
+                "edit_bread": "Modifica BREAD",
+                "edit_bread_for_table": "Modifica BREAD per la tabella {table}",
+                "edit_rows": "Modifica le righe per la tabella {table} qui sotto",
+                "edit_table": "Modifica la tabella {table} qui sotto",
+                "edit_table_not_exist": "La tabella che vuoi modificare non esiste",
+                "error_creating_bread": "Spiacenti sembra ci sia stato un problema nel creare questo BREAD",
+                "error_removing_bread": "Spiacenti sembra ci sia stato un problema nell'eliminare questo BREAD",
+                "error_updating_bread": "Spiacenti sembra ci sia stato un problema nell'aggiornare questo BREAD",
+                "extra": "Aggiuntivo",
+                "field": "Campo",
+                "field_safe_failed": "Salvataggio fallito per il campo {field}, stiamo tornando indietro!",
+                "generate_permissions": "Genera Permessi",
+                "icon_class": "Icona da utilizzare per questa Tabella",
+                "icon_hint": "Icona (opzionale) Usare una",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDICE",
+                "input_type": "Tipo input",
+                "key": "Chiave",
+                "model_class": "Nome della Classe del Model",
+                "model_name": "Nome Model",
+                "model_name_ph": "es. \\App\\User, se lasciato vuoto prover\xE0 ad utilizzare il nome della tabella",
+                "name_warning": "Per favore dare un nome alla colonna prima di inserire un indice",
+                "no_composites_warning": "Questa tabella ha indici compositi. Si prega di notare che non sono supportati al momento. Fare attenzione quando si tenta di aggiungere\/eliminare gli indici.",
+                "null": "Null",
+                "optional_details": "Dettagli Opzionali",
+                "policy_class": "Nome della Classe Policy",
+                "policy_name": "Nome Policy",
+                "policy_name_ph": "es. \\App\\Policies\\UserPolicy, se lasciato vuoto prover\xE0 ad usare quella di default",
+                "primary": "PRIMARIA",
+                "server_pagination": "Paginazione lato Server",
+                "success_create_table": "Tabella {table} creata con successo",
+                "success_created_bread": "Nuovo BREAD creato con successo",
+                "success_delete_table": "Tabella {table} eliminata con successo",
+                "success_remove_bread": "BREAD rimosso con successo da {datatype}",
+                "success_update_bread": "Aggiornato con successo {datatype} BREAD",
+                "success_update_table": "Tabella {table} aggiornata con successo",
+                "table_actions": "Azioni Tabella",
+                "table_columns": "Colonne Tabella",
+                "table_has_index": "La tabella ha già un indice primario.",
+                "table_name": "Nome Tabella",
+                "table_no_columns": "La tabella non ha colonne...",
+                "type": "Tipo",
+                "type_not_supported": "Questo tipo non è supportato",
+                "unique": "UNICA",
+                "unknown_type": "Tipo sconosciuto",
+                "update_table": "Aggiorna Tabella",
+                "url_slug": "URL Slug (deve essere unico)",
+                "url_slug_ph": "URL slug (ex. articoli)",
+                "visibility": "Visibilità"
+            },
+            "dimmer": {
+                "page": "Pagina|Pagine",
+                "page_link_text": "Visualizza tutte le pagine",
+                "page_text": "Ci sono {count} {string} nel tuo database. Premi il bottone qui sotto per vedere tutte le pagine.",
+                "post": "Articolo|Articoli",
+                "post_link_text": "Visualizza tutti gli articoli",
+                "post_text": "Ci sono {count} {string} nel tuo database. Premi il bottone qui sotto per vedere tutti gli articoli.",
+                "user": "Utente|Utenti",
+                "user_link_text": "Visualizza tutti gli utenti",
+                "user_text": "Ci sono {count} {string} nel tuo database. Premi il bottone qui sotto per vedere tutti gli utenti."
+            },
+            "form": {
+                "field_password_keep": "Lasciare vuoto per mantenere lo stesso",
+                "field_select_dd_relationship": "Assicurarsi di impostare la relazione appropriata nel metodo {method} dellaclasse {class} .",
+                "type_checkbox": "Check Box",
+                "type_codeeditor": "Editore del Codice",
+                "type_file": "File",
+                "type_image": "Immagine",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Select Dropdown",
+                "type_textarea": "Text Area",
+                "type_textbox": "Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "Nessun dato disponibile nella tabella",
+                "sInfo": "Visualizzazione _START_ a _END_ di _TOTAL_ elementi",
+                "sInfoEmpty": "Visualizzazione 0 a 0 di 0 elementi",
+                "sInfoFiltered": "(filtrati da _MAX_ elementi totali)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostra _MENU_ elementi",
+                "sLoadingRecords": "Caricando...",
+                "sProcessing": "Processando...",
+                "sSearch": "Cerca:",
+                "sZeroRecords": "Nessun risultato trovato",
+                "oPaginate": {
+                    "sFirst": "Primo",
+                    "sLast": "Ultimo",
+                    "sNext": "Successivo",
+                    "sPrevious": "Precedente"
+                },
+                "oAria": {
+                    "sSortAscending": ": attivare per ordinare la colonna in ordine crescente",
+                    "sSortDescending": ": attivare per ordinare la colonna in ordine decrescente"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Realizzato con <i class=\"voyager-heart\"><\/i> da",
+                "footer_copyright2": "Realizzato con rum, e poi ancora rum"
+            },
+            "json": {
+                "invalid": "Json non valido",
+                "invalid_message": "Sembra che tu abbia introdotto qualche JSON non valido.",
+                "valid": "Json valido",
+                "validation_errors": "Errori di validazione"
+            },
+            "analytics": {
+                "by_pageview": "Per pageview",
+                "by_sessions": "Per sessioni",
+                "by_users": "Per utenti",
+                "no_client_id": "Per visualizzare le analisi, dovrai ottenere un client ID per Google Analytics eaggiungerlo alle tue impostazioni per la chiave <code>google_analytics_client_id<\/code>. ottieni una chiave su Google developer console:",
+                "set_view": "Seleziona una Vista",
+                "this_vs_last_week": "Questa settimana vs la scorsa settimana",
+                "this_vs_last_year": "Quest'anno vs lo scorso anno",
+                "top_browsers": "Browser Top",
+                "top_countries": "Paesi Top",
+                "various_visualizations": "Varie visualizzazioni"
+            },
+            "error": {
+                "symlink_created_text": "Abbiamo appena creato il symlink mancante per te.",
+                "symlink_created_title": "Il symlink per lo storage mancante è stato creato",
+                "symlink_failed_text": "Non siamo riusciti a generare il symlink mancante per l'applicazione. Sembra che il tuo provider di hosting non lo supporti.",
+                "symlink_failed_title": "Non è possibile creare il symlink mancante per lo storage",
+                "symlink_missing_button": "Riparalo",
+                "symlink_missing_text": "Non abbiamo trovato un symlink per lo storage. Questo potrebbe causare problemi nel caricare file multimediali dal browser.",
+                "symlink_missing_title": "Symlink per lo storage mancante"
+            }
+        }
+    },
+    "nl": {
+        "index": {
+            "welcome": "Welkom"
+        },
+        "validation": {
+            "accepted": "{attribute} moet geaccepteerd zijn.",
+            "active_url": "{attribute} is geen geldige URL.",
+            "after": "{attribute} moet een datum na {date} zijn.",
+            "after_or_equal": "{attribute} moet een datum na of gelijk aan {date} zijn.",
+            "alpha": "{attribute} mag alleen letters bevatten.",
+            "alpha_dash": "{attribute} mag alleen letters, nummers, underscores (_) en streepjes (-) bevatten.",
+            "alpha_num": "{attribute} mag alleen letters en nummers bevatten.",
+            "array": "{attribute} moet geselecteerde elementen bevatten.",
+            "before": "{attribute} moet een datum voor {date} zijn.",
+            "before_or_equal": "{attribute} moet een datum voor of gelijk aan {date} zijn.",
+            "between": {
+                "numeric": "{attribute} moet tussen {min} en {max} zijn.",
+                "file": "{attribute} moet tussen {min} en {max} kilobytes zijn.",
+                "string": "{attribute} moet tussen {min} en {max} karakters zijn.",
+                "array": "{attribute} moet tussen {min} en {max} items bevatten."
+            },
+            "boolean": "{attribute} moet ja of nee zijn.",
+            "confirmed": "{attribute} bevestiging komt niet overeen.",
+            "date": "{attribute} moet een datum bevatten.",
+            "date_format": "{attribute} moet een geldig datum formaat bevatten.",
+            "different": "{attribute} en {other} moeten verschillend zijn.",
+            "digits": "{attribute} moet bestaan uit {digits} cijfers.",
+            "digits_between": "{attribute} moet bestaan uit minimaal {min} en maximaal {max} cijfers.",
+            "dimensions": "{attribute} heeft geen geldige afmetingen voor afbeeldingen.",
+            "distinct": "{attribute} heeft een dubbele waarde.",
+            "email": "{attribute} is geen geldig e-mailadres.",
+            "exists": "{attribute} bestaat niet.",
+            "file": "{attribute} moet een bestand zijn.",
+            "filled": "{attribute} is verplicht.",
+            "image": "{attribute} moet een afbeelding zijn.",
+            "in": "{attribute} is ongeldig.",
+            "in_array": "{attribute} bestaat niet in {other}.",
+            "integer": "{attribute} moet een getal zijn.",
+            "ip": "{attribute} moet een geldig IP-adres zijn.",
+            "ipv4": "{attribute} moet een geldig IPv4-adres zijn.",
+            "ipv6": "{attribute} moet een geldig IPv6-adres zijn.",
+            "json": "{attribute} moet een geldige JSON-string zijn.",
+            "max": {
+                "numeric": "{attribute} mag niet hoger dan {max} zijn.",
+                "file": "{attribute} mag niet meer dan {max} kilobytes zijn.",
+                "string": "{attribute} mag niet uit meer dan {max} karakters bestaan.",
+                "array": "{attribute} mag niet meer dan {max} items bevatten."
+            },
+            "mimes": "{attribute} moet een bestand zijn van het bestandstype {values}.",
+            "mimetypes": "{attribute} moet een bestand zijn van het bestandstype {values}.",
+            "min": {
+                "numeric": "{attribute} moet minimaal {min} zijn.",
+                "file": "{attribute} moet minimaal {min} kilobytes zijn.",
+                "string": "{attribute} moet minimaal {min} karakters zijn.",
+                "array": "{attribute} moet minimaal {min} items bevatten."
+            },
+            "not_in": "Het formaat van {attribute} is ongeldig.",
+            "numeric": "{attribute} moet een nummer zijn.",
+            "present": "{attribute} moet bestaan.",
+            "regex": "{attribute} formaat is ongeldig.",
+            "required": "{attribute} is verplicht.",
+            "required_if": "{attribute} is verplicht indien {other} gelijk is aan {value}.",
+            "required_unless": "{attribute} is verplicht tenzij {other} gelijk is aan {values}.",
+            "required_with": "{attribute} is verplicht i.c.m. {values}",
+            "required_with_all": "{attribute} is verplicht i.c.m. {values}",
+            "required_without": "{attribute} is verplicht als {values} niet ingevuld is.",
+            "required_without_all": "{attribute} is verplicht als {values} niet ingevuld zijn.",
+            "same": "{attribute} en {other} moeten overeenkomen.",
+            "size": {
+                "numeric": "{attribute} moet {size} zijn.",
+                "file": "{attribute} moet {size} kilobyte zijn.",
+                "string": "{attribute} moet {size} karakters zijn.",
+                "array": "{attribute} moet {size} items bevatten."
+            },
+            "string": "{attribute} moet een tekenreeks zijn.",
+            "timezone": "{attribute} moet een geldige tijdzone zijn.",
+            "unique": "{attribute} is al in gebruik.",
+            "uploaded": "Het uploaden van {attribute} is mislukt.",
+            "url": "{attribute} is geen geldige URL.",
+            "custom": {
+                "attribute-name": {
+                    "rule-name": "custom-message"
+                }
+            },
+            "attributes": {
+                "address": "adres",
+                "age": "leeftijd",
+                "available": "beschikbaar",
+                "city": "stad",
+                "content": "inhoud",
+                "country": "land",
+                "date": "datum",
+                "day": "dag",
+                "description": "omschrijving",
+                "email": "e-mailadres",
+                "excerpt": "uittreksel",
+                "first_name": "voornaam",
+                "gender": "geslacht",
+                "hour": "uur",
+                "last_name": "achternaam",
+                "message": "boodschap",
+                "minute": "minuut",
+                "mobile": "mobiel",
+                "month": "maand",
+                "name": "naam",
+                "password": "wachtwoord",
+                "password_confirmation": "wachtwoordbevestiging",
+                "phone": "telefoonnummer",
+                "second": "seconde",
+                "sex": "geslacht",
+                "size": "grootte",
+                "subject": "onderwerp",
+                "time": "tijd",
+                "title": "titel",
+                "username": "gebruikersnaam",
+                "year": "jaar"
+            }
+        }
+    },
+    "pt": {
+        "voyager": {
+            "date": {
+                "last_week": "Semana Passada",
+                "last_year": "Ano Passado",
+                "this_week": "Esta Semana",
+                "this_year": "Este Ano"
+            },
+            "generic": {
+                "action": "Ação",
+                "actions": "Ações",
+                "add": "Adicionar",
+                "add_folder": "Adicionar Pasta",
+                "add_new": "Adicionar",
+                "all_done": "Concluído",
+                "are_you_sure": "Tem certeza",
+                "are_you_sure_delete": "Tem certeza de que deseja remover",
+                "auto_increment": "Incremento automático",
+                "browse": "Navegar",
+                "builder": "Construtor",
+                "cancel": "Cancelar",
+                "choose_type": "Escolha o tipo",
+                "click_here": "Clique aqui",
+                "close": "Fechar",
+                "compass": "Bússola",
+                "created_at": "Criado em",
+                "custom": "Personalizado",
+                "dashboard": "Painel de Controle",
+                "database": "Base de dados",
+                "default": "Padrão",
+                "delete": "Remover",
+                "delete_confirm": "Sim, Remover!",
+                "delete_question": "Tem certeza de que deseja remover isto",
+                "delete_this_confirm": "Sim, exclua isto",
+                "deselect_all": "Desmarcar todos",
+                "download": "Descarregar",
+                "edit": "Editar",
+                "email": "E-mail",
+                "error_deleting": "Oops, ocorreu um problema ao remover",
+                "exception": "Exceção",
+                "featured": "Destacado",
+                "field_does_not_exist": "O campo não existe",
+                "how_to_use": "Como usar",
+                "index": "Índice",
+                "internal_error": "Erro interno",
+                "items": "item(s)",
+                "keep_sidebar_open": "Arrrgh! Soltem as âncoras! (e mantenha a barra lateral aberta)",
+                "key": "Chave",
+                "last_modified": "Última modificação",
+                "length": "comprimento",
+                "login": "Login",
+                "media": "Media",
+                "menu_builder": "Construtor de Menu",
+                "move": "Mover",
+                "name": "Nome",
+                "new": "Novo",
+                "no": "Não",
+                "no_thanks": "Não Obrigado",
+                "not_null": "Não Nulo",
+                "options": "Opções",
+                "password": "Password",
+                "permissions": "Permissões",
+                "profile": "Perfil",
+                "public_url": "URL público",
+                "read": "Ler",
+                "rename": "Renomear",
+                "required": "Requerido",
+                "return_to_list": "Voltar à lista",
+                "route": "Rota",
+                "save": "Guardar",
+                "search": "Procurar",
+                "select_all": "Selecione Todos",
+                "settings": "Configurações",
+                "showing_entries": "Mostrando {from} a {to} de {all} entrada|Mostrando {from} a {to} de {all} entradas",
+                "submit": "Submeter",
+                "successfully_added_new": "Adicionado com sucesso",
+                "successfully_deleted": "Removido com sucesso",
+                "successfully_updated": "Atualizado com sucesso",
+                "timestamp": "Timestamp",
+                "title": "Título",
+                "type": "Tipo",
+                "unsigned": "Não assinado",
+                "unstick_sidebar": "Descolar a barra lateral",
+                "update": "Atualizar",
+                "update_failed": "atualização falhou",
+                "upload": "Upload",
+                "url": "URL",
+                "view": "Ver",
+                "viewing": "Visualizando",
+                "yes": "Sim",
+                "yes_please": "Sim, por favor"
+            },
+            "login": {
+                "loggingin": "A iniciar sessão",
+                "signin_below": "Iniciar sessão abaixo:",
+                "welcome": "Bem-vindo ao Voyager. O painel de administração que faltava ao Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Editar o meu perfil",
+                "edit_user": "Editar Utilizador",
+                "password": "Password",
+                "password_hint": "Deixar vazio para manter o valor atual",
+                "role": "Função",
+                "user_role": "Função do Utilizador"
+            },
+            "settings": {
+                "usage_help": "Pode obter o valor de cada configuração em qualquer lugar em seu site, executando",
+                "save": "Guardar configurações",
+                "new": "Nova configuração",
+                "help_name": "Nome da configuração ex: Título do Administrador",
+                "help_key": "Chave da configuração ex: title_administrador",
+                "help_option": "(Opcional, aplica-se apenas a certos tipos, como dropdown ou botão de rádio)",
+                "add_new": "Adicionar configuração",
+                "delete_question": "Tem certeza de que deseja remover a Configuração {setting}?",
+                "delete_confirm": "Sim, remover esta configuração",
+                "successfully_created": "Configurações criadas com sucesso",
+                "successfully_saved": "Configurações guardadas com sucesso",
+                "successfully_deleted": "Configuração removida com sucesso",
+                "already_at_top": "Já chegou ao topo da lista",
+                "already_at_bottom": "Já chegou ao fundo da lista",
+                "moved_order_up": "Configuração {name} movida para cima",
+                "moved_order_down": "Configuração {name} movida para baixo",
+                "successfully_removed": "Valor {name} removido com sucesso"
+            },
+            "media": {
+                "add_new_folder": "Adicionar Pasta",
+                "audio_support": "O seu navegador não suporta o elemento de áudio.",
+                "create_new_folder": "Criar Pasta",
+                "delete_folder_question": "Ao remover uma pasta irá também remover todos os ficheiros e pastas contidos nela",
+                "destination_folder": "Destino da Pasta",
+                "drag_drop_info": "Arraste e solte ficheiros ou clique abaixo para carregar",
+                "error_already_exists": "Oops, já existe um ficheiro \/ pasta com esse nome nessa pasta.",
+                "error_creating_dir": "Oops, ocorreu algo inesperado a criar a pasta, por favor verifique as suas permissões",
+                "error_deleting_file": "Oops, ocorreu algo inesperado removendo este ficheiro, por favor verifique as suas permissões",
+                "error_deleting_folder": "Oops, ocorreu algo inesperado removendo esta pasta, por favor verifique as suas permissões",
+                "error_may_exist": "Talvez um Ficheiro ou Pasta exista com esse nome. Por favor tente com outro nome, ou apague o ficheiro correspondente.",
+                "error_moving": "Oops, ocorreu um problema ao mover esse ficheiro \/ pasta, verifique as suas permissões.",
+                "error_uploading": "Falha ao Copiar: Ocorreu um erro desconhecido!",
+                "folder_exists_already": "Oops, essa pasta já existe, por favor remova essa pasta se desejar criar uma nova",
+                "image_does_not_exist": "A imagem não existe",
+                "image_removed": "Imagem removida",
+                "library": "Biblioteca de Media",
+                "loading": "A CARREGAR OS SEUS FICHEIROS DE MÍDIA",
+                "move_file_folder": "Mover Ficheiro\/pasta",
+                "new_file_folder": "Novo Nome do Ficheiro\/Pasta",
+                "new_folder_name": "Novo Nome da Pasta",
+                "no_files_here": "Não há ficheiros aqui.",
+                "no_files_in_folder": "Nenhum ficheiro nesta pasta.",
+                "nothing_selected": "Nenhum ficheiro ou pasta selecionada",
+                "rename_file_folder": "Renomear Ficheiro\/Pasta",
+                "success_uploaded_file": "Ficheiro carregado com sucesso!",
+                "success_uploading": "Imagem carregada com sucesso!",
+                "uploading_wrong_type": "Falha de envio: Formato do ficheiro não suportado ou é muito grande para ser carregado!",
+                "video_support": "O seu navegador não suporta a tag de vídeo."
+            },
+            "menu_builder": {
+                "color": "Cor em RGB ou hex (opcional)",
+                "color_ph": "Cor (ex. #ffffff ou rgb(255, 255, 255)",
+                "create_new_item": "Criar um novo item de menu",
+                "delete_item_confirm": "Sim, Remover este item de menu",
+                "delete_item_question": "Tem certeza de que deseja remover este item de menu?",
+                "drag_drop_info": "Arraste e solte os itens do menu para os reorganizar.",
+                "dynamic_route": "Rota Dinâmica",
+                "edit_item": "Editar item de menu",
+                "icon_class": "Classe do Ícone da Fonte para o item de menu (Use ",
+                "icon_class2": "Classe da Fonte Voyager<\/a>)",
+                "icon_class_ph": "Classe do Ícone (opcional)",
+                "item_route": "Rota do item de menu",
+                "item_title": "Título do item de menu",
+                "link_type": "Tipo de link",
+                "new_menu_item": "Novo Item de Menu",
+                "open_in": "Abrir em",
+                "open_new": "Nova Guia\/Janela",
+                "open_same": "Mesma Guia\/Janela",
+                "route_parameter": "Parâmetros de Rotas (se aplicado)",
+                "static_url": "URL Estático",
+                "successfully_created": "Novo item de menu criado com sucesso.",
+                "successfully_deleted": "Item de menu removido com sucesso",
+                "successfully_updated": "Item de menu atualizado com sucesso.",
+                "updated_order": "Ordem de menu atualizada com sucesso.",
+                "url": "URL do item de menu",
+                "usage_hint": "Pode apresentar um menu em qualquer lugar no seu site, executando| Pode apresentar este menu em qualquer lugar no seu site, executando"
+            },
+            "post": {
+                "category": "Categoria da Publicação",
+                "content": "Conteúdo da Publicação",
+                "details": "Detalhes da Publicação",
+                "excerpt": "Excerto <small>Pequena descrição desta publicação<\/small>",
+                "image": "Publicar imagem",
+                "meta_description": "Descrição de Meta",
+                "meta_keywords": "palavras-chave de Meta",
+                "new": "Criar nova publicação",
+                "seo_content": "Conteúdo do SEO",
+                "seo_title": "Título SEO",
+                "slug": "URL slug",
+                "status": "Status da Publicação",
+                "status_draft": "rascunho",
+                "status_pending": "pendente",
+                "status_published": "Publicados",
+                "title": "Título do cargo",
+                "title_sub": "O título da sua Publicação",
+                "update": "Alterar Publicação"
+            },
+            "database": {
+                "add_bread": "Adicionar BREAD a esta tabela",
+                "add_new_column": "Adicionar Novo Campo",
+                "add_softdeletes": "Adicionar Soft Deletes",
+                "add_timestamps": "Adicionar Timestamps",
+                "already_exists": "já existe",
+                "already_exists_table": "A Tabela {table} já existe",
+                "bread_crud_actions": "Ações BREAD\/CRUD",
+                "bread_info": "Informação do BREAD",
+                "column": "Campo",
+                "composite_warning": "Atenção: este campo faz parte dos índices compostos",
+                "controller_name": "Nome do Controller",
+                "controller_name_hint": "ex. PageController, se não preencher irá usar o BREAD Controller",
+                "create_bread_for_table": "Criar BREAD para a tabela {table}",
+                "create_migration": "Criar Migration para esta tabela?",
+                "create_model_table": "Criar Model para esta tabela?",
+                "create_new_table": "Criar Tabela",
+                "create_your_new_table": "Criar a Nova Tabela",
+                "default": "Pré-definido",
+                "delete_bread": "Remover BREAD",
+                "delete_bread_before_table": "Por favor, remova o BREAD desta tabela antes de remover a tabela.",
+                "delete_table_bread_conf": "Sim, remover este BREAD",
+                "delete_table_bread_quest": "Tem a certeza que deseja remover o BREAD para a tabela {table}?",
+                "delete_table_confirm": "Sim, remover esta tabela",
+                "delete_table_question": "Tem a certeza que deseja remover a tabela {table}?",
+                "description": "Descrição",
+                "display_name": "Nome a Apresentar",
+                "display_name_plural": "Nome a Apresentar (Plural)",
+                "display_name_singular": "Nome a Apresentar (Singular)",
+                "edit_bread": "Alterar BREAD",
+                "edit_bread_for_table": "Alterar BREAD da tabela {table}",
+                "edit_rows": "Alterar as linhas para a tabela {table} abaixo",
+                "edit_table": "Alterar a tabela {table} abaixo",
+                "edit_table_not_exist": "A tabela que pretende remover não existe",
+                "error_creating_bread": "Oops, ocorreu algo inesperado ao criar este BREAD",
+                "error_removing_bread": "Oops, ocorreu algo inesperado ao Remover este BREAD",
+                "error_updating_bread": "Oops, ocorreu algo inesperado ao alterar este BREAD",
+                "extra": "Extra",
+                "field": "Campo",
+                "field_safe_failed": "Erro ao gravar o campo {field}, voltando atrás!",
+                "generate_permissions": "Gerar Permissões",
+                "icon_class": "Icon para usar nesta Tabela",
+                "icon_hint": "Icon (opcional) Usar a",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Tipo de Input",
+                "key": "Key",
+                "model_class": "Nome da Classe do Model",
+                "model_name": "Nome do Model",
+                "model_name_ph": "ex. \\App\\User, se vazio ir\xE1 tentar usar o nome da tabela",
+                "name_warning": "Por favor adicione o nome da coluna para criar o index",
+                "no_composites_warning": "Esta tabela tem composite indexes. Nota, eles não são suportados de momento. Tenha atenção ao tentar adicionar\/remover indexes.",
+                "null": "Null",
+                "optional_details": "Opções Adicionais",
+                "primary": "PRIMARY",
+                "server_pagination": "Paginação no Servidor",
+                "success_create_table": "Tabela {table} criada com sucesso",
+                "success_created_bread": "BREAD criado com sucesso",
+                "success_delete_table": "Tabela {table} removida com sucesso",
+                "success_remove_bread": "BREAD {datatype} removido com sucesso",
+                "success_update_bread": "BREAD {datatype} alterado com sucesso",
+                "success_update_table": "Tabela {table} alterada com sucesso",
+                "table_actions": "Ações da Tabela",
+                "table_columns": "Campos da Tabela",
+                "table_has_index": "A tabela já tem um primary index.",
+                "table_name": "Nome da Tabela",
+                "table_no_columns": "A tabela não tem campos...",
+                "type": "Tipo",
+                "type_not_supported": "Este tipo de campo não é suportado",
+                "unique": "UNIQUE",
+                "unknown_type": "Tipo Desconhecido",
+                "update_table": "Alterar Tabela",
+                "url_slug": "URL Slug (único)",
+                "url_slug_ph": "URL slug (ex. posts)",
+                "visibility": "Visibilidade"
+            },
+            "dimmer": {
+                "page": "Página|Páginas",
+                "page_link_text": "Ver todas as páginas",
+                "page_text": "Tem {count} {string} na sua base de dados. Clique no botão abaixo para ver todas as páginas.",
+                "post": "Publicação|Publicações",
+                "post_link_text": "Ver todas as publicações",
+                "post_text": "Tem {count} {string} na sua base de dados. Clique no botão abaixo para ver todas as publicações.",
+                "user": "Utilizador|Utilizadores",
+                "user_link_text": "Ver todos os utilizadores",
+                "user_text": "Tem {count} {string} na sua base de dados. Clique no botão abaixo para ver todos os utilizadores."
+            },
+            "form": {
+                "field_password_keep": "Deixar vazio para manter o atual",
+                "field_select_dd_relationship": "Make sure to setup the appropriate relationship in the {method} method of the {class} class.",
+                "type_checkbox": "Check Box",
+                "type_codeeditor": "Editor de Código",
+                "type_file": "Ficheiro",
+                "type_image": "Imagem",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Select Dropdown",
+                "type_textarea": "Text Area",
+                "type_textbox": "Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "Não há registos para apresentar",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registos",
+                "sInfoEmpty": "Mostrando de 0 até 0 de 0 registos",
+                "sInfoFiltered": "(filtrado de _MAX_ registos no total)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostrar _MENU_ registos",
+                "sLoadingRecords": "A Carregar...",
+                "sProcessing": "A processar...",
+                "sSearch": "Procurar:",
+                "sZeroRecords": "Não foram encontrados resultados",
+                "oPaginate": {
+                    "sFirst": "Primeiro",
+                    "sPrevious": "Anterior",
+                    "sNext": "Seguinte",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": ativar para ordenar de forma crescente",
+                    "sSortDescending": ": ativar para ordenar de forma decrescente"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Produzido com <i class=\"voyager-heart\"><\/i> por",
+                "footer_copyright2": "Produzido com rum e mais rum"
+            },
+            "json": {
+                "invalid": "JSON Inválido",
+                "invalid_message": "Submeteu um JSON inválido.",
+                "valid": "JSON Válido",
+                "validation_errors": "Erros de validação"
+            },
+            "analytics": {
+                "by_pageview": "Por pageview",
+                "by_sessions": "Por sessions",
+                "by_users": "Por users",
+                "no_client_id": "Para aceder ao analytics precisa adicionar nas Configurações do Voyager o key <code>google_analytics_client_id <\/code> com o código google analytics client id. Obtenha o seu key através do Google developer console:",
+                "set_view": "Selecionar Vista",
+                "this_vs_last_week": "Esta Semana vs Semana Passada",
+                "this_vs_last_year": "Este Ano vs Ano Passado",
+                "top_browsers": "Top Browsers",
+                "top_countries": "Top Países",
+                "various_visualizations": "Visualizações várias"
+            },
+            "error": {
+                "symlink_created_text": "We just created the missing symlink for you.",
+                "symlink_created_title": "Missing storage symlink created",
+                "symlink_failed_text": "We failed to generate the missing symlink for your application. It seems like your hosting provider does not support it.",
+                "symlink_failed_title": "Could not create missing storage symlink",
+                "symlink_missing_button": "Fix it",
+                "symlink_missing_text": "We could not find a storage symlink. This could cause problems with loading media files from the browser.",
+                "symlink_missing_title": "Missing storage symlink"
+            }
+        }
+    },
+    "pt_br": {
+        "voyager": {
+            "date": {
+                "last_week": "Semana Passada",
+                "last_year": "Ano Passado",
+                "this_week": "Esta Semana",
+                "this_year": "Este Ano"
+            },
+            "generic": {
+                "action": "Ação",
+                "actions": "Ações",
+                "add": "Adicionar",
+                "add_folder": "Adicionar Pasta",
+                "add_new": "Adicionar",
+                "all_done": "Concluído",
+                "are_you_sure": "Tem certeza",
+                "are_you_sure_delete": "Tem certeza de que deseja remover",
+                "auto_increment": "Incremento automático",
+                "browse": "Navegar",
+                "builder": "Construtor",
+                "bulk_delete": "Exclusão em massa",
+                "bulk_delete_confirm": "Sim, exclua estes",
+                "bulk_delete_nothing": "Você não selecionou nada para excluir",
+                "cancel": "Cancelar",
+                "choose_type": "Escolha o tipo",
+                "click_here": "Clique aqui",
+                "close": "Fechar",
+                "compass": "Bússola",
+                "created_at": "Criado em",
+                "custom": "Personalizado",
+                "dashboard": "Painel de Controle",
+                "database": "Banco de dados",
+                "default": "Padrão",
+                "delete": "Remover",
+                "delete_confirm": "Sim, Remover!",
+                "delete_question": "Tem certeza de que deseja remover isto",
+                "delete_this_confirm": "Sim, exclua isto",
+                "deselect_all": "Desmarcar todos",
+                "download": "Baixar",
+                "edit": "Editar",
+                "email": "E-mail",
+                "error_deleting": "Oops, ocorreu um problema ao remover",
+                "exception": "Exceção",
+                "featured": "Destacado",
+                "field_does_not_exist": "O campo não existe",
+                "how_to_use": "Como usar",
+                "index": "Índice",
+                "internal_error": "Erro interno",
+                "items": "item(s)",
+                "keep_sidebar_open": "Arrrgh! Soltem as âncoras! (e mantenha a barra lateral aberta)",
+                "key": "Chave",
+                "last_modified": "Última modificação",
+                "length": "Comprimento",
+                "login": "Login",
+                "media": "Mídia",
+                "menu_builder": "Construtor de Menu",
+                "move": "Mover",
+                "name": "Nome",
+                "new": "Novo",
+                "no": "Não",
+                "no_thanks": "Não Obrigado",
+                "not_null": "Não Nulo",
+                "options": "Opções",
+                "password": "Senha",
+                "permissions": "Permissões",
+                "profile": "Perfil",
+                "public_url": "URL público",
+                "read": "Ler",
+                "rename": "Renomear",
+                "required": "Requerido",
+                "return_to_list": "Voltar à lista",
+                "route": "Rota",
+                "save": "Guardar",
+                "search": "Procurar",
+                "select_all": "Selecione Todos",
+                "select_group": "Selecione um grupo existente ou adicione um novo",
+                "settings": "Configurações",
+                "showing_entries": "Mostrando {from} a {to} de {all} entrada|Mostrando {from} a {to} de {all} entradas",
+                "submit": "Submeter",
+                "successfully_added_new": "Adicionado com sucesso",
+                "successfully_deleted": "Removido com sucesso",
+                "successfully_updated": "Atualizado com sucesso",
+                "timestamp": "Timestamp",
+                "title": "Título",
+                "type": "Tipo",
+                "unsigned": "Não assinado",
+                "unstick_sidebar": "Descolar a barra lateral",
+                "update": "Atualizar",
+                "update_failed": "Atualização falhou",
+                "upload": "Upload",
+                "url": "URL",
+                "view": "Ver",
+                "viewing": "Visualizando",
+                "yes": "Sim",
+                "yes_please": "Sim, por favor"
+            },
+            "login": {
+                "loggingin": "Iniciando sessão",
+                "signin_below": "Iniciar sessão abaixo:",
+                "welcome": "Bem-vindo ao Voyager. O painel de administração que faltava ao Laravel"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Editar o meu perfil",
+                "edit_user": "Editar Utilizador",
+                "password": "Senha",
+                "password_hint": "Deixar vazio para manter o valor atual",
+                "role": "Função",
+                "user_role": "Função do Utilizador"
+            },
+            "settings": {
+                "usage_help": "Pode obter o valor de cada configuração em qualquer lugar em seu site, executando",
+                "save": "Guardar configurações",
+                "new": "Nova configuração",
+                "help_name": "Nome da configuração ex: Título do Administrador",
+                "help_key": "Chave da configuração ex: title_administrador",
+                "help_option": "(opcional, aplica-se apenas a certos tipos, como dropdown ou botão de rádio)",
+                "add_new": "Adicionar configuração",
+                "delete_question": "Tem certeza de que deseja remover a Configuração {setting}?",
+                "delete_confirm": "Sim, remover esta configuração",
+                "successfully_created": "Configurações criadas com sucesso",
+                "successfully_saved": "Configurações guardadas com sucesso",
+                "successfully_deleted": "Configuração removida com sucesso",
+                "already_at_top": "Já chegou ao topo da lista",
+                "already_at_bottom": "Já chegou ao fundo da lista",
+                "key_already_exists": "A chave {key} já existe",
+                "moved_order_up": "Configuração {name} movida para cima",
+                "moved_order_down": "Configuração {name} movida para baixo",
+                "successfully_removed": "Valor {name} removido com sucesso",
+                "group_general": "Geral",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Grupo",
+                "help_group": "O grupo desta configuração é atribuído a"
+            },
+            "media": {
+                "add_new_folder": "Adicionar Pasta",
+                "audio_support": "O seu navegador não suporta o elemento de áudio.",
+                "create_new_folder": "Criar Pasta",
+                "delete_folder_question": "Ao remover uma pasta irá também remover todos os arquivos e pastas contidos nela",
+                "destination_folder": "Destino da Pasta",
+                "drag_drop_info": "Arraste e solte arquivo ou clique abaixo para carregar",
+                "error_already_exists": "Oops, já existe um arquivo \/ pasta com esse nome nessa pasta.",
+                "error_creating_dir": "Oops, ocorreu algo inesperado a criar a pasta, por favor verifique as suas permissões",
+                "error_deleting_file": "Oops, ocorreu algo inesperado removendo este arquivo, por favor verifique as suas permissões",
+                "error_deleting_folder": "Oops, ocorreu algo inesperado removendo esta pasta, por favor verifique as suas permissões",
+                "error_may_exist": "Talvez um arquivo ou Pasta exista com esse nome. Por favor tente com outro nome, ou apague o arquivo correspondente.",
+                "error_moving": "Oops, ocorreu um problema ao mover esse arquivo \/ pasta, verifique as suas permissões.",
+                "error_uploading": "Falha ao Copiar: Ocorreu um erro desconhecido!",
+                "folder_exists_already": "Oops, essa pasta já existe, por favor remova essa pasta se desejar criar uma nova",
+                "image_does_not_exist": "A imagem não existe",
+                "image_removed": "Imagem removida",
+                "library": "Biblioteca de Mídia",
+                "loading": "A CARREGAR OS SEUS ARQUIVOS DE MÍDIA",
+                "move_file_folder": "Mover Arquivo\/pasta",
+                "new_file_folder": "Novo Nome do Arquivo\/Pasta",
+                "new_folder_name": "Novo Nome da Pasta",
+                "no_files_here": "Não há arquivos aqui.",
+                "no_files_in_folder": "Nenhum arquivo nesta pasta.",
+                "nothing_selected": "Nenhum arquivo ou pasta selecionada",
+                "rename_file_folder": "Renomear Arquivo\/Pasta",
+                "success_uploaded_file": "Arquivo carregado com sucesso!",
+                "success_uploading": "Imagem carregada com sucesso!",
+                "uploading_wrong_type": "Falha de envio: Formato do arquivo não suportado ou é muito grande para ser carregado!",
+                "video_support": "O seu navegador não suporta a tag de vídeo.",
+                "crop": "Cortar",
+                "crop_and_create": "Cortar & Criar",
+                "crop_override_confirm": "Irá substituir a imagem original, você tem certeza?",
+                "crop_image": "Cortar Imagem",
+                "success_crop_image": "Imagem cortada com sucesso",
+                "height": "Altura: ",
+                "width": "Largura: "
+            },
+            "menu_builder": {
+                "color": "Cor em RGB ou hex (opcional)",
+                "color_ph": "Cor (ex. #ffffff ou rgb(255, 255, 255)",
+                "create_new_item": "Criar um novo item de menu",
+                "delete_item_confirm": "Sim, Remover este item de menu",
+                "delete_item_question": "Tem certeza de que deseja remover este item de menu?",
+                "drag_drop_info": "Arraste e solte os itens do menu para os reorganizar.",
+                "dynamic_route": "Rota Dinâmica",
+                "edit_item": "Editar item de menu",
+                "icon_class": "Classe do Ícone da Fonte para o item de menu (Use ",
+                "icon_class2": "Classe da Fonte Voyager<\/a>)",
+                "icon_class_ph": "Classe do Ícone (opcional)",
+                "item_route": "Rota do item de menu",
+                "item_title": "Título do item de menu",
+                "link_type": "Tipo de link",
+                "new_menu_item": "Novo Item de Menu",
+                "open_in": "Abrir em",
+                "open_new": "Nova Guia\/Janela",
+                "open_same": "Mesma Guia\/Janela",
+                "route_parameter": "Parâmetros de Rotas (se aplicado)",
+                "static_url": "URL Estático",
+                "successfully_created": "Novo item de menu criado com sucesso.",
+                "successfully_deleted": "Item de menu removido com sucesso",
+                "successfully_updated": "Item de menu atualizado com sucesso.",
+                "updated_order": "Ordem de menu atualizada com sucesso.",
+                "url": "URL do item de menu",
+                "usage_hint": "Pode apresentar um menu em qualquer lugar no seu site, executando| Pode apresentar este menu em qualquer lugar no seu site, executando"
+            },
+            "post": {
+                "category": "Categoria da Publicação",
+                "content": "Conteúdo da Publicação",
+                "details": "Detalhes da Publicação",
+                "excerpt": "Excerto <small>Pequena descrição desta publicação<\/small>",
+                "image": "Publicar imagem",
+                "meta_description": "Meta de Descrição",
+                "meta_keywords": "Meta de palavras-chave",
+                "new": "Criar nova publicação",
+                "seo_content": "Conteúdo do SEO",
+                "seo_title": "Título SEO",
+                "slug": "URL slug",
+                "status": "Status da Publicação",
+                "status_draft": "rascunho",
+                "status_pending": "pendente",
+                "status_published": "publicados",
+                "title": "Título da publicação",
+                "title_sub": "O título da sua publicação",
+                "update": "Alterar Publicação"
+            },
+            "database": {
+                "add_bread": "Adicionar BREAD à esta tabela",
+                "add_new_column": "Adicionar Nova Coluna",
+                "add_softdeletes": "Adicionar Soft Deletes",
+                "add_timestamps": "Adicionar Timestamps",
+                "already_exists": "já existe",
+                "already_exists_table": "A Tabela {table} já existe",
+                "bread_crud_actions": "Ações BREAD\/CRUD",
+                "bread_info": "Informação do BREAD",
+                "column": "Coluna",
+                "composite_warning": "Atenção: esta coluna faz parte de um índice composto",
+                "controller_name": "Nome do Controller",
+                "controller_name_hint": "ex. PageController, se não preencher irá usar o BREAD Controller",
+                "create_bread_for_table": "Criar BREAD para a tabela {table}",
+                "create_migration": "Criar migration para esta tabela?",
+                "create_model_table": "Criar model para esta tabela?",
+                "create_new_table": "Criar tabela",
+                "create_your_new_table": "Crie sua nova tabela",
+                "default": "Pré-definido",
+                "delete_bread": "Remover BREAD",
+                "delete_bread_before_table": "Por favor, remova o BREAD desta tabela antes de remover a tabela.",
+                "delete_table_bread_conf": "Sim, remover este BREAD",
+                "delete_table_bread_quest": "Tem certeza que deseja remover o BREAD para a tabela {table}?",
+                "delete_table_confirm": "Sim, remover esta tabela",
+                "delete_table_question": "Tem certeza que deseja remover a tabela {table}?",
+                "description": "Descrição",
+                "display_name": "Nome a ser Apresentado",
+                "display_name_plural": "Nome a ser Apresentado (Plural)",
+                "display_name_singular": "Nome a ser Apresentado (Singular)",
+                "edit_bread": "Alterar BREAD",
+                "edit_bread_for_table": "Alterar BREAD da tabela {table}",
+                "edit_rows": "Alterar as linhas para a tabela {table} abaixo",
+                "edit_table": "Alterar a tabela {table} abaixo",
+                "edit_table_not_exist": "A tabela que pretende remover não existe",
+                "error_creating_bread": "Oops, ocorreu algo inesperado ao criar este BREAD",
+                "error_removing_bread": "Oops, ocorreu algo inesperado ao remover este BREAD",
+                "error_updating_bread": "Oops, ocorreu algo inesperado ao alterar este BREAD",
+                "extra": "Extra",
+                "field": "Campo",
+                "field_safe_failed": "Erro ao gravar o campo {field}, voltando atrás!",
+                "generate_permissions": "Gerar Permissões",
+                "icon_class": "Icon para usar nesta Tabela",
+                "icon_hint": "Icon (opcional) Usar a",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Tipo de Input",
+                "key": "Key",
+                "model_class": "Nome da Classe do Model",
+                "model_name": "Nome do Model",
+                "model_name_ph": "ex. \\App\\User, se vazio ir\xE1 tentar usar o nome da tabela",
+                "name_warning": "Por favor adicione o nome da coluna para criar o index",
+                "no_composites_warning": "Esta tabela tem composite indexes. Nota, eles não são suportados de momento. Tenha atenção ao tentar adicionar\/remover indexes.",
+                "null": "Null",
+                "optional_details": "Opções Adicionais",
+                "policy_class": "Nome da classe Policy",
+                "policy_name": "Policy Name",
+                "policy_name_ph": "ex. \\App\\Policies\\UserPolicy, se deixado vazio, tentar\xE1 usar o padr\xE3o",
+                "primary": "PRIMARY",
+                "server_pagination": "Paginação no Servidor",
+                "success_create_table": "Tabela {table} criada com sucesso",
+                "success_created_bread": "BREAD criado com sucesso",
+                "success_delete_table": "Tabela {table} removida com sucesso",
+                "success_remove_bread": "BREAD {datatype} removido com sucesso",
+                "success_update_bread": "BREAD {datatype} alterado com sucesso",
+                "success_update_table": "Tabela {table} alterada com sucesso",
+                "table_actions": "Ações da Tabela",
+                "table_columns": "Campos da Tabela",
+                "table_has_index": "A tabela já tem um Índice primário.",
+                "table_name": "Nome da Tabela",
+                "table_no_columns": "A tabela não tem campos...",
+                "type": "Tipo",
+                "type_not_supported": "Este tipo de campo não é suportado",
+                "unique": "ÚNICO",
+                "unknown_type": "Tipo Desconhecido",
+                "update_table": "Alterar Tabela",
+                "url_slug": "URL Slug (único)",
+                "url_slug_ph": "URL slug (ex. posts)",
+                "visibility": "Visibilidade"
+            },
+            "dimmer": {
+                "page": "Página|Páginas",
+                "page_link_text": "Ver todas as páginas",
+                "page_text": "Tem {count} {string} na seu banco de dados. Clique no botão abaixo para ver todas as páginas.",
+                "post": "Publicação|Publicações",
+                "post_link_text": "Ver todas as publicações",
+                "post_text": "Tem {count} {string} na seu banco de dados. Clique no botão abaixo para ver todas as publicações.",
+                "user": "Utilizador|Utilizadores",
+                "user_link_text": "Ver todos os utilizadores",
+                "user_text": "Tem {count} {string} na seu banco de dados. Clique no botão abaixo para ver todos os utilizadores."
+            },
+            "form": {
+                "field_password_keep": "Deixar vazio para manter o atual",
+                "field_select_dd_relationship": "Certifique-se de configurar o relacionamento apropriado no método {method} da classe {class}.",
+                "type_checkbox": "Check Box",
+                "type_codeeditor": "Editor de Código",
+                "type_file": "Arquivo",
+                "type_image": "Imagem",
+                "type_radiobutton": "Radio Button",
+                "type_richtextbox": "Rich Textbox",
+                "type_selectdropdown": "Selecione Dropdown",
+                "type_textarea": "Text Area",
+                "type_textbox": "Text Box"
+            },
+            "datatable": {
+                "sEmptyTable": "Não há registos para apresentar",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registos",
+                "sInfoEmpty": "Mostrando de 0 até 0 de 0 registos",
+                "sInfoFiltered": "(filtrado de _MAX_ registos no total)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostrar _MENU_ registos",
+                "sLoadingRecords": "A Carregar...",
+                "sProcessing": "A processar...",
+                "sSearch": "Procurar:",
+                "sZeroRecords": "Não foram encontrados resultados",
+                "oPaginate": {
+                    "sFirst": "Primeiro",
+                    "sLast": "Último",
+                    "sNext": "Seguinte",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": ativar para ordenar de forma crescente",
+                    "sSortDescending": ": ativar para ordenar de forma decrescente"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Produzido com <i class=\"voyager-heart\"><\/i> por",
+                "footer_copyright2": "Produzido com rum e mais rum"
+            },
+            "json": {
+                "invalid": "JSON Inválido",
+                "invalid_message": "Submeteu um JSON inválido.",
+                "valid": "JSON Válido",
+                "validation_errors": "Erros de validação"
+            },
+            "analytics": {
+                "by_pageview": "Por pageview",
+                "by_sessions": "Por sessões",
+                "by_users": "Por usuário",
+                "no_client_id": "Para aceder ao analytics precisa adicionar nas Configurações do Voyager a chave <code>google_analytics_client_id <\/code> com o código google de identidade do analytics client. Obtenha o sua chave através do Google developer console:",
+                "set_view": "Selecionar Vista",
+                "this_vs_last_week": "Esta Semana vs Semana Passada",
+                "this_vs_last_year": "Este Ano vs Ano Passado",
+                "top_browsers": "Top Browsers",
+                "top_countries": "Top Países",
+                "various_visualizations": "Visualizações várias"
+            },
+            "error": {
+                "symlink_created_text": "Acabamos de criar o link simbólico (symlink) faltante para você.",
+                "symlink_created_title": "O link simbólico (symlink) de armazenamento faltante foi criado",
+                "symlink_failed_text": "Não conseguimos gerar o link simbólico (symlink) faltante para sua aplicação. Parece que seu provedor de hospedagem não o suporta.",
+                "symlink_failed_title": "Não foi possível criar o link simbólico (symlink) de armazenamento faltante",
+                "symlink_missing_button": "Consertá-lo",
+                "symlink_missing_text": "Não foi possível encontrar o link simbólico (symlink) de armazenamento. Isso pode causar problemas ao carregar os arquivos de mídia no navegador.",
+                "symlink_missing_title": "Link simbólico (symlink) de armazenamento faltante."
+            }
+        }
+    },
+    "ro": {
+        "voyager": {
+            "date": {
+                "last_week": "Săptămâna trecută",
+                "last_year": "Anul trecut",
+                "this_week": "Săptămâna asta",
+                "this_year": "În acest an"
+            },
+            "generic": {
+                "action": "Acțiune",
+                "actions": "Acțiuni",
+                "add": "Adaugă",
+                "add_folder": "Crează folder",
+                "add_new": "Adaugă nou",
+                "all_done": "Gata",
+                "are_you_sure": "Sunteți sigur",
+                "are_you_sure_delete": "Sunteți sigur că doriți să ștergeți",
+                "auto_increment": "Auto incrementare",
+                "browse": "Răsfoiește",
+                "builder": "Constructor",
+                "bulk_delete": "Șterge tot",
+                "bulk_delete_confirm": "Da, șterge asta",
+                "bulk_delete_nothing": "Nu ați ales nimic pentru ștergere",
+                "cancel": "Anulare",
+                "choose_type": "Alegeți tipul",
+                "click_here": "Click aici",
+                "close": "Închide",
+                "compass": "Busolă",
+                "created_at": "Data creării",
+                "custom": "Personalizat",
+                "dashboard": "Panou de control",
+                "database": "Baza de date",
+                "default": "Prestabilit",
+                "delete": "Șterge",
+                "delete_confirm": "Da, Șterge",
+                "delete_question": "Sunteți sigur că vreți să ștergeți asta",
+                "delete_this_confirm": "Da, șterge asta",
+                "deselect_all": "Anulează selecția",
+                "download": "Descarcă",
+                "edit": "Editare",
+                "email": "E-mail",
+                "error_deleting": "A apărut o eroare în timpul ștergerii",
+                "exception": "Excepție",
+                "featured": "Recomandat",
+                "field_does_not_exist": "Câmpul nu există",
+                "how_to_use": "Cum să folosiți",
+                "index": "Index",
+                "internal_error": "Eroare internă",
+                "items": "Element(e)",
+                "keep_sidebar_open": "Yarr! Aruncați ancorele! (și ține-ți bara laterală deschisă)",
+                "key": "Cheie",
+                "last_modified": "Ultima modificare",
+                "length": "Lungime",
+                "login": "Login",
+                "media": "Media",
+                "menu_builder": "Constructor de meniuri",
+                "move": "Mutare",
+                "name": "Nume",
+                "new": "Nou",
+                "no": "Nu",
+                "no_thanks": "Nu, mulțumesc",
+                "not_null": "Nu-i Null",
+                "options": "Opțiuni",
+                "password": "Parolă",
+                "permissions": "Permisiuni",
+                "profile": "Profil",
+                "public_url": "URL public",
+                "read": "Citire",
+                "rename": "Redenumire",
+                "required": "Obligatoriu",
+                "return_to_list": "Întoarcere la listă",
+                "route": "Traseu",
+                "save": "Salvare",
+                "search": "Caută",
+                "select_all": "Selectează tot",
+                "settings": "Setări",
+                "showing_entries": "Publicare afișată de la {from} până la {to} din {all}|Publicări afișate de la {from} până la {to} din {all}",
+                "submit": "Trimite",
+                "successfully_added_new": "Adăugat cu succes",
+                "successfully_deleted": "Șters cu succes",
+                "successfully_updated": "Actualizat cu succes",
+                "timestamp": "Timestamp-ul",
+                "title": "Titlu",
+                "type": "Tip",
+                "unsigned": "Nesemnat",
+                "unstick_sidebar": "Desfaceți bara laterală",
+                "update": "Actualizează",
+                "update_failed": "Actualizare eșuată",
+                "upload": "Încărcare",
+                "url": "URL",
+                "view": "Vedere",
+                "viewing": "Vizualizare",
+                "yes": "Da",
+                "yes_please": "Da, vă rog"
+            },
+            "login": {
+                "loggingin": "Logare în sistem",
+                "signin_below": "Conectați-vă mai jos:",
+                "welcome": "Bine ați venit la Voyager. Panoul de control ce lipsește în Laravel"
+            },
+            "profile": {
+                "avatar": "Poza",
+                "edit": "Editează profilul",
+                "edit_user": "Editează utilizatorul",
+                "password": "Parola",
+                "password_hint": "Lăsați gol pentru a păstra aceeași",
+                "role": "Rol",
+                "user_role": "Rolul utilizatorului"
+            },
+            "settings": {
+                "usage_help": "Puteți folosi valoarea fiecărei setări, oriunde pe site apelând",
+                "save": "Salvează setările",
+                "new": "Setare nouă",
+                "help_name": "Numele setării (ex: Titlu Admin)",
+                "help_key": "Cheia setării (ex: admin_title)",
+                "help_option": "(opțional, se aplică doar la unele tipuri, cum ar fi dropdown sau buton radio)",
+                "add_new": "Adăugați setare nouă",
+                "delete_question": "Sunteți sigur că doriți să ștergeți setarea {setting}?",
+                "delete_confirm": "Da, șterge această setare",
+                "successfully_created": "Setare creată cu succes",
+                "successfully_saved": "Setare salvată cu succes",
+                "successfully_deleted": "Setare ștearsă cu succes",
+                "already_at_top": "Deja este prima în listă",
+                "already_at_bottom": "Deja este ultima în listă",
+                "moved_order_up": "Setarea {name} a fost mutată mai sus",
+                "moved_order_down": "Setarea {name} a fost mutată mai jos",
+                "successfully_removed": "Valoarea {name} a fost ștearsă cu succes",
+                "group_general": "General",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Grup",
+                "help_group": "Atașați această setare la grupul"
+            },
+            "media": {
+                "add_new_folder": "Adaugă un folder nou",
+                "audio_support": "Browser-ul dvs. nu suportă elementul audio.",
+                "create_new_folder": "Crează un folder nou",
+                "delete_folder_question": "Ștergerea folderului va duce la ștergerea fișierelor și folderelor ce se află el.",
+                "destination_folder": "Folderul de destinație",
+                "drag_drop_info": "Trageți și aruncați fișiere.",
+                "error_already_exists": "Există deja fișier\/folder cu așa nume în acest folder",
+                "error_creating_dir": "Eroare la crearea folderului: verificați permisiunile",
+                "error_deleting_file": "Eroare la ștergerea fișierului: verificați permisiunile",
+                "error_deleting_folder": "Eroare la ștergerea folderului: verificați permisiunile",
+                "error_may_exist": "Există deja un fișier sau un folder cu așa nume: alegeți alt nume sau ștergeți fișierul curent",
+                "error_moving": "Eroare la mutarea fișierului\/folderului: verificați permisiunile.",
+                "error_uploading": "Încărcare eșuată: S-a produs o eroare necunoscută",
+                "folder_exists_already": "Folder cu așa nume există deja. Vă rugăm să o ștergeți dacă doriți să creați una cu același nume.",
+                "image_does_not_exist": "Imaginea nu există",
+                "image_removed": "Imagine ștearsă",
+                "library": "Bibliotecă media",
+                "loading": "SE ÎNCARCĂ FIȘIERELE DVS. MEDIA",
+                "move_file_folder": "Mutare fișier\/folder",
+                "new_file_folder": "Nume nou fișier\/folder",
+                "new_folder_name": "Nume nou folder",
+                "no_files_here": "Aici nu există fișiere",
+                "no_files_in_folder": "În acest folder nu există fișiere",
+                "nothing_selected": "Nimic selectat",
+                "rename_file_folder": "Redenumire fișier\/folder",
+                "success_uploaded_file": "Încărcarea fișierului a avut loc cu succes",
+                "success_uploading": "Încărcarea imaginii a avut loc cu succes",
+                "uploading_wrong_type": "Încărcare eșuată: formatul fișierului nu este suportat sau fișierul este prea mare pentru a fi încărcat!",
+                "video_support": "Browser-ul dvs. nu suportă elementul video."
+            },
+            "menu_builder": {
+                "color": "Culoarea în RGB sau hex (opțional)",
+                "color_ph": "Culoarea (ex: #ffffff sau rgb(255, 255, 255)",
+                "create_new_item": "Crează un punct de meniu nou",
+                "delete_item_confirm": "Da, șterge acest punct de meniu",
+                "delete_item_question": "Sunteți sigur, că doriți să ștergeți acest punct de meniu?",
+                "drag_drop_info": "Trageți punctul din meniu mai jos, pentru a schimba ordinea lor.",
+                "dynamic_route": "Cale(route) dinamică",
+                "edit_item": "Editează punct de meniu",
+                "icon_class": "Iconiță pentru punctul de meniu (Folosiți ",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Iconiță (opțional)",
+                "item_route": "Calea pentru punctul de meniu",
+                "item_title": "Denumirea punctului de meniu",
+                "link_type": "Tipul link-ului",
+                "new_menu_item": "Punct de meniu nou",
+                "open_in": "Deschide în",
+                "open_new": "Fereastră\/Tab nou",
+                "open_same": "aceeași fereastră\/tab",
+                "route_parameter": "Parametrii rutei (dacă există)",
+                "static_url": "URL Static",
+                "successfully_created": "Punctul de meniu a fost creat cu succes.",
+                "successfully_deleted": "Punctul de meniu a fost șters cu succes.",
+                "successfully_updated": "Punctul de meniu a fost actualizat cu succes.",
+                "updated_order": "Structura meniului a fost actualizată cu succes.",
+                "url": "URL pentru punctul de meniu",
+                "usage_hint": "Puteți afișa un meniu oriunde pe site apelând|Puteți afișa acest meniu oriunde pe site apelând"
+            },
+            "post": {
+                "category": "Categoria postării",
+                "content": "Conținutul postării",
+                "details": "Detaliile postării",
+                "excerpt": "Extras <small>Descrierea scurtă a postării<\/small>",
+                "image": "Imagine",
+                "meta_description": "Descriere meta",
+                "meta_keywords": "Cuvinte cheie",
+                "new": "Creați o postare nouă",
+                "seo_content": "Conținut SEO",
+                "seo_title": "Titlu SEO",
+                "slug": "slug(link)",
+                "status": "Starea postării",
+                "status_draft": "Ciornă",
+                "status_pending": "În așteptare",
+                "status_published": "Publicat",
+                "title": "Titlu",
+                "title_sub": "Titlul postării",
+                "update": "Actualizarea postării"
+            },
+            "database": {
+                "add_bread": "Adăugați BREAD la acest tabel",
+                "add_new_column": "Adăugați o coloană nouă",
+                "add_softdeletes": "Adăugați Soft Deletes",
+                "add_timestamps": "Adăugați timestamp-uri",
+                "already_exists": "deja există",
+                "already_exists_table": "Tabelul {table} deja există",
+                "bread_crud_actions": "Acțiuni BREAD\/CRUD",
+                "bread_info": "Informații despre BREAD",
+                "column": "Coloană",
+                "composite_warning": "Avertizare: această coloană face parte din indexul compozit",
+                "controller_name": "Numele controller-ului",
+                "controller_name_hint": "ex: PageController, dacă lăsați liber se va folosi BREAD Controller",
+                "create_bread_for_table": "Creare BREAD pentru tabelul {table}",
+                "create_migration": "Creare migrare pentru acest tabel?",
+                "create_model_table": "Creare model pentru acest tabel?",
+                "create_new_table": "Creare tabel nou",
+                "create_your_new_table": "Creare tabel nou",
+                "default": "Prdefinit",
+                "delete_bread": "Șterge BREAD",
+                "delete_bread_before_table": "Înainte de a șterge tabelul este necesar să ștergeți BREAD-ul tabelului.",
+                "delete_table_bread_conf": "Da, șterge BREAD",
+                "delete_table_bread_quest": "Sunteți sigur, că doriți să ștergeți BREAD-ul tabelului {table}?",
+                "delete_table_confirm": "Da, șterge tabelul",
+                "delete_table_question": "Sunteți sigur că doriți să ștergeți tabelul {table}?",
+                "description": "Descriere",
+                "display_name": "Numele afișat",
+                "display_name_plural": "Numele afișat (la plural)",
+                "display_name_singular": "Numele afișat (la singular)",
+                "edit_bread": "Editare BREAD",
+                "edit_bread_for_table": "Editare BREAD pentru tabelul {table}",
+                "edit_rows": "Editați rândurile tabelului {table} mai jos",
+                "edit_table": "Editați tabelul {table} mai jos",
+                "edit_table_not_exist": "Tabelul pe care doriți să-l editați nu există",
+                "error_creating_bread": "Se pare că a apărut o problemă cu crearea acestui BREAD",
+                "error_removing_bread": "Se pare că a apărut o problemă cu ștergerea acestui BREAD",
+                "error_updating_bread": "Se pare că a apărut o problemă cu actualizarea acestui BREAD",
+                "extra": "Suplimentar",
+                "field": "Câmp",
+                "field_safe_failed": "Nu s-a reușit savlarea câmpului {field}, ne întoarcem la valoarea precedentă.",
+                "generate_permissions": "Generare permisiuni",
+                "icon_class": "Iconiță pentru acest tabel",
+                "icon_hint": "Iconiță pentru (opțional)",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Tipul input-ului",
+                "key": "Cheie",
+                "model_class": "Numele clasei modelului",
+                "model_name": "Numele modelului",
+                "model_name_ph": "ex: \\App\\User, dac\u0103 l\u0103sa\u021Bi gol, vom \xEEncerca \u0219i vom folosi numele tabelului",
+                "name_warning": "Vă rugăm să indicați numele coloanei înainte de adăugarea indexului",
+                "no_composites_warning": "În acest tabel există index compozit. Atrageți atenția că la momentul de față ele nu sunt suportate. Fiți atenți când încercați să adăugați\/ștergeți indexuri.",
+                "null": "Null",
+                "optional_details": "Detalii suplimentare",
+                "policy_class": "Policy Class Name",
+                "policy_name": "Policy Name",
+                "policy_name_ph": "ex. \\App\\Policies\\UserPolicy, dac\u0103 l\u0103sa\u021Bi gol, vom \xEEncerca \u0219i vom folosi predefinit",
+                "primary": "CHEIE PRIMARĂ",
+                "server_pagination": "Paginare pe server",
+                "success_create_table": "Tabelul {table} a fost creat cu succes",
+                "success_created_bread": "BREAD nou a fost creat cu succes",
+                "success_delete_table": "Tabelul {table} a fost șters cu succes",
+                "success_remove_bread": "BREAD a fost șters cu succes din {datatype}",
+                "success_update_bread": "BREAD a fost actualizat cu succes în {datatype}",
+                "success_update_table": "Tabelul {table} a fost actualizat cu succes",
+                "table_actions": "Acțiuni cu tabelul",
+                "table_columns": "Coloanele tabelului",
+                "table_has_index": "În acest tabel există deja cheia primară.",
+                "table_name": "Numele tabelului",
+                "table_no_columns": "Acest tabel nu are coloane...",
+                "type": "Tip",
+                "type_not_supported": "Acest tip nu este suportat",
+                "unique": "UNIQUE",
+                "unknown_type": "Tip necunoscut",
+                "update_table": "Actualizare tabel",
+                "url_slug": "URL Slug (trebuie să fie unic)",
+                "url_slug_ph": "URL slug (ex:, posts)",
+                "visibility": "Vizibilitate",
+                "relationship": {
+                    "relationship": "Relație",
+                    "relationships": "Relații",
+                    "has_one": "Unu la unu",
+                    "has_many": "Unu la mulți",
+                    "belongs_to": "Mulți la unu",
+                    "belongs_to_many": "Mulți la mulți",
+                    "which_column_from": "Ce coloană din",
+                    "is_used_to_reference": "este folosită pentru a face referire la",
+                    "pivot_table": "Tabel de legătură",
+                    "selection_details": "Detaliile selecției",
+                    "display_the": "Afișează",
+                    "store_the": "Salvează",
+                    "easy_there": "Ușor, Căpitane",
+                    "before_create": "Înainte de a crea o relație ai nevoie mai întâi să creezi BREAD-ul.<br> Apoi, te întorci înapoi pentru a edita BREAD-ul și atunci vei putea adăuga o relație nouă.<br> Mulțam.",
+                    "cancel": "Anulare",
+                    "add_new": "Adăugare relație nouă",
+                    "open": "Deschide",
+                    "close": "Închide",
+                    "relationship_details": "Detaliile relației",
+                    "browse": "Răsfoiește",
+                    "read": "Citește",
+                    "edit": "Editează",
+                    "add": "Adaugă",
+                    "delete": "Șterge",
+                    "create": "Crează o Relație",
+                    "namespace": "Model N\u0103imsp\u0103is (ex: App\\User)"
+                }
+            },
+            "dimmer": {
+                "page": "pagină|pagini",
+                "page_link_text": "Toate paginile",
+                "page_text": "În baza de date există {count} {string}",
+                "post": "postare|postări",
+                "post_link_text": "Toate postările",
+                "post_text": "În baza de date există {count} {string}",
+                "user": "utilizator|utilizatori",
+                "user_link_text": "Toți utilizatorii",
+                "user_text": "În baza de date există {count} {string}"
+            },
+            "form": {
+                "field_password_keep": "Lăsați gol, dacă nu doriți să schimbați parola",
+                "field_select_dd_relationship": "Este necesar să setați realțiile (relationship) în metoda {method} din clasa {class}.",
+                "type_checkbox": "Checkbox",
+                "type_codeeditor": "Editor de cod",
+                "type_file": "Fișier",
+                "type_image": "Imagine",
+                "type_radiobutton": "Radio buton",
+                "type_richtextbox": "Edito vizual",
+                "type_selectdropdown": "Listă dropdown",
+                "type_textarea": "Câmp text (textarea)",
+                "type_textbox": "Câmp text (simplu)"
+            },
+            "datatable": {
+                "sEmptyTable": "În tabel nu există date",
+                "sInfo": "Afișat de la _START_ până la _END_ din _TOTAL_ înregistrări",
+                "sInfoEmpty": "Afișat 0 din 0 înregistrări",
+                "sInfoFiltered": "(sortat din _MAX_ înregitrări)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Afișați _MENU_ înregistrări",
+                "sLoadingRecords": "Încărcare înregistrări...",
+                "sProcessing": "Așteptați...",
+                "sSearch": "Căutare:",
+                "sZeroRecords": "Lipsesc înregistrări",
+                "oPaginate": {
+                    "sFirst": "Prima",
+                    "sLast": "Ultima",
+                    "sNext": "Următoarea",
+                    "sPrevious": "Precedenta"
+                },
+                "oAria": {
+                    "sSortAscending": ": activați pentru a sorta coloana crescător",
+                    "sSortDescending": ": activați pentru a sorta coloana descrescător"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Creat cu <i class=\"voyager-heart\"><\/i> ",
+                "footer_copyright2": "Creat cu rom și chiar mai mult rom :) "
+            },
+            "json": {
+                "invalid": "format JSON invalid",
+                "invalid_message": "Ați introdus un format JSON invalid",
+                "valid": "Format JSON corect",
+                "validation_errors": "Eroare la verificarea datelor"
+            },
+            "analytics": {
+                "by_pageview": "După pagini",
+                "by_sessions": "După sesiuni",
+                "by_users": "După utilizatori",
+                "no_client_id": "Pentru a vedea statisticile din analytics aveți nevoie de google analytics cliend id pe care să-l adăugați în setări pentru cheia <code>google_analytics_client_id<\/code>. Puteți obține cheia(analytics cliend id) în contul dvs. Google developers console:",
+                "set_view": "Alegeți modul de vizualizare",
+                "this_vs_last_week": "Săptămâna aceasta în comparație cu săptămâna trecută.",
+                "this_vs_last_year": "Anul acesta în comparație cu anul trecut",
+                "top_browsers": "Top browser-e",
+                "top_countries": "Top țări",
+                "various_visualizations": "Vizualizări diverse"
+            },
+            "error": {
+                "symlink_created_text": "Noi tocmai am creat legătura simbolică(symlink) pentru dvs.",
+                "symlink_created_title": "Legătura simbolică a folderului storage ce lipsea, a fost creată.",
+                "symlink_failed_text": "Nu am putut genera link-ul simbolic ce lipsește pentru aplicația dvs. Se pare că hosting provider-ul dvs. nu suportă symlinks))).",
+                "symlink_failed_title": "Nu am putut crea link-ul simbolic pentru folderul storage.",
+                "symlink_missing_button": "Corectați",
+                "symlink_missing_text": "Nu am putut găsi un link simbolic pentru folderul storage. Aceasta poate cauza probleme cu încărcarea fișierelor media de către browser.",
+                "symlink_missing_title": "Lipsește link-ul simbolic pentru folderul storage."
+            }
+        }
+    },
+    "ru": {
+        "voyager": {
+            "date": {
+                "last_week": "На прошлой неделе",
+                "last_year": "В прошлом году",
+                "this_week": "На этой неделе",
+                "this_year": "В этом году"
+            },
+            "generic": {
+                "action": "Действие",
+                "actions": "Доступные действия",
+                "add": "Добавить",
+                "add_folder": "Создать папку",
+                "add_new": "Добавить",
+                "all_done": "Готово",
+                "are_you_sure": "Вы уверены",
+                "are_you_sure_delete": "Вы точно хотите удалить",
+                "auto_increment": "Auto Increment",
+                "browse": "Просмотр",
+                "builder": "Конструктор",
+                "bulk_delete": "Удалить выбранное",
+                "bulk_delete_confirm": "Да, удалить это",
+                "bulk_delete_nothing": "Вы ничего не выбрали для удаления!",
+                "cancel": "Отмена",
+                "choose_type": "Выберите тип поля",
+                "click_here": "Кликните тут",
+                "close": "Закрыть",
+                "compass": "Документация",
+                "created_at": "Дата создания",
+                "custom": "Пользовательская категория",
+                "dashboard": "Панель управления",
+                "database": "База данных",
+                "default": "По умолчанию",
+                "delete": "Удалить",
+                "delete_confirm": "Да, удалить!",
+                "delete_question": "Вы действительно хотите удалить это?",
+                "delete_this_confirm": "Да, удалить это",
+                "deselect_all": "Отменить выделение",
+                "download": "Загрузка",
+                "edit": "Изменить",
+                "email": "E-mail",
+                "error_deleting": "Во время удаления возникла ошибка",
+                "exception": "Исключение",
+                "featured": "Рекомендуемый",
+                "field_does_not_exist": "Поля не существует",
+                "how_to_use": "Как использовать",
+                "index": "Индекс",
+                "internal_error": "Внутренняя ошибка",
+                "items": "элемент(ы)",
+                "keep_sidebar_open": "Раскрывать панель",
+                "key": "Ключ",
+                "last_modified": "Последнее изменение",
+                "length": "Длина",
+                "login": "Войти",
+                "media": "Медиа",
+                "menu_builder": "Конструктор меню",
+                "move": "Переместить",
+                "name": "Имя",
+                "new": "Новинка",
+                "no": "Нет",
+                "no_thanks": "Нет, спасибо",
+                "not_null": "Не Null",
+                "options": "Параметры",
+                "password": "Пароль",
+                "permissions": "Права доступа",
+                "profile": "Профиль",
+                "public_url": "Общедоступный URL-адрес",
+                "read": "Считывание",
+                "rename": "Переименовать",
+                "required": "Обязательный",
+                "return_to_list": "Вернуться к списку",
+                "route": "Маршрут",
+                "save": "Сохранить",
+                "search": "Искать",
+                "select_all": "Выбрать все",
+                "settings": "Настройки",
+                "showing_entries": "Показана от {from} до {to} из {all} запись|Показано от {from} до {to} из {all} записей",
+                "submit": "Отправить",
+                "successfully_added_new": "Успешное добавление",
+                "successfully_deleted": "Успешное удаление",
+                "successfully_updated": "Успешное обновление",
+                "timestamp": "Временная метка",
+                "title": "Название",
+                "type": "Тип",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "Открепить боковую панель",
+                "update": "Обновить",
+                "update_failed": "Обновление не удалось",
+                "upload": "Загрузка",
+                "url": "URL",
+                "view": "Просмотр",
+                "viewing": "Просмотр",
+                "yes": "Да",
+                "yes_please": "Да, пожалуйста"
+            },
+            "login": {
+                "loggingin": "Вход в систему",
+                "signin_below": "Вход в панель управления",
+                "welcome": "Панель управления, которой не хватало в Laravel"
+            },
+            "profile": {
+                "avatar": "Фото",
+                "edit": "Настройки профиля",
+                "edit_user": "Изменить профиль",
+                "password": "Пароль",
+                "password_hint": "Для сохранения того же значения оставьте поле пустым",
+                "role": "Группа",
+                "user_role": "Группа пользователя"
+            },
+            "settings": {
+                "usage_help": "Чтобы получить значения параметров, используйте в шаблоне код ",
+                "save": "Сохранить настройки",
+                "new": "Создать настройку",
+                "help_name": "Название параметра (например, Мой параметр)",
+                "help_key": "Ключ параметра (например, my_parametr)",
+                "help_option": "(необязательно, применяется только к выпадающему списку или радио-кнопкам)",
+                "add_new": "Добавить новый параметр",
+                "delete_question": "Вы уверены, что нужно удалить параметр {setting}?",
+                "delete_confirm": "Да, удалите этот параметр",
+                "successfully_created": "Параметры успешно созданы",
+                "successfully_saved": "Параметры успешно сохранены",
+                "successfully_deleted": "Параметры успешно удалены",
+                "already_at_top": "Уже размещено вверху списка",
+                "already_at_bottom": "Уже размещено внизу списка",
+                "moved_order_up": "Параметр {name} перемещен вверх",
+                "moved_order_down": "Параметр {name} перемещен вниз",
+                "successfully_removed": "Успешно удалено значение параметра {name}",
+                "group_general": "Основное",
+                "group_admin": "Админ",
+                "group_site": "Сайт",
+                "group": "Группа",
+                "help_group": "Привязать эту настройку к группе"
+            },
+            "media": {
+                "add_new_folder": "Добавить новую папку",
+                "audio_support": "Ваш браузер не поддерживает элемент audio.",
+                "create_new_folder": "Создать новую папку",
+                "delete_folder_question": "Удаление папки приведет к удалению всего ее содержимого.",
+                "destination_folder": "Папка назначения",
+                "drag_drop_info": "Перетащите файлы мышью или нажмите на кнопку внизу для загрузки.",
+                "error_already_exists": "Файл\/папка с таким именем уже существуют в данном каталоге",
+                "error_creating_dir": "Не удалось создать папку: проверьте права доступа",
+                "error_deleting_file": "Не удалось удалить файл: проверьте права доступа",
+                "error_deleting_folder": "Не удалось удалить папку: проверьте права доступа",
+                "error_may_exist": "Файл или папка с таким именем уже существуют: выберите другое имя или удалите существующий файл!",
+                "error_moving": "Не удалось переместить файл или папку: проверьте права доступа.",
+                "error_uploading": "Ошибка загрузки: Произошла неизвестная ошибка!",
+                "folder_exists_already": "Папка с таким именем уже существует: удалите ее, если хотите создать новую с таким же именем.",
+                "image_does_not_exist": "Изображения не существует",
+                "image_removed": "Изображение удалено",
+                "library": "Библиотека медиа",
+                "loading": "ИДЕТ ЗАГРУЗКА ВАШИХ ФАЙЛОВ",
+                "move_file_folder": "Переместить файл\/папку",
+                "new_file_folder": "Новое имя файла\/папки",
+                "new_folder_name": "Новое имя папки",
+                "no_files_here": "Тут нет файлов",
+                "no_files_in_folder": "Отсутствуют файлы в данной папке",
+                "nothing_selected": "Ничего не выбрано",
+                "rename_file_folder": "Переименовать файл\/папку",
+                "success_uploaded_file": "Успешная загрузка файла!",
+                "success_uploading": "Успешная загрузка изображения!",
+                "uploading_wrong_type": "Ошибка загрузки: неподдерживаемый формат файла или слишком большой размер файла для загрузки!",
+                "video_support": "Ваш браузер не поддерживает элемент video.",
+                "crop": "Обрезать",
+                "crop_and_create": "Создать и Обрезать",
+                "crop_override_confirm": "Исходное изображение будет изменено, вы уверены?",
+                "crop_image": "Обрезать изображение",
+                "success_crop_image": "Изображение успешно обрезано",
+                "height": "Высота: ",
+                "width": "Ширина: "
+            },
+            "menu_builder": {
+                "color": "Цвет в RGB или hex (необязательно)",
+                "color_ph": "Цвет (например, #ffffff или rgb(255, 255, 255)",
+                "create_new_item": "Создать новый пункт меню",
+                "delete_item_confirm": "Да, удалить этот пункт меню",
+                "delete_item_question": "Вы уверены, что хотите удалить этот пункт меню?",
+                "drag_drop_info": "Перетащите пункты меню ниже, чтобы изменить их порядок.",
+                "dynamic_route": "Динамический путь",
+                "edit_item": "Редактировать пункт меню",
+                "icon_class": "Иконка для пункта меню (Используйте ",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Иконка (необязательно)",
+                "item_route": "Путь для пункта меню",
+                "item_title": "Название пункта меню",
+                "link_type": "Тип ссылки",
+                "new_menu_item": "Новый пункт меню",
+                "open_in": "Открыть в",
+                "open_new": "Новая вкладка\/окно",
+                "open_same": "Та же вкладка\/окно",
+                "route_parameter": "Параметры пути (если есть)",
+                "static_url": "Статический URL",
+                "successfully_created": "Пункт меню успешно создан.",
+                "successfully_deleted": "Пункт меню успешно удален.",
+                "successfully_updated": "Пункт меню успешно обновлен.",
+                "updated_order": "Структура меню успешно обновлена.",
+                "url": "URL для пункта меню",
+                "usage_hint": "Вы можете вывести меню в любом месте вашего сайта, вызвав |Вы можете вывести это меню в любом месте вашего сайта, вызвав "
+            },
+            "post": {
+                "category": "Категория сообщения",
+                "content": "Текст сообщения",
+                "details": "Свойства",
+                "excerpt": "Анонс <small>Краткое описание статьи<\/small>",
+                "image": "Изображение",
+                "meta_description": "Описание (meta)",
+                "meta_keywords": "Ключевые слова (meta)",
+                "new": "Опубликовать",
+                "seo_content": "SEO текст",
+                "seo_title": "SEO название",
+                "slug": "Ссылка",
+                "status": "Статус публикации",
+                "status_draft": "Черновик",
+                "status_pending": "На модерации",
+                "status_published": "Опубликовано",
+                "title": "Заголовок",
+                "title_sub": "Название статьи",
+                "update": "Обновить"
+            },
+            "database": {
+                "add_bread": "Добавить BREAD к данной таблице",
+                "add_new_column": "Добавить новый столбец",
+                "add_softdeletes": "Добавить Soft Deletes",
+                "add_timestamps": "Добавить метки времени",
+                "already_exists": "уже существует",
+                "already_exists_table": "Таблица {table} уже существует",
+                "bread_crud_actions": "BREAD\/CRUD действия",
+                "bread_info": "BREAD информация",
+                "column": "Столбец",
+                "composite_warning": "Предупреждение: этот столбец является частью составного индекса",
+                "controller_name": "Имя контроллера",
+                "controller_name_hint": "например, пустой PageController,  будет использовать BREAD Controller",
+                "create_bread_for_table": "Создать BREAD для таблицы {table}",
+                "create_migration": "Создать миграцию для данной таблицы?",
+                "create_model_table": "Создать модель для данной таблицы?",
+                "create_new_table": "Создать новую таблицу",
+                "create_your_new_table": "Создать новую таблицу",
+                "default": "По умолчанию",
+                "delete_bread": "Удалить BREAD",
+                "delete_bread_before_table": "Перед удалением таблицы обязательно удалите BREAD таблицы.",
+                "delete_table_bread_conf": "Да, удалить BREAD",
+                "delete_table_bread_quest": "Вы уверены, что хотите удалить BREAD для таблицы {table}?",
+                "delete_table_confirm": "Да, удалить таблицу",
+                "delete_table_question": "Вы точно хотите удалить таблицу {table}?",
+                "description": "Описание",
+                "display_name": "Отображаемое имя",
+                "display_name_plural": "Отображаемое имя (во множественном числе)",
+                "display_name_singular": "Отображаемое имя (в единственном числе)",
+                "edit_bread": "Редактировать BREAD",
+                "edit_bread_for_table": "Редактировать BREAD для таблицы {table}",
+                "edit_rows": "Редактировать строки таблицы {table} ниже",
+                "edit_table": "Редактировать таблицу {table} ниже",
+                "edit_table_not_exist": "Таблицы, которую вы хотите редактировать, не существует",
+                "error_creating_bread": "Похоже, возникла проблема с созданием данного BREAD",
+                "error_removing_bread": "Похоже, возникла проблема с удалением данного BREAD",
+                "error_updating_bread": "Похоже, возникла проблема с обновлением данного BREAD",
+                "extra": "Дополнительно",
+                "field": "Поле",
+                "field_safe_failed": "Не удалось сохранить поле {field}, будет произведен откат к предыдущему значению.",
+                "generate_permissions": "Создание прав доступа",
+                "icon_class": "Значок для данной таблицы",
+                "icon_hint": "Значок для (необязательно)",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Тип ввода",
+                "key": "Ключ",
+                "model_class": "Название класса модели",
+                "model_name": "Название модели",
+                "model_name_ph": "\u043D\u0430\u043F\u0440\u0438\u043C\u0435\u0440 \\App\\User, \u0435\u0441\u043B\u0438 \u043E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u043F\u0443\u0441\u0442\u044B\u043C - \u043F\u043E\u043F\u044B\u0442\u0430\u0435\u0442\u0441\u044F \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0442\u0430\u0431\u043B\u0438\u0446\u044B",
+                "name_warning": "Укажите столбец перед добавлением индекса",
+                "no_composites_warning": "В данной таблице присутствует составной индекс. Обратите внимание, что в настоящий момент они не поддерживаются. Будьте осторожны при попытке добавить\/удалить индексы.",
+                "null": "Null",
+                "optional_details": "Дополнительные сведения",
+                "policy_class": "Имя класса политики",
+                "policy_name": "Политика",
+                "policy_name_ph": "\u043D\u0430\u043F\u0440\u0438\u043C\u0435\u0440 \\App\\Policies\\UserPolicy, \u0435\u0441\u043B\u0438 \u043E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u043F\u0443\u0441\u0442\u044B\u043C - \u043F\u043E\u043F\u044B\u0442\u0430\u0435\u0442\u0441\u044F \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0443 \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E",
+                "primary": "ПЕРВИЧНЫЙ КЛЮЧ",
+                "server_pagination": "Пагинация на стороне сервера",
+                "success_create_table": "Таблица {table} успешно создана",
+                "success_created_bread": "Новый BREAD успешно создан",
+                "success_delete_table": "Таблица {table} успешно удалена",
+                "success_remove_bread": "BREAD успешно удален из {datatype}",
+                "success_update_bread": "BREAD успешно обновлен в {datatype}",
+                "success_update_table": "Таблица {table} успешно обновлена",
+                "table_actions": "Действия с таблицей",
+                "table_columns": "Столбцы таблицы",
+                "table_has_index": "В данной таблице уже имеется первичный ключ.",
+                "table_name": "Название таблицы",
+                "table_no_columns": "В таблице отсутствуют столбцы...",
+                "type": "Тип",
+                "type_not_supported": "Данный тип не поддерживается",
+                "unique": "UNIQUE",
+                "unknown_type": "Неизвестный тип",
+                "update_table": "Обновить таблицу",
+                "url_slug": "URL Slug (должен быть уникальным)",
+                "url_slug_ph": "URL slug (например, posts)",
+                "visibility": "Видимость"
+            },
+            "dimmer": {
+                "page": "страница|страницы",
+                "page_link_text": "Все страницы",
+                "page_text": "В базе данных {count} {string}",
+                "post": "запись|записи",
+                "post_link_text": "Все записи",
+                "post_text": "В базе данных {count} {string}",
+                "user": "пользователь|пользователей",
+                "user_link_text": "Все пользователи",
+                "user_text": "В базе данных {count} {string}"
+            },
+            "form": {
+                "field_password_keep": "Оставьте пустым, если не хотите менять пароль",
+                "field_select_dd_relationship": "Обязательно настройте соответствующие отношения (relationship) в методе {method} класса {class}.",
+                "type_checkbox": "Флажок",
+                "type_codeeditor": "Редактор кода",
+                "type_file": "Файл",
+                "type_image": "Изображение",
+                "type_radiobutton": "Радио-кнопка",
+                "type_richtextbox": "Визуальный редактор",
+                "type_selectdropdown": "Выпадающий список",
+                "type_textarea": "Многострочный текст",
+                "type_textbox": "Однострочный текст"
+            },
+            "datatable": {
+                "sEmptyTable": "В таблице нет данных",
+                "sInfo": "Показано от _START_ до _END_ из _TOTAL_ записей",
+                "sInfoEmpty": "Показано 0 из 0 записей",
+                "sInfoFiltered": "(выбрано из _MAX_ записей)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Показать _MENU_ записей",
+                "sLoadingRecords": "Загрузка записей...",
+                "sProcessing": "Подождите...",
+                "sSearch": "Поиск:",
+                "sZeroRecords": "Записи отсутствуют",
+                "oPaginate": {
+                    "sFirst": "Первая",
+                    "sLast": "Последняя",
+                    "sNext": "Следующая",
+                    "sPrevious": "Предыдущая"
+                },
+                "oAria": {
+                    "sSortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sSortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Сделано с <i class=\"voyager-heart\"><\/i> ",
+                "footer_copyright2": "Сделано под ромом :) "
+            },
+            "json": {
+                "invalid": "неверный формат JSON",
+                "invalid_message": "Введен неверный формат JSON",
+                "valid": "Верный формат JSON",
+                "validation_errors": "Ошибки при проверке данных"
+            },
+            "analytics": {
+                "by_pageview": "По страницам",
+                "by_sessions": "По сессиям",
+                "by_users": "По пользователям",
+                "no_client_id": "Для активации аналитики необходимо получить идентификатор клиента Google Analytics и добавить его в поле <code>google_analytics_client_id<\/code> меню настроек. Получить код Google Analytics: ",
+                "set_view": "Выберите вид",
+                "this_vs_last_week": "Текущая неделя в сравнении с прошлой.",
+                "this_vs_last_year": "Нынешний год в сравнении с прошлым",
+                "top_browsers": "Лучшие браузеры",
+                "top_countries": "Лучшие страны",
+                "various_visualizations": "Различные визуализации"
+            },
+            "error": {
+                "symlink_created_text": "Мы создали ссылку для вас.",
+                "symlink_created_title": "Создана недостающая ссылка на хранилище данных.",
+                "symlink_failed_text": "Не удалось создать недостающую ссылку: похоже, дело в хостинге.",
+                "symlink_failed_title": "Не удалось создать ссылку для хранилища данных.",
+                "symlink_missing_button": "Исправьте",
+                "symlink_missing_text": "Не найдена ссылка на хранилище данных: это может вызвать проблемы с загрузкой медиафайлов.",
+                "symlink_missing_title": "Отсутствует ссылка на хранилище данных."
+            }
+        }
+    },
+    "tr": {
+        "voyager": {
+            "date": {
+                "last_week": "Geçen Hafta",
+                "last_year": "Geçen Yıl",
+                "this_week": "Bu Hafta",
+                "this_year": "Bu Yıl"
+            },
+            "generic": {
+                "action": "İşlem",
+                "actions": "İşlemler",
+                "add": "Ekle",
+                "add_folder": "Klasör ekle",
+                "add_new": "Yeni Ekle",
+                "all_done": "Hepsi tamam",
+                "are_you_sure": "Eminmisin",
+                "are_you_sure_delete": "Silmek istediğinden eminmisin",
+                "auto_increment": "Otomatik artan",
+                "browse": "Gözden geçirmek",
+                "builder": "Kurucu",
+                "cancel": "İptal",
+                "choose_type": "Tip seçin",
+                "click_here": "Buraya tıkla",
+                "close": "Kapat",
+                "compass": "Sınır",
+                "created_at": "Oluşturma zamanı",
+                "custom": "Özel",
+                "dashboard": "Yönetim",
+                "database": "Veritabanı",
+                "default": "Varsayılan",
+                "delete": "Sil",
+                "delete_confirm": "Evet , sil !",
+                "delete_question": "Silmek istediğinden eminmisin",
+                "delete_this_confirm": "Evet , bunu sil !",
+                "deselect_all": "Tüm seçimi kaldır",
+                "download": "İndir",
+                "edit": "Düzenle",
+                "email": "E-mail",
+                "error_deleting": "Maalesef bunu silmek için bir sorun oluştu",
+                "exception": "İstisna",
+                "featured": "Öne Çıkan",
+                "field_does_not_exist": "Alan bulunamadı",
+                "how_to_use": "Nasıl kullanılır",
+                "index": "İndeks",
+                "internal_error": "İç hata",
+                "items": "Eşya(lar)",
+                "keep_sidebar_open": "Yarr! Bağları bırak! (ve yan menüyü açık tut)",
+                "key": "Anahtar",
+                "last_modified": "Son güncellenem",
+                "length": "Uzunluk",
+                "login": "Giriş",
+                "media": "Medya",
+                "menu_builder": "Menu kurucusu",
+                "move": "Hareket",
+                "name": "İsim",
+                "new": "New",
+                "no": "Hayır",
+                "no_thanks": "Hayır teşekkürler",
+                "not_null": "Boş değil",
+                "options": "Seçenekler",
+                "password": "Şifre",
+                "permissions": "İzinler",
+                "profile": "Profil",
+                "public_url": "Açık link",
+                "read": "Okuma",
+                "rename": "Yeniden adlandır",
+                "required": "Gerekli",
+                "return_to_list": "Listeye dön",
+                "route": "Rota",
+                "save": "Kaydet",
+                "search": "Bul",
+                "select_all": "Tümünü seç",
+                "settings": "Ayarlar",
+                "showing_entries": "{from} ile {to} arasındaki {all} kayıttan göstriliyor | {from} ile {to} arasındaki {all} kayıtlar göstriliyor",
+                "submit": "Gönder",
+                "successfully_added_new": "Başarılı eklendi",
+                "successfully_deleted": "Başarılı dilindi",
+                "successfully_updated": "Başarılı güncellendi",
+                "timestamp": "Zaman alanı",
+                "title": "Başlık",
+                "type": "Tip",
+                "unsigned": "İmzasız",
+                "unstick_sidebar": "Sidebarı açık tut",
+                "update": "güncelle",
+                "update_failed": "Alan güncellendi",
+                "upload": "Yükle",
+                "url": "Link",
+                "view": "Görünüm",
+                "viewing": "Görme",
+                "yes": "Evet",
+                "yes_please": "Evet, lütfen"
+            },
+            "login": {
+                "loggingin": "Giriş yap",
+                "signin_below": " Below: oturum aç",
+                "welcome": "Voyager a hoş geldiniz , Laravel'in aranan yönetim paneli"
+            },
+            "profile": {
+                "avatar": "Avatar",
+                "edit": "Profilimi düzenle",
+                "edit_user": "Kullanıcıyı düzenle",
+                "password": "Şifre",
+                "password_hint": "Aynı şifre ise boş bırakın",
+                "role": "Rol",
+                "user_role": "Kullanıcı Rolü"
+            },
+            "settings": {
+                "usage_help": "Her ayarın değerini sitenizdeki herhangi bir yerinden çağırabilirisiniz",
+                "save": "Ayarları Kaydet",
+                "new": "Yeni Ayarlar",
+                "help_name": "Ayar Adı ex: Yönetici paneli",
+                "help_key": "Ayar anahtarı ex: yonetici_paneli",
+                "help_option": "(optional, only applies to certain types like dropdown box or radio button)",
+                "add_new": "Yeni Ayar ekle",
+                "delete_question": " {setting} Bu ayarı silmek istediğinden eminmisin?",
+                "delete_confirm": "Evet , Bu Ayarı Sil",
+                "successfully_created": "Başarılı Ayar  Oluşturuldu",
+                "successfully_saved": "Başarılı Ayar kaydedildi ",
+                "successfully_deleted": "Başarılı Ayar silindi ",
+                "already_at_top": "Zaten Listenin en üstünde",
+                "already_at_bottom": "Zaten listenin en altında",
+                "moved_order_up": " {name} ayarı yukarı taşındı",
+                "moved_order_down": " {name} ayarı aşağı taşındı ",
+                "successfully_removed": "{name} başarılı bir şekilde değeri silindi",
+                "group_general": "Genel",
+                "group_admin": "Admin",
+                "group_site": "Site",
+                "group": "Grop",
+                "help_group": "Ayarların atandığı grup"
+            },
+            "media": {
+                "add_new_folder": "Yeni dosya ekle",
+                "audio_support": "tarıyıcın ses dosyası desteklemiyor.",
+                "create_new_folder": "Yeni dosya oluştur",
+                "delete_folder_question": "Bu dosyayı silmek içindekileride silmene neden olcak",
+                "destination_folder": "Dosya konumu",
+                "drag_drop_info": "Sürükle bırakla hızlıca resim yükle",
+                "error_already_exists": "Malesef dosya\/dizin ile aynı isimde bulunan bir kayıt var",
+                "error_creating_dir": "Malesef dizin oluşturuken bir şeyler yolunda girmedi, Lütfen izinlerinizi kontrol ediniz",
+                "error_deleting_file": "Bu dosyayı silerken bir sorun oluştu, lütfen izinlerinizi kontrol ediniz ",
+                "error_deleting_folder": "Malesef bu dizini silerken bir sorun oluştur, lütfen izinlerinizi kontrol ediniz",
+                "error_may_exist": "Malesef dosya\/dizin ile aynı isimde bulunan bir kayıt olabilir lütfen ismini değiştirn",
+                "error_moving": "Bu dosya\/dizini taşırken bir sorun oluştu , lütfen doğru izinlerin olduğuna emin olun",
+                "error_uploading": "Yükleme hatası: Unknown bilinmeyen bir hata oluştur",
+                "folder_exists_already": "Malesef bu dizinden var ama isterseniz silip tekrar oluşturabilirsiniz ",
+                "image_does_not_exist": "Resim bulanamadı",
+                "image_removed": "Resim silindi",
+                "library": "Medya silindi",
+                "loading": "Medya dosyanızı bekleyin",
+                "move_file_folder": "Dosya\/Dizin taşı",
+                "new_file_folder": "Yeni Dosya\/Dizin ismi",
+                "new_folder_name": "Yeni dizin ismi",
+                "no_files_here": "Hiç dosya bulunamadı",
+                "no_files_in_folder": "Bu klasörde hiç dosya bulunamadı",
+                "nothing_selected": "Hiçbir Dosya\/Dizin seçilmedi",
+                "rename_file_folder": "yeniden adlanadır Dosya\/Dizin",
+                "success_uploaded_file": "Başarı bir şekilde yeni dosya yüklendi",
+                "success_uploading": "Resim başarılı bir şekilde yüklendi",
+                "uploading_wrong_type": "Yükleme hatasu: Desteklenmeyen dosya formatı veya çok büyük dosya!",
+                "video_support": "Tarayıcı video etiketini desteklemiyor "
+            },
+            "menu_builder": {
+                "color": "Renkler RGB veya hex (tercihen)",
+                "color_ph": "Renk (örn. #ffffff veya rgb(255, 255, 255)",
+                "create_new_item": "Yeni bir kayıt oluşturun",
+                "delete_item_confirm": "Evet , Bu menüyü sil",
+                "delete_item_question": "Bu menü kaydını silmek istediğinden eminmisin ?",
+                "drag_drop_info": "Sürükle ve bırak ile menüyü ayarlayın",
+                "dynamic_route": "Dinamik rota",
+                "edit_item": "Menüyü düzenle",
+                "icon_class": "Font Icon sınıfları menü için (Use a",
+                "icon_class2": "Voyager Font sınıfları<\/a>)",
+                "icon_class_ph": "Icon sınıfları (tercihen)",
+                "item_route": "Menü için rota",
+                "item_title": "Menü başlığı",
+                "link_type": "Link tipi",
+                "new_menu_item": "Yeni menü kaydı",
+                "open_in": "Açılış hedefi",
+                "open_new": "Yeni Tab\/Ekran",
+                "open_same": "Aynı Tab\/Ekran",
+                "route_parameter": "Rota parametresi",
+                "static_url": "Statik URL",
+                "successfully_created": "Menü kaydı başarılı bir şekilde kaydoldu",
+                "successfully_deleted": "Menü kaydı başarılı bir şekilde silindi",
+                "successfully_updated": "Menü kaydı başarılı bir şekilde güncellendi",
+                "updated_order": "Menü kaydı başarılı bir şekilde sıralandı",
+                "url": "Menü kaydının linki",
+                "usage_hint": "Bu menüyü istediğiniz yerde çağra bilirsiniz|Şu şekilde Bu menüyü sitenin istediğiniz yerinde çağırmak için"
+            },
+            "post": {
+                "category": "Yazı kategorisi",
+                "content": "Yazı içeriği",
+                "details": "Yazı detayı",
+                "excerpt": "Alıntı <small>Yazının kısa açıklaması<\/small>",
+                "image": "Yazı resmi",
+                "meta_description": "Meta Açıklaması",
+                "meta_keywords": "Meta Anahtar kelimesi",
+                "new": "Yeni Yazı Oluştur",
+                "seo_content": "SEO içeriği",
+                "seo_title": "Seo başlığı",
+                "slug": "URL link",
+                "status": "Yazı durumu",
+                "status_draft": "taslak",
+                "status_pending": "bekliyor",
+                "status_published": "yayınlandı",
+                "title": "Yazı başlığı",
+                "title_sub": "Yazınız için başlık",
+                "update": "Yazıyı güncelle"
+            },
+            "database": {
+                "add_bread": "Bu tabloya BREAD ekle",
+                "add_new_column": "Yeni kolon ekle",
+                "add_softdeletes": "Yazılımsal silme kolonu ekle(soft delete)",
+                "add_timestamps": "Zaman kolonları ekle(created_at , updated_at)",
+                "already_exists": "Bu kolon var",
+                "already_exists_table": "Tablo {table} zaten var",
+                "bread_crud_actions": "BREAD\/CRUD işlemleri",
+                "bread_info": "BREAD bilgisi",
+                "column": "Kolon",
+                "composite_warning": "Warning: bu sütun, bileşik bir dizinin parçasıdır",
+                "controller_name": "Kontrol Adı",
+                "controller_name_hint": "örn. PageController, eğer boş bırakırsanı BREAD kontrolü kullanır",
+                "create_bread_for_table": "{table} tablosu için BREAD oluştur",
+                "create_migration": "Bu tablo için migrasyon oluşturulsunmu ?",
+                "create_model_table": "bu tablo için model oluşturulsunmu ?",
+                "create_new_table": "Yeni tablo oluştur",
+                "create_your_new_table": "Kendine yeni tablo oluştur",
+                "default": "Varsayılan",
+                "delete_bread": "BREAD sil",
+                "delete_bread_before_table": "Lütfen tabloyu silmeden önce bu tablodaki BREAD'i kaldırdığınızdan emin olun.",
+                "delete_table_bread_conf": "Evet,BREAD'i sil",
+                "delete_table_bread_quest": "{table} tablosunda BREAD'i silmek istediğinizden eminmisiniz ? ",
+                "delete_table_confirm": "Evet bu tabloyu sil",
+                "delete_table_question": "{table} tablosunu silmek istediğinizden eminmisiniz ? ",
+                "description": "Açıklama",
+                "display_name": "Görünüm adı",
+                "display_name_plural": "Görünüm adı (Çoğul)",
+                "display_name_singular": "Görünüm adı  (Tekil)",
+                "edit_bread": "BREAD düzenle",
+                "edit_bread_for_table": "{table} tablosu için BREAD düzenle",
+                "edit_rows": "Aşağıdaki {table} tablolarının satırlarını düzenleyin:",
+                "edit_table": "Aşağıdaki {table} tablolarını düzenleyin",
+                "edit_table_not_exist": "Düzenlemek istediğin tablo mevcut değil",
+                "error_creating_bread": "Maalesef, bu BREAD'i oluşturmakta bir sorun olabilir gibi görünüyor",
+                "error_removing_bread": "Maalesef, bu BREAD'i düzenlemekte bir sorun olabilir gibi görünüyor",
+                "error_updating_bread": "Maalesef, bu BREAD'i güncellemekde bir sorun olabilir gibi görünüyor",
+                "extra": "Extra",
+                "field": "Alan",
+                "field_safe_failed": "{field} alan kaydedilirken hata oluştur, veri tabanını geri sarıyorum",
+                "generate_permissions": "İzinleri oluştur",
+                "icon_class": "Bu tablo için İcon",
+                "icon_hint": "İcon (isteğe bağlı) kullanın",
+                "icon_hint2": "voyager ön yüz sınıfı",
+                "index": "İNDEKS",
+                "input_type": "Giriş tipi",
+                "key": "Anahtar",
+                "model_class": "Model Sınıf Adı",
+                "model_name": "Model Adı",
+                "model_name_ph": "ex. \\App\\User, E\u011Fer bo\u015F ise tablo ad\u0131n\u0131 deneyin",
+                "name_warning": "Lütfen indeks eklemden önce kolon adı belirleyin",
+                "no_composites_warning": "This table has composite indexes. Please note that they are not supported at the moment. Be careful when trying to add\/remove indexes.",
+                "null": "Boş",
+                "optional_details": "İsteğe Bağlı Ayrıntılar",
+                "primary": "BİRİNCİL",
+                "server_pagination": "Sunucu-taraflı sayfalama",
+                "success_create_table": "Başarılı tablo oluşturuldu {table} ",
+                "success_created_bread": "Başarılı yeni BREAD oluşturuldu",
+                "success_delete_table": "Başarılı tablo silindi {table} table",
+                "success_remove_bread": "Başarılı silindi BREAD şurdan {datatype}",
+                "success_update_bread": "Başarılı güncellendi {datatype} BREAD",
+                "success_update_table": "Başarılı tablo güncellendi {table} table",
+                "table_actions": "Tablo işlemleri",
+                "table_columns": "Tablo kolanları",
+                "table_has_index": "Tablo zaten birincil anahtarı var.",
+                "table_name": "Tablo Adı",
+                "table_no_columns": "Tabloda hiç kolan bulunamadı...",
+                "type": "Tip",
+                "type_not_supported": "Bu tip desteklenöiyor",
+                "unique": "BENZERSİZ",
+                "unknown_type": "Bilinmeyen Tip",
+                "update_table": "Tabloyu güncelle",
+                "url_slug": "Link yazısı (benzersiz olmalı)",
+                "url_slug_ph": "Link yazısı (ex. gonderi)",
+                "visibility": "Görünür"
+            },
+            "dimmer": {
+                "page": "Sayfa|Sayfalar",
+                "page_link_text": "Tüm sayfaları Görüntüle",
+                "page_text": " {count} kadar {string} veritabanınızda. Tıklayarak tüm sayfaları görün",
+                "post": "Gönderi|Gönderiler",
+                "post_link_text": "Tüm Gönderileri Görüntüle",
+                "post_text": "{count} kadar {string} veritabanınızda. Tıklayarak tüm Gönderileri görün",
+                "user": "Kullanıcı|Kullanıcılar",
+                "user_link_text": "Tüm Kullanıcları Görüntüle",
+                "user_text": "{count} kadar {string} veritabanınızda. Tıklayarak tüm kullanıcıları görün"
+            },
+            "form": {
+                "field_password_keep": "Aynı kalamsı için boş bırakın",
+                "field_select_dd_relationship": "Şurada uygun ilişkiyi kurduğunuzdan emin olun. {method} methodu ile {class} sınıfı içinde.",
+                "type_checkbox": "Çoklu seçim kutuları",
+                "type_codeeditor": "Kod Editörü",
+                "type_file": "Dosya",
+                "type_image": "Resim",
+                "type_radiobutton": "Radio kutular",
+                "type_richtextbox": "Metin Editörü",
+                "type_selectdropdown": "Seçim Kutusu",
+                "type_textarea": "Metin Alanı",
+                "type_textbox": "metin Kutusu"
+            },
+            "datatable": {
+                "sEmptyTable": "Tablo yok",
+                "sInfo": "_START_ ile _END_ arasında _TOTAL_ kadar kayıt görüntülendi",
+                "sInfoEmpty": "0 ile 0 arasında 0 kadar kayıt görüntülendi",
+                "sInfoFiltered": "( _MAX_ toplam bu kadar kayıt filtrelendi)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": " _MENU_ kayıtlarını göster",
+                "sLoadingRecords": "Yükleniyor...",
+                "sProcessing": "İşleniyor...",
+                "sSearch": "Search:",
+                "sZeroRecords": "Eşleşen bir kayıt bulunmamakta",
+                "oPaginate": {
+                    "sFirst": "İlk",
+                    "sLast": "Son",
+                    "sNext": "İleri",
+                    "sPrevious": "Geri"
+                },
+                "oAria": {
+                    "sSortAscending": ": activate artana göre sırala",
+                    "sSortDescending": ": activate azalana göre sırala"
+                }
+            },
+            "theme": {
+                "footer_copyright": "<i class=\"voyager-heart\"><\/i> ile yapıldı",
+                "footer_copyright2": "Rom ve daha da fazla romla yapılmış"
+            },
+            "json": {
+                "invalid": "Geçersiz Json",
+                "invalid_message": "Doğru olmıyan bir JSON gibi görünüyor",
+                "valid": "Doğru Json",
+                "validation_errors": "Doğrulama hatası"
+            },
+            "analytics": {
+                "by_pageview": "Sayfa görüntülenmeye göre",
+                "by_sessions": "Oturuma göre",
+                "by_users": "Kullanıcıya göre",
+                "no_client_id": "To view analytics you'll need to get a google analytics client id and add it to your settings for the key <code>google_analytics_client_id<\/code>. Get your key in your Google developer console:",
+                "set_view": "Görünüm seçin",
+                "this_vs_last_week": "Bu Hafta vs Geçen Hafta",
+                "this_vs_last_year": "Bu Yıl vs Geçen Yıl",
+                "top_browsers": "En çok girilen tarayıcı türü",
+                "top_countries": "En çok girilen ülke",
+                "various_visualizations": "Çeşitli görünümler"
+            },
+            "error": {
+                "symlink_created_text": "Kayıp depolama alanı sembolik bağlantısı sizin için onardık",
+                "symlink_created_title": "Kayıp depolama alanı sembolik bağlantısı oluşturuldu",
+                "symlink_failed_text": "Kayıp depolama alanı sembolik bağlantısını sizin için oluştururken sorun alıyoruzSunucunuz bunu desteklemiyor görünüyor.",
+                "symlink_failed_title": "Depolama alanı sembolik bağlantısı oluşturulamadı",
+                "symlink_missing_button": "Düzelt",
+                "symlink_missing_text": "Depolama alanı sembolik bağlantısı bulamadık. Şunun yüzünden olabilir Medya dosyalarını tarayıcıdan yüklerken",
+                "symlink_missing_title": "Depolama alanı sembolik bağlantısı eksik"
+            }
+        }
+    },
+    "uk": {
+        "voyager": {
+            "date": {
+                "last_week": "Минулого тижня",
+                "last_year": "Минулого року",
+                "this_week": "Цього тижня",
+                "this_year": "Цього року"
+            },
+            "generic": {
+                "action": "Дія",
+                "actions": "Дії",
+                "add": "Додати",
+                "add_folder": "Додати папку",
+                "add_new": "Додати",
+                "all_done": "Готово",
+                "are_you_sure": "Ви впевнені",
+                "are_you_sure_delete": "Ви дійсно хочете видалити",
+                "auto_increment": "Авто інкремент",
+                "browse": "Переглянути список",
+                "builder": "Конструктор",
+                "bulk_delete": "Видалити відмічені",
+                "bulk_delete_confirm": "Так, видалити це",
+                "bulk_delete_nothing": "Ви нічого не обрали для видалення!",
+                "cancel": "Відміна",
+                "choose_type": "Виберіть тип поля",
+                "click_here": "Натисніть тут",
+                "close": "Закрити",
+                "compass": "Компас",
+                "created_at": "Дата створення",
+                "custom": "Користувацька категорія",
+                "dashboard": "Панель управління",
+                "database": "База даних",
+                "default": "За замовчуванням",
+                "delete": "Видалити",
+                "delete_confirm": "Так, видалити!",
+                "delete_question": "Ви дійсно хотите видалити це?",
+                "delete_this_confirm": "Так, видалити це",
+                "deselect_all": "Скасувати видалення",
+                "download": "Завантаження",
+                "edit": "Редагувати",
+                "email": "Електронна пошта",
+                "error_deleting": "Під час видалення виникла помилка",
+                "exception": "Виняток",
+                "featured": "Рекомендуємий",
+                "field_does_not_exist": "Поле не існує",
+                "how_to_use": "Як використовувати",
+                "index": "Індекс",
+                "internal_error": "Внутрішня помилка",
+                "items": "Елемент(и)",
+                "keep_sidebar_open": "Розкривати панель",
+                "key": "Ключ",
+                "last_modified": "Остання зміна",
+                "length": "Довжина",
+                "login": "Вхід",
+                "media": "Медіа",
+                "menu_builder": "Конструктор меню",
+                "move": "Перемістити",
+                "name": "Назва",
+                "new": "Новинка",
+                "no": "Ні",
+                "no_thanks": "Ні, дякую",
+                "not_null": "Не Null",
+                "options": "Параметри",
+                "password": "Пароль",
+                "permissions": "Права доступу",
+                "profile": "Профіль",
+                "public_url": "Загальнодоступна URL-адреса",
+                "read": "Переглянути запис",
+                "rename": "Перейменувати",
+                "required": "Обов'язковий",
+                "return_to_list": "Повернутись до списку",
+                "route": "Маршрут",
+                "save": "Зберегти",
+                "search": "Шукати",
+                "select_all": "Вибрати все",
+                "settings": "Налаштування",
+                "showing_entries": "Показаний від {from} до {to} з {all} запис|Показано від {from} до {to} з {all} записів",
+                "submit": "Зберегти",
+                "successfully_added_new": "Успішне додання",
+                "successfully_deleted": "Успішне видалення",
+                "successfully_updated": "Успішне оновлення",
+                "timestamp": "Відмітка часу",
+                "title": "Назва",
+                "type": "Тип",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "Відкріпити бокову панель",
+                "update": "Оновити",
+                "update_failed": "Оновлення не вдалось",
+                "upload": "Завантажити на сервер",
+                "url": "URL",
+                "view": "Переглянути",
+                "viewing": "Перегляд",
+                "yes": "Так",
+                "yes_please": "Так, будь ласка"
+            },
+            "login": {
+                "loggingin": "Вхід в систему",
+                "signin_below": "Вхід тут:",
+                "welcome": "Ласкаво просимо до Voyager. Панель управління, якої не вистачало в Laravel"
+            },
+            "profile": {
+                "avatar": "Фото",
+                "edit": "Налаштування профілю",
+                "edit_user": "Змінити профіль",
+                "password": "Пароль",
+                "password_hint": "Залиште порожнім, щоб не змінювати",
+                "role": "Роль",
+                "user_role": "Роль користувача"
+            },
+            "settings": {
+                "usage_help": "Для того, щоб отримати значення параметрів, використовуйте в шаблоні код ",
+                "save": "Зберегти налаштування",
+                "new": "Створити налаштування",
+                "help_name": "Назва параметру (наприклад, Мій параметр)",
+                "help_key": "Ключ параметру (наприклад, my_parametr)",
+                "help_option": "(необов'язково, застосовується тільки до випадаючого списку чи радіо-кнопок)",
+                "add_new": "Додати новий параметр",
+                "delete_question": "Ви впевнені, що потрібно видалити параметр {setting}?",
+                "delete_confirm": "Так, видалити цей параметр",
+                "successfully_created": "Параметри успішно створені",
+                "successfully_saved": "Параметри успішно збережені",
+                "successfully_deleted": "Параметри успішно видалені",
+                "already_at_top": "Вже розміщено вверху списку",
+                "already_at_bottom": "Вже розміщено внизу списку",
+                "moved_order_up": "Параметр {name} переміщено догори",
+                "moved_order_down": "Параметр {name} переміщено донизу",
+                "successfully_removed": "Успішно видалено значення параметру {name}",
+                "group_general": "Основне",
+                "group_admin": "Адмін",
+                "group_site": "Сайт",
+                "group": "Група",
+                "help_group": "Прив'язати це налаштування до групи"
+            },
+            "media": {
+                "add_new_folder": "Додати нову папку",
+                "audio_support": "Ваш браузер не підтримує елемент audio.",
+                "create_new_folder": "Створити нову папку",
+                "delete_folder_question": "Видалення папки призведе до видалення всього її вмісту.",
+                "destination_folder": "Папка призначення",
+                "drag_drop_info": "Перетягніть файли мишкою або натисніть на кнопку знизу для завантаження.",
+                "error_already_exists": "Файл\/папка з такою назвою вже існує в даному каталозі",
+                "error_creating_dir": "Не вдалось створити папку: перевірте права доступу",
+                "error_deleting_file": "Не вдалось видалити файл: перевірте права доступу",
+                "error_deleting_folder": "Не вдалось видалити папку: перевірте права доступу",
+                "error_may_exist": "Файл чи папка з такою назвою вже існує: виберіть іншу назву або видаліть існуючий файл!",
+                "error_moving": "Не вдалось перемістити файл чи папку: перевірте права доступу.",
+                "error_uploading": "Помилка завантаження: сталась невідома помилка!",
+                "folder_exists_already": "Папка з такою назвою вже існує: видаліть її, якщо хочете створити нову з такою ж назвою.",
+                "image_does_not_exist": "Зображення не існує",
+                "image_removed": "Зображення видалено",
+                "library": "Медіатека",
+                "loading": "ЙДЕ ЗАВАНТАЖЕННЯ ВАШИХ ФАЙЛІВ",
+                "move_file_folder": "Перемістити файл\/папку",
+                "new_file_folder": "Нова назва файлу\/папки",
+                "new_folder_name": "Нова назва папки",
+                "no_files_here": "Тут немає файлів",
+                "no_files_in_folder": "Відсутні файли в даній папці",
+                "nothing_selected": "Нічого не обрано",
+                "rename_file_folder": "Перейменувати файл\/папку",
+                "success_uploaded_file": "Успішне завантаження файлу!",
+                "success_uploading": "Успішне завантаження зображення!",
+                "uploading_wrong_type": "Помилка завантаження: непідтримуваний формат файлу або завеликий розмір файлу для завантаження!",
+                "video_support": "Ваш браузер не підтримує елемент video.",
+                "crop": "Обрізати",
+                "crop_and_create": "Обрізати та створити",
+                "crop_override_confirm": "Існуюче зображення буде змінене, ви впевнені?",
+                "crop_image": "Обрізати зображення",
+                "success_crop_image": "Зображення успішно обрізано",
+                "height": "Висота: ",
+                "width": "Ширина: "
+            },
+            "menu_builder": {
+                "color": "Колір в RGB чи hex (необов'язково)",
+                "color_ph": "Колір (наприклад, #ffffff чи rgb(255, 255, 255)",
+                "create_new_item": "Створити новий пункт меню",
+                "delete_item_confirm": "Так, видалити цей пункт меню",
+                "delete_item_question": "Ви впевнені, що хочете видалити цей пункт меню?",
+                "drag_drop_info": "Перетягніть пункти меню нижче, щоб змінити їх порядок.",
+                "dynamic_route": "Динамічний шлях",
+                "edit_item": "Редагувати пункт меню",
+                "icon_class": "Іконка для пункту меню (Використовуйте ",
+                "icon_class2": "Voyager Font Class<\/a>)",
+                "icon_class_ph": "Іконка (необов'язково)",
+                "item_route": "Шлях для пункту меню",
+                "item_title": "Назва пункту меню",
+                "link_type": "Тип посилання",
+                "new_menu_item": "Новий пункт меню",
+                "open_in": "Відкрити в",
+                "open_new": "Нова вкладка\/вікно",
+                "open_same": "Та ж вкладка\/вікно",
+                "route_parameter": "Параметри шляху (якщо є)",
+                "static_url": "Статичний URL",
+                "successfully_created": "Пункт меню успішно створено.",
+                "successfully_deleted": "Пункт меню успішно видалено.",
+                "successfully_updated": "Пункт меню успішно оновлено.",
+                "updated_order": "Структуру меню успішно оновлено.",
+                "url": "URL для пункту меню",
+                "usage_hint": "Ви можете вивести меню в будь-якому місці вашого сайту, викликавши |Ви можете вивести це меню в будь-якому місці вашого сайту, викликавши "
+            },
+            "post": {
+                "category": "Категорія повідомлення",
+                "content": "Текст повідомлення",
+                "details": "Властивості",
+                "excerpt": "Анонс <small>Короткий опис статті<\/small>",
+                "image": "Зображення",
+                "meta_description": "Опис (meta)",
+                "meta_keywords": "Ключові слова (meta)",
+                "new": "Опублікувати",
+                "seo_content": "SEO текст",
+                "seo_title": "SEO назва",
+                "slug": "Посилання",
+                "status": "Статус публікації",
+                "status_draft": "Чернетка",
+                "status_pending": "На модерації",
+                "status_published": "Опубліковано",
+                "title": "Заголовок",
+                "title_sub": "Назва статті",
+                "update": "Оновити"
+            },
+            "database": {
+                "add_bread": "Додати BREAD до даної таблиці",
+                "add_new_column": "Додати новий стовпчик",
+                "add_softdeletes": "Додати Soft Deletes",
+                "add_timestamps": "Додати мітки часу",
+                "already_exists": "Вже існує",
+                "already_exists_table": "Таблиця {table} вже існує",
+                "bread_crud_actions": "BREAD\/CRUD дії",
+                "bread_info": "BREAD інформація",
+                "column": "Стовпчик",
+                "composite_warning": "Попередження: цей стовпчик є частиною складового індексу",
+                "controller_name": "Назва контролера",
+                "controller_name_hint": "наприклад, порожній PageController,  буде використовувати BREAD Controller",
+                "create_bread_for_table": "Створити BREAD для таблиці {table}",
+                "create_migration": "Створити міграцію для даної таблиці?",
+                "create_model_table": "Створити модель для даної таблиці?",
+                "create_new_table": "Створити нову таблицю",
+                "create_your_new_table": "Створити вашу нову таблицю",
+                "default": "За замовчуванням",
+                "delete_bread": "Видалити BREAD",
+                "delete_bread_before_table": "Перед видаленням таблиці обов'язково видаліть BREAD таблиці.",
+                "delete_table_bread_conf": "Так, видалити BREAD",
+                "delete_table_bread_quest": "Ви впевнені, що хочете видалити BREAD для таблиці {table}?",
+                "delete_table_confirm": "Так, видалити таблицю",
+                "delete_table_question": "Ви дійсно хочете видалити таблицю {table}?",
+                "description": "Опис",
+                "display_name": "Відображена назва",
+                "display_name_plural": "Відображена назва (в множині)",
+                "display_name_singular": "Відображена назва (в однині)",
+                "edit_bread": "Редагувати BREAD",
+                "edit_bread_for_table": "Редагувати BREAD для таблиці {table}",
+                "edit_rows": "Редагувати рядки таблиці {table} нижче",
+                "edit_table": "Редагувати таблицю {table} нижче",
+                "edit_table_not_exist": "Таблиці, яку ви хочете редагувати, не існує",
+                "error_creating_bread": "Схоже, виникла проблема з створенням даного BREAD",
+                "error_removing_bread": "Схоже, виникла проблема з видаленням даного BREAD",
+                "error_updating_bread": "Схоже, виникла проблема з оновленням даного BREAD",
+                "extra": "Додатково",
+                "field": "Поле",
+                "field_safe_failed": "Не вдалось зберегти поле {field}, буде проведено відкат до попереднього значення.",
+                "generate_permissions": "Створення прав доступу",
+                "icon_class": "Значок для даної таблиці",
+                "icon_hint": "Значок для (необов'язково)",
+                "icon_hint2": "Voyager Font Class",
+                "index": "INDEX",
+                "input_type": "Тип вводу",
+                "key": "Ключ",
+                "model_class": "Назва класу моделі",
+                "model_name": "Назва моделі",
+                "model_name_ph": "\u043D\u0430\u043F\u0440\u0438\u043A\u043B\u0430\u0434 \\App\\User, \u044F\u043A\u0449\u043E \u0437\u0430\u043B\u0438\u0448\u0438\u0442\u0438 \u043F\u043E\u0440\u043E\u0436\u043D\u0456\u043C - \u0441\u043F\u0440\u043E\u0431\u0443\u0454 \u0432\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u0430\u0442\u0438 \u043D\u0430\u0437\u0432\u0443 \u0442\u0430\u0431\u043B\u0438\u0446\u0456",
+                "name_warning": "Вкажіть стовпчик перед додаванням індексу",
+                "no_composites_warning": "В даній таблиці присутній складовий індекс. Зверніть увагу, що на даний момент вони не підтримуються. Будьте обережні при додаванні\/видаленні індексів.",
+                "null": "Null",
+                "optional_details": "Необов'язкові відомості",
+                "policy_class": "Назва класу політики",
+                "policy_name": "Назва політики",
+                "policy_name_ph": "\u043D\u0430\u043F\u0440\u0438\u043A\u043B\u0430\u0434 \\App\\Policies\\UserPolicy, \u044F\u043A\u0449\u043E \u0437\u0430\u043B\u0438\u0448\u0438\u0442\u0438 \u043F\u043E\u0440\u043E\u0436\u043D\u0456\u043C - \u0441\u043F\u0440\u043E\u0431\u0443\u0454 \u0432\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u0430\u0442\u0438 \u043F\u043E\u043B\u0456\u0442\u0438\u043A\u0443 \u0437\u0430 \u0437\u0430\u043C\u043E\u0432\u0447\u0443\u0432\u0430\u043D\u043D\u044F\u043C",
+                "primary": "ПЕРВИННИЙ КЛЮЧ",
+                "server_pagination": "Пагінація на стороні сервера",
+                "success_create_table": "Таблиця {table} успішно створена",
+                "success_created_bread": "Новий BREAD успішно створений",
+                "success_delete_table": "Таблиця {table} успішно видалена",
+                "success_remove_bread": "BREAD успішно видалений з {datatype}",
+                "success_update_bread": "BREAD успішно оновлений в {datatype}",
+                "success_update_table": "Таблиця {table} успішно оновлена",
+                "table_actions": "Дії з таблицею",
+                "table_columns": "Стовпчики таблиці",
+                "table_has_index": "В даній таблиці вже є первинний ключ.",
+                "table_name": "Назва таблиці",
+                "table_no_columns": "В таблиці відсутні стовпчики...",
+                "type": "Тип",
+                "type_not_supported": "Даний тип не підтримується",
+                "unique": "UNIQUE",
+                "unknown_type": "Невідомий тип",
+                "update_table": "Оновити таблицю",
+                "url_slug": "URL Slug (пвинен бути унікальним)",
+                "url_slug_ph": "URL slug (наприклад, posts)",
+                "visibility": "Видимість"
+            },
+            "dimmer": {
+                "page": "сторінка|сторінки",
+                "page_link_text": "Всі сторінки",
+                "page_text": "В базі даних {count} {string}",
+                "post": "запис|записи",
+                "post_link_text": "Всі записи",
+                "post_text": "В базі даних {count} {string}",
+                "user": "користувач|користувачів",
+                "user_link_text": "Всі користувачі",
+                "user_text": "В базі даних {count} {string}"
+            },
+            "form": {
+                "field_password_keep": "Залиште порожнім, якщо не хочете змінювати пароль",
+                "field_select_dd_relationship": "Обов'язково налаштуйте відповідні стосунки (relationship) в методі {method} класу {class}.",
+                "type_checkbox": "Чекбокс",
+                "type_codeeditor": "Редактор коду",
+                "type_file": "Файл",
+                "type_image": "Зображення",
+                "type_radiobutton": "Радіо-кнопка",
+                "type_richtextbox": "Візуальний редактор",
+                "type_selectdropdown": "Випадаючий список",
+                "type_textarea": "Текстове поле",
+                "type_textbox": "Поле вводу"
+            },
+            "datatable": {
+                "sEmptyTable": "В таблиці немає даних",
+                "sInfo": "Показано від _START_ до _END_ з _TOTAL_ записів",
+                "sInfoEmpty": "Показано 0 з 0 записів",
+                "sInfoFiltered": "(вибрано з _MAX_ записів)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Показати _MENU_ записів",
+                "sLoadingRecords": "Загрузка записів...",
+                "sProcessing": "Зачекайте...",
+                "sSearch": "Пошук:",
+                "sZeroRecords": "Записи відсутні",
+                "oPaginate": {
+                    "sFirst": "Перша",
+                    "sLast": "Остання",
+                    "sNext": "Наступна",
+                    "sPrevious": "Попередня"
+                },
+                "oAria": {
+                    "sSortAscending": ": активувати для сортування стовпчика за зростанням",
+                    "sSortDescending": ": активувати для сортування стовпчика за спаданням"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Зроблено з <i class=\"voyager-heart\"><\/i> ",
+                "footer_copyright2": "Зроблено під ромом :) "
+            },
+            "json": {
+                "invalid": "неправильний формат JSON",
+                "invalid_message": "Введено неправильний формат JSON",
+                "valid": "Правильний формат JSON",
+                "validation_errors": "Помилки при перевірці даних"
+            },
+            "analytics": {
+                "by_pageview": "По сторінках",
+                "by_sessions": "По сесіях",
+                "by_users": "По користувачах",
+                "no_client_id": "Для активації аналітики необхідно отримати ідентифікатор клієнта Google Analytics та додати його в поле <code>google_analytics_client_id<\/code> меню налаштувань. Отримати код Google Analytics: ",
+                "set_view": "Виберіть вид",
+                "this_vs_last_week": "Поточний тиждень в порівнянні з попереднім.",
+                "this_vs_last_year": "Поточний рік в порівнянні з попереднім",
+                "top_browsers": "Найкращі браузери",
+                "top_countries": "Найкращі країни",
+                "various_visualizations": "Різноманітні візуалізації"
+            },
+            "error": {
+                "symlink_created_text": "Ми щойно створили посилання для вас.",
+                "symlink_created_title": "Створено відсутнє посилання на сховище даних.",
+                "symlink_failed_text": "Не вдалось створити відсутнє посилання: схоже, справа в хостингу.",
+                "symlink_failed_title": "Не вдалось створити посилання для сховища даних.",
+                "symlink_missing_button": "Виправте",
+                "symlink_missing_text": "Не знайдено посилання на сховище даних: це може спричинити проблеми з завантаженням медіафайлів.",
+                "symlink_missing_title": "Відсутнє посилання на сховище даних."
+            }
+        }
+    },
+    "zh_CN": {
+        "voyager": {
+            "date": {
+                "last_week": "上周",
+                "last_year": "去年",
+                "this_week": "本周",
+                "this_year": "今年"
+            },
+            "generic": {
+                "action": "操作",
+                "actions": "操作",
+                "add": "添加",
+                "add_folder": "添加文件夹",
+                "add_new": "添加",
+                "all_done": "已全部完成",
+                "are_you_sure": "您确定吗？",
+                "are_you_sure_delete": "你确定要删除吗",
+                "auto_increment": "自增",
+                "browse": "浏览",
+                "builder": "构建器",
+                "bulk_delete": "删除选中",
+                "bulk_delete_confirm": "是的, 删除这些",
+                "bulk_delete_nothing": "没有选择要删除的内容",
+                "cancel": "取消",
+                "choose_type": "选择类型",
+                "click_here": "点击这里",
+                "close": "关闭",
+                "compass": "指南针",
+                "created_at": "创建于",
+                "custom": "自定义",
+                "dashboard": "控制面板",
+                "database": "数据库",
+                "default": "默认",
+                "delete": "删除",
+                "delete_confirm": "是的,删除它!",
+                "delete_question": "您确定要删除它吗？",
+                "delete_this_confirm": "是的，我要删除！",
+                "deselect_all": "反选全部",
+                "download": "下载",
+                "edit": "编辑",
+                "email": "电子邮件",
+                "error_deleting": "抱歉，在删除过程中出现了问题",
+                "exception": "异常",
+                "featured": "特色",
+                "field_does_not_exist": "字段不存在",
+                "how_to_use": "如何使用",
+                "index": "INDEX",
+                "internal_error": "内部错误",
+                "items": "项目",
+                "keep_sidebar_open": "保持边栏处在打开状态",
+                "key": "键",
+                "last_modified": "最近一次更改",
+                "length": "长度",
+                "login": "登录",
+                "media": "媒体",
+                "menu_builder": "菜单生成器",
+                "move": "移动",
+                "name": "命名",
+                "new": "新",
+                "no": "否",
+                "no_thanks": "不，谢谢",
+                "not_null": "非空",
+                "options": "选项",
+                "password": "密码",
+                "permissions": "权限",
+                "profile": "个人资料",
+                "public_url": "公开 URL",
+                "read": "读",
+                "rename": "重命名",
+                "required": "必须",
+                "return_to_list": "返回列表",
+                "route": "路由",
+                "save": "保存",
+                "search": "搜索",
+                "select_all": "选择全部",
+                "settings": "设置",
+                "showing_entries": "展示从 {from} 到 {to} 项结果，共 {all} 项|展示从 {from} 到 {to} 项结果，共 {all} 项",
+                "submit": "发布",
+                "successfully_added_new": "添加成功",
+                "successfully_deleted": "删除成功",
+                "successfully_updated": "更新成功",
+                "timestamp": "时间戳",
+                "title": "标题",
+                "type": "类型",
+                "unsigned": "Unsigned",
+                "unstick_sidebar": "取消固定侧边栏",
+                "update": "更新",
+                "update_failed": "更新失败",
+                "upload": "上传",
+                "url": "网址",
+                "view": "视图",
+                "viewing": "查看",
+                "yes": "是",
+                "yes_please": "是的，就这样做"
+            },
+            "login": {
+                "loggingin": "正在登录",
+                "signin_below": "在下方登录：",
+                "welcome": "欢迎使用 Voyager - 不可错过的 Laravel 后台管理框架"
+            },
+            "profile": {
+                "avatar": "头像",
+                "edit": "更改个人资料",
+                "edit_user": "编辑用户",
+                "password": "密码",
+                "password_hint": "留空为不修改密码",
+                "role": "权限",
+                "user_role": "用户权限"
+            },
+            "settings": {
+                "usage_help": "通过调用，您可以在站点的任何地方获得每个设置的值",
+                "save": "保存设置",
+                "new": "新设置",
+                "help_name": "设置名称 例如：管理标题",
+                "help_key": "设置键（key） 例如：admin_title",
+                "help_option": "(可选。仅适用于下拉框或单选按钮之类的某些类型)",
+                "add_new": "添加新设置",
+                "delete_question": "您确定要删除 {setting} 设置吗?",
+                "delete_confirm": "是的，删除此设置",
+                "successfully_created": "成功创建了设置",
+                "successfully_saved": "成功保存设置",
+                "successfully_deleted": "成功删除设置",
+                "already_at_top": "已经在顶部了",
+                "already_at_bottom": "已经在底部了",
+                "key_already_exists": "键 {key} 已存在",
+                "moved_order_up": "已将 {name} 设置抬升",
+                "moved_order_down": "已将 {name} 设置下沉",
+                "successfully_removed": "成功移除 {name} 的值",
+                "group_general": "概览",
+                "group_admin": "管理",
+                "group_site": "站点",
+                "group": "组",
+                "help_group": "这个设置被分配给"
+            },
+            "media": {
+                "add_new_folder": "添加新文件夹",
+                "audio_support": "您的浏览器不支持音频元素。",
+                "create_new_folder": "创建新文件夹",
+                "delete_folder_question": "此操作将连同其内的所有文件和文件夹一并删除",
+                "destination_folder": "目标文件夹",
+                "drag_drop_info": "拖放文件或点击下面的上传",
+                "error_already_exists": "对不起，相同名称的文件 \/ 文件夹已存在。",
+                "error_creating_dir": "对不起，创建目录似乎出了问题，请检查您的权限",
+                "error_deleting_file": "抱歉，在删除此文件时出现了错误，请检查您的权限",
+                "error_deleting_folder": "对不起，在删除此文件夹时出现了错误，请检查您的权限",
+                "error_may_exist": "可能已存在同名的文件或文件夹。请选择另一个名称或删除现有文件。",
+                "error_moving": "对不起，在移动文件 \/ 文件夹时出现了问题，请确保您有正确的权限。",
+                "error_uploading": "上传失败：发生未知错误！",
+                "folder_exists_already": "对不起，文件夹已经存在，如果您想重新创建，请删除该文件夹",
+                "image_does_not_exist": "图片不存在",
+                "image_removed": "图片已删除",
+                "library": "媒体库",
+                "loading": "加载你的媒体文件",
+                "move_file_folder": "移动文件或文件夹",
+                "new_file_folder": "新文件 \/ 文件夹的名字",
+                "new_folder_name": "新文件夹名称",
+                "no_files_here": "没有文件。",
+                "no_files_in_folder": "这个文件夹中没有文件。",
+                "nothing_selected": "没有选择文件或文件夹",
+                "rename_file_folder": "重命名文件或文件夹",
+                "success_uploaded_file": "成功上传新文件!",
+                "success_uploading": "图片上传成功!",
+                "uploading_wrong_type": "上传失败：不受支持的文件格式，或是它文件过大而无法上传!",
+                "video_support": "您的浏览器不支持视频标签。"
+            },
+            "menu_builder": {
+                "color": "RGB 或 Hex 颜色（可选）",
+                "color_ph": "颜色 (例如：#ffffff 或 rgb(255, 255, 255)",
+                "create_new_item": "创建一个新的菜单项",
+                "delete_item_confirm": "是的，删除这个菜单项",
+                "delete_item_question": "您确定要删除这个菜单项吗？",
+                "drag_drop_info": "拖放下面的菜单项重新排列。",
+                "dynamic_route": "动态路由",
+                "edit_item": "编辑菜单项",
+                "icon_class": "菜单项的字体图标类（使用",
+                "icon_class2": "Voyager 图标库<\/a>）",
+                "icon_class_ph": "Icon Class（可选）",
+                "item_route": "菜单项的路由",
+                "item_title": "菜单项的标题",
+                "link_type": "链接类型",
+                "new_menu_item": "新菜单项",
+                "open_in": "打开",
+                "open_new": "新标签页 \/ 窗口打开",
+                "open_same": "在相同标签 \/ 窗口打开",
+                "route_parameter": "路由参数（如果存在）",
+                "static_url": "静态 URL",
+                "successfully_created": "成功创建新菜单项。",
+                "successfully_deleted": "成功删除菜单项。",
+                "successfully_updated": "成功更新菜单项。",
+                "updated_order": "成功更新菜单顺序。",
+                "url": "菜单项的 URL",
+                "usage_hint": "您可以在网站的任意位置调用菜单，例：|您可以在网站的任意位置调用菜单，例："
+            },
+            "post": {
+                "category": "分类目录",
+                "content": "文章内容",
+                "details": "文章详细信息",
+                "excerpt": "文章摘要 <small>对该篇文章的简短描述<\/small>",
+                "image": "文章图片",
+                "meta_description": "Meta Description",
+                "meta_keywords": "Meta Keywords",
+                "new": "创建新文章",
+                "seo_content": "SEO Content",
+                "seo_title": "Seo Title",
+                "slug": "URL Slug",
+                "status": "发布状态",
+                "status_draft": "草稿",
+                "status_pending": "待审核",
+                "status_published": "已发布",
+                "title": "文章标题",
+                "title_sub": "该篇文章的标题",
+                "update": "更新文章"
+            },
+            "database": {
+                "add_bread": "添加 BREAD 至该表",
+                "add_new_column": "添加新列",
+                "add_softdeletes": "添加软删除",
+                "add_timestamps": "添加时间戳",
+                "already_exists": "已存在",
+                "already_exists_table": "表 {table} 已经存在",
+                "bread_crud_actions": "BREAD \/ CRUD 操作",
+                "bread_info": "BREAD 信息",
+                "browse_bread": "浏览 BREAD",
+                "column": "列",
+                "composite_warning": "警告：此列是复合索引的一部分",
+                "controller_name": "Controller 名称",
+                "controller_name_hint": "例如：PageController，如果留空将使用自带的 BREAD Controller",
+                "create_bread_for_table": "为表 {table} 创建 BREAD",
+                "create_migration": "为该表创建迁移？",
+                "create_model_table": "为该表创建模型（Model）？",
+                "create_new_table": "创建新表",
+                "create_your_new_table": "创建新表",
+                "default": "默认",
+                "delete_bread": "删除 BREAD",
+                "delete_bread_before_table": "请务必在删除表前先删除该表的 BREAD。",
+                "delete_table_bread_conf": "是的，删除该 BREAD",
+                "delete_table_bread_quest": "你确定要删除 {table} 表的 BREAD吗？",
+                "delete_table_confirm": "是的，删除该表",
+                "delete_table_question": "您确定要删除 {table} 表吗?",
+                "description": "描述",
+                "display_name": "显示名称",
+                "display_name_plural": "显示名称（复数）",
+                "display_name_singular": "显示名称（单数）",
+                "edit_bread": "编辑 BREAD",
+                "edit_bread_for_table": "编辑 BREAD {table}",
+                "edit_rows": "在下方编辑 {table} 行",
+                "edit_table": "在下方编辑 {table} 表",
+                "edit_table_not_exist": "您想要编辑的表不存在",
+                "error_creating_bread": "很抱歉，在创建 BREAD 时出现了问题",
+                "error_removing_bread": "很抱歉，在删除 BREAD 时出现了问题",
+                "error_updating_bread": "很抱歉，在更新 BREAD 时出现了问题",
+                "extra": "额外",
+                "field": "字段",
+                "field_safe_failed": "未能保存字段 {field}，正在回滚操作！",
+                "generate_permissions": "权限生成",
+                "icon_class": "用于该表的图标",
+                "icon_hint": "使用图标（可选）",
+                "icon_hint2": "Voyager 字体类",
+                "index": "INDEX",
+                "input_type": "输入类型",
+                "key": "键",
+                "model_class": "模型类名称",
+                "model_name": "模型名称",
+                "model_name_ph": "如果左侧留空，将尝试使用表名",
+                "name_warning": "请在添加索引之前给列命名",
+                "no_composites_warning": "此表有复合索引。请注意，他们目前不受支持。在尝试添加 \/ 删除索引时要小心。",
+                "null": "空",
+                "optional_details": "可选细项",
+                "primary": "主",
+                "server_pagination": "服务器端分页",
+                "success_create_table": "成功创建了{table} 表",
+                "success_created_bread": "成功创建 BREAD",
+                "success_delete_table": "成功删除表 {table}",
+                "success_remove_bread": "成功地从 {datatype} 中移除 BREAD",
+                "success_update_bread": "成功更新 {datatype} BREAD",
+                "success_update_table": "成功更新 {table} 表",
+                "table_actions": "表操作",
+                "table_columns": "表列",
+                "table_has_index": "该表已经有一个主索引。",
+                "table_name": "表名",
+                "table_no_columns": "该表没有列…",
+                "type": "类型",
+                "type_not_supported": "不支持这种类型",
+                "unique": "唯一",
+                "unknown_type": "未知类型",
+                "update_table": "更新表",
+                "url_slug": "URL Slug（必须是唯一的）",
+                "url_slug_ph": "URL Slug（例如文章）",
+                "visibility": "可见性",
+                "relationship": {
+                    "relationship": "关系",
+                    "relationships": "关系",
+                    "has_one": "Has One",
+                    "has_many": "Has Many",
+                    "belongs_to": "Belongs To",
+                    "belongs_to_many": "Belongs To Many",
+                    "which_column_from": "从哪一列...？",
+                    "is_used_to_reference": "被用于引用（reference）",
+                    "pivot_table": "中间表（Pivot）",
+                    "selection_details": "选择项详细信息",
+                    "display_the": "显示",
+                    "store_the": "保存",
+                    "easy_there": "别慌，舰长！",
+                    "before_create": "在您创建新关系时，您需要先创建它的 BREAD。<br>在这之后，返回到 BREAD 的编辑页面您就可以看到创建关系的相关项。",
+                    "cancel": "取消",
+                    "add_new": "添加新关系",
+                    "open": "打开",
+                    "close": "关闭",
+                    "relationship_details": "关系详细内容",
+                    "browse": "浏览",
+                    "read": "读取",
+                    "edit": "编辑",
+                    "add": "添加",
+                    "delete": "删除",
+                    "create": "创建关系",
+                    "namespace": "模型命名空间 (ex. App\\Category)"
+                }
+            },
+            "dimmer": {
+                "page": "页面|页面",
+                "page_link_text": "查看所有页面",
+                "page_text": "您有 {count} {string} 在数据库中。点击下面的按钮查看所有页面。",
+                "post": "文章|文章",
+                "post_link_text": "查看所有的帖子",
+                "post_text": "您有 {count} {string} 在数据库中。点击下面的按钮查看所有文章。",
+                "user": "用户|用户",
+                "user_link_text": "查看所有用户",
+                "user_text": "您有 {count} {string} 在数据库中。点击下面的按钮查看所有用户。"
+            },
+            "form": {
+                "field_password_keep": "留空以保持不变",
+                "field_select_dd_relationship": "确保在 {class} 类的 {method} 方法中设置适当的关系。",
+                "type_checkbox": "复选框",
+                "type_codeeditor": "代码编辑器",
+                "type_file": "文件",
+                "type_image": "图像",
+                "type_radiobutton": "单选按钮",
+                "type_richtextbox": "富文本框",
+                "type_selectdropdown": "选择下拉",
+                "type_textarea": "文本区域",
+                "type_textbox": "文本框"
+            },
+            "datatable": {
+                "sEmptyTable": "暂时没有内容哦",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sLoadingRecords": "载入中...",
+                "sProcessing": "处理中...",
+                "sSearch": "搜索：",
+                "sZeroRecords": "没有匹配结果",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sLast": "末页",
+                    "sNext": "下页",
+                    "sPrevious": "上页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "theme": {
+                "footer_copyright": "Made with <i class=\"voyager-heart\"><\/i> by",
+                "footer_copyright2": "Made with rum and even more rum"
+            },
+            "json": {
+                "invalid": "JSON 无效",
+                "invalid_message": "看起来您引入的是一个无效的 JSON",
+                "valid": "JSON 有效",
+                "validation_errors": "验证错误"
+            },
+            "analytics": {
+                "by_pageview": "以 PV",
+                "by_sessions": "以 Session",
+                "by_users": "以用户",
+                "no_client_id": "若需查看统计数据，您需要先注册 Google Analytics 并将所提供的网站 Client ID 以键名：<code>google_analytics_client_id<\/code> 添加到您的 Voyager 设置项。在 Google Developer Console 上获取您的 key 信息：",
+                "set_view": "选择一个视图",
+                "this_vs_last_week": "本周 VS 上周",
+                "this_vs_last_year": "今年 VS 去年",
+                "top_browsers": "使用最多的浏览器",
+                "top_countries": "访问量最高的国家",
+                "various_visualizations": "复合图表"
+            },
+            "error": {
+                "symlink_created_text": "我们刚刚为您创建了缺失的软连接。",
+                "symlink_created_title": "丢失的存储软连接已被重新创建",
+                "symlink_failed_text": "我们未能为您的应用程序生成缺失的软连接，似乎您的主机提供商不支持它。",
+                "symlink_failed_title": "无法创建丢失的存储软连接",
+                "symlink_missing_button": "修复",
+                "symlink_missing_text": "我们找不到一个存储软连接，这可能会导致从浏览器加载媒体文件的问题。",
+                "symlink_missing_title": "缺失的存储软连接"
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -60671,7 +69525,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 
 /***/ }),
-/* 159 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -60928,10 +69782,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 159;
+webpackContext.id = 162;
 
 /***/ }),
-/* 160 */
+/* 163 */
 /***/ (function(module, exports) {
 
 var start_date = "2018-07-06";
@@ -61002,19 +69856,19 @@ initializeDates = function initializeDates() {
 };
 
 /***/ }),
-/* 161 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(162)
+  __webpack_require__(165)
 }
-var normalizeComponent = __webpack_require__(167)
+var normalizeComponent = __webpack_require__(170)
 /* script */
-var __vue_script__ = __webpack_require__(168)
+var __vue_script__ = __webpack_require__(171)
 /* template */
-var __vue_template__ = __webpack_require__(169)
+var __vue_template__ = __webpack_require__(172)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -61053,17 +69907,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 162 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(163);
+var content = __webpack_require__(166);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(165)("662f91d9", content, false);
+var update = __webpack_require__(168)("662f91d9", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -61079,21 +69933,21 @@ if(false) {
 }
 
 /***/ }),
-/* 163 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(164)(undefined);
+exports = module.exports = __webpack_require__(167)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 164 */
+/* 167 */
 /***/ (function(module, exports) {
 
 /*
@@ -61175,7 +70029,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 165 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -61194,7 +70048,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(166)
+var listToStyles = __webpack_require__(169)
 
 /*
 type StyleObject = {
@@ -61396,7 +70250,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 166 */
+/* 169 */
 /***/ (function(module, exports) {
 
 /**
@@ -61429,7 +70283,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 167 */
+/* 170 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -61538,11 +70392,15 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 168 */
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -61857,7 +70715,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 169 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -61866,12 +70724,14 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "person-form" }, [
     _c("div", [
-      _c("h3", [_vm._v("Information")]),
+      _c("h3", [_vm._v(_vm._s(_vm.$t("index.information")))]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "form-group col-lg-6" }, [
           _c("label", [
-            _vm._v("First Name\n                    "),
+            _vm._v(
+              _vm._s(_vm.$t("index.first_name")) + "\n                    "
+            ),
             _c("input", {
               staticClass: "form-control",
               attrs: {
@@ -61885,7 +70745,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-lg-6" }, [
           _c("label", [
-            _vm._v("Name\n                    "),
+            _vm._v(_vm._s(_vm.$t("index.name")) + "\n                    "),
             _c("input", {
               staticClass: "form-control",
               attrs: {
@@ -61901,7 +70761,9 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "form-group col-lg-6" }, [
           _c("label", [
-            _vm._v("Date of Birth\n                    "),
+            _vm._v(
+              _vm._s(_vm.$t("index.date_of_birth")) + "\n                    "
+            ),
             _c("input", {
               staticClass: "form-control",
               attrs: {
@@ -61915,7 +70777,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-lg-6" }, [
           _c("label", [
-            _vm._v("Gender\n                    "),
+            _vm._v(_vm._s(_vm.$t("index.gender")) + "\n                    "),
             _c(
               "select",
               {
@@ -61929,12 +70791,22 @@ var render = function() {
                     staticStyle: { display: "none" },
                     attrs: { disabled: "", selected: "", value: "" }
                   },
-                  [_vm._v(" -- select an option --")]
+                  [
+                    _vm._v(
+                      "-- " +
+                        _vm._s(_vm.$t("index.select_option")) +
+                        "\n                            --\n                        "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "0" } }, [_vm._v("Male")]),
+                _c("option", { attrs: { value: "0" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.male")))
+                ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "1" } }, [_vm._v("Female")])
+                _c("option", { attrs: { value: "1" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.female")))
+                ])
               ]
             )
           ])
@@ -61944,7 +70816,10 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "form-group col-lg-6" }, [
           _c("label", [
-            _vm._v("Attendance Language\n                    "),
+            _vm._v(
+              _vm._s(_vm.$t("index.attendance_language")) +
+                "\n                    "
+            ),
             _c(
               "select",
               {
@@ -61955,11 +70830,17 @@ var render = function() {
                 }
               },
               [
-                _c("option", { attrs: { value: "0" } }, [_vm._v("English")]),
+                _c("option", { attrs: { value: "0" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.english")))
+                ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "1" } }, [_vm._v("Nederlands")]),
+                _c("option", { attrs: { value: "1" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.dutch")))
+                ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "2" } }, [_vm._v("Français")])
+                _c("option", { attrs: { value: "2" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.french")))
+                ])
               ]
             )
           ])
@@ -61967,7 +70848,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "form-group col-lg-6" }, [
           _c("label", [
-            _vm._v("Diet\n                    "),
+            _vm._v(_vm._s(_vm.$t("index.diet")) + "\n                    "),
             _c(
               "select",
               {
@@ -61981,15 +70862,25 @@ var render = function() {
                     staticStyle: { display: "none" },
                     attrs: { disabled: "", selected: "", value: "" }
                   },
-                  [_vm._v(" -- select an option --")]
+                  [
+                    _vm._v(
+                      " -- " +
+                        _vm._s(_vm.$t("index.select_option")) +
+                        "\n                            --\n                        "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "0" } }, [_vm._v("Standard")]),
+                _c("option", { attrs: { value: "0" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.standard")))
+                ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "1" } }, [_vm._v("Vegetarian")]),
+                _c("option", { attrs: { value: "1" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.vegetarian")))
+                ]),
                 _vm._v(" "),
                 _c("option", { attrs: { value: "2" } }, [
-                  _vm._v("Self-catering")
+                  _vm._v(_vm._s(_vm.$t("index.self_catering")))
                 ])
               ]
             )
@@ -61999,17 +70890,15 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", [
-      _c("h3", [_vm._v("Stay")]),
+      _c("h3", [_vm._v(_vm._s(_vm.$t("index.stay")))]),
       _vm._v(" "),
       _c("span", { staticClass: "help-block" }, [
-        _vm._v(
-          "The Summer School lasts from Friday 6th of July noon, to Tuesday 10th of July 4 pm. A commemoration for the martydom of the Báb will be held on Tuesday at 1 pm."
-        )
+        _vm._v(_vm._s(_vm.$t("index.stay_message")))
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "form-group col-lg-6" }, [
-          _c("h4", [_vm._v("Duration of Stay")]),
+          _c("h4", [_vm._v(_vm._s(_vm.$t("index.duration_stay")))]),
           _vm._v(" "),
           _c("div", { staticClass: "form-check" }, [
             _c("label", { staticClass: "form-check-label" }, [
@@ -62024,7 +70913,9 @@ var render = function() {
                 on: { change: _vm.hideMeals }
               }),
               _vm._v(
-                "\n                        Entire Stay\n                    "
+                "\n                        " +
+                  _vm._s(_vm.$t("index.entire_stay")) +
+                  "\n                    "
               )
             ])
           ]),
@@ -62041,18 +70932,23 @@ var render = function() {
                 on: { change: _vm.showMeals }
               }),
               _vm._v(
-                "\n                        Partial Stay\n                    "
+                "\n                        " +
+                  _vm._s(_vm.$t("index.partial_stay")) +
+                  "\n                    "
               )
             ])
           ]),
           _vm._v(" "),
           _c("div", { class: "stay-meals-" + _vm.index }, [
             _c("div", { staticClass: "form-group col-lg-12" }, [
-              _c("h4", [_vm._v("Arrival")]),
+              _c("h4", [_vm._v(_vm._s(_vm.$t("index.arrival")))]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
                 _c("label", [
-                  _vm._v("Days\n                                "),
+                  _vm._v(
+                    _vm._s(_vm.$t("index.days")) +
+                      "\n                                "
+                  ),
                   _c("input", {
                     staticClass: "form-control",
                     attrs: {
@@ -62074,9 +70970,13 @@ var render = function() {
                     }
                   }),
                   _vm._v(
-                    "\n                                Before Lunch\n                                "
+                    "\n                                " +
+                      _vm._s(_vm.$t("index.before_lunch")) +
+                      "\n                                "
                   ),
-                  _c("small", [_vm._v("(Please bring your own lunch)")])
+                  _c("small", [
+                    _vm._v("(" + _vm._s(_vm.$t("index.bring_own_lunch")) + ")")
+                  ])
                 ])
               ]),
               _vm._v(" "),
@@ -62091,7 +70991,9 @@ var render = function() {
                     }
                   }),
                   _vm._v(
-                    "\n                                Before Dinner\n                            "
+                    "\n                                " +
+                      _vm._s(_vm.$t("index.before_dinner")) +
+                      "\n                            "
                   )
                 ])
               ]),
@@ -62107,18 +71009,23 @@ var render = function() {
                     }
                   }),
                   _vm._v(
-                    "\n                                After Dinner\n                            "
+                    "\n                                " +
+                      _vm._s(_vm.$t("index.after_dinner")) +
+                      "\n                            "
                   )
                 ])
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group col-lg-12" }, [
-              _c("h4", [_vm._v("Departure")]),
+              _c("h4", [_vm._v(_vm._s(_vm.$t("index.departure")))]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
                 _c("label", [
-                  _vm._v("Days\n                                "),
+                  _vm._v(
+                    _vm._s(_vm.$t("index.days")) +
+                      "\n                                "
+                  ),
                   _c("input", {
                     staticClass: "form-control",
                     attrs: {
@@ -62140,7 +71047,9 @@ var render = function() {
                     }
                   }),
                   _vm._v(
-                    "\n                                Before Lunch\n                            "
+                    "\n                                " +
+                      _vm._s(_vm.$t("index.before_lunch")) +
+                      "\n                            "
                   )
                 ])
               ]),
@@ -62156,7 +71065,9 @@ var render = function() {
                     }
                   }),
                   _vm._v(
-                    "\n                                Before Dinner\n                            "
+                    "\n                                " +
+                      _vm._s(_vm.$t("index.before_dinner")) +
+                      "\n                            "
                   )
                 ])
               ]),
@@ -62172,7 +71083,9 @@ var render = function() {
                     }
                   }),
                   _vm._v(
-                    "\n                                After Dinner\n                            "
+                    "\n                                " +
+                      _vm._s(_vm.$t("index.after_dinner")) +
+                      "\n                            "
                   )
                 ])
               ])
@@ -62183,12 +71096,10 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", [
-      _c("h3", [_vm._v("Accommodation")]),
+      _c("h3", [_vm._v(_vm._s(_vm.$t("index.accommodation")))]),
       _vm._v(" "),
       _c("span", { staticClass: "help-block" }, [
-        _vm._v(
-          "This year, you have the choice between a regular room in the main building (La Ferme) or a deluxe room in the Bed&Breakfast across the street."
-        )
+        _vm._v(_vm._s(_vm.$t("index.accommodation_message")))
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
@@ -62215,7 +71126,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n                                Show Prices\n                            "
+                        "\n                                " +
+                          _vm._s(_vm.$t("index.show_prices")) +
+                          "\n                            "
                       )
                     ]
                   )
@@ -62240,29 +71153,46 @@ var render = function() {
                     { staticClass: "table table-striped table-bordered" },
                     [
                       _c("thead", [
-                        _vm._m(0),
+                        _c("tr", [
+                          _c("th", { attrs: { scope: "col" } }),
+                          _vm._v(" "),
+                          _c("th", { attrs: { colspan: "2", scope: "col" } }, [
+                            _vm._v(_vm._s(_vm.$t("index.regular")))
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { colspan: "2", scope: "col" } }, [
+                            _vm._v(_vm._s(_vm.$t("index.deluxe")))
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v(_vm._s(_vm.$t("index.no_accommodation")))
+                          ])
+                        ]),
                         _vm._v(" "),
                         _c("tr", [
                           _c("th", { attrs: { scope: "col" } }),
                           _vm._v(" "),
                           _c("th", { attrs: { scope: "col" } }, [
-                            _vm._v("Full (incl. meals)")
+                            _vm._v(_vm._s(_vm.$t("index.full_with_meal")))
                           ]),
                           _vm._v(" "),
                           _c("th", { attrs: { scope: "col" } }, [
-                            _vm._v("Partial (per day, incl. meals)")
+                            _vm._v(_vm._s(_vm.$t("index.partial_with_meal")))
                           ]),
                           _vm._v(" "),
                           _c("th", { attrs: { scope: "col" } }, [
-                            _vm._v("Full (incl. meals)")
+                            _vm._v(_vm._s(_vm.$t("index.full_with_meal")))
                           ]),
                           _vm._v(" "),
                           _c("th", { attrs: { scope: "col" } }, [
-                            _vm._v("Partial (per day, incl. meals)")
+                            _vm._v(_vm._s(_vm.$t("index.partial_with_meal")))
                           ]),
                           _vm._v(" "),
                           _c("th", { attrs: { scope: "col" } }, [
-                            _vm._v("Per day, excl. meals ("),
+                            _vm._v(
+                              _vm._s(_vm.$t("index.per_day_without_meal")) +
+                                " ("
+                            ),
                             _c(
                               "span",
                               {
@@ -62270,7 +71200,7 @@ var render = function() {
                                   id: "heading-meal-prices-" + _vm.index
                                 }
                               },
-                              [_vm._v("Meal Prices")]
+                              [_vm._v(_vm._s(_vm.$t("index.meal_prices")))]
                             ),
                             _vm._v(
                               ")\n                                        "
@@ -62282,13 +71212,192 @@ var render = function() {
                                   "table table-striped table-bordered",
                                 attrs: { id: "meal-prices-" + _vm.index }
                               },
-                              [_vm._m(1), _vm._v(" "), _vm._m(2)]
+                              [
+                                _c("thead", [
+                                  _c("tr", [
+                                    _c("th", { attrs: { scope: "col" } }, [
+                                      _vm._v(
+                                        _vm._s(_vm.$t("index.meal_warning")) +
+                                          "\n                                                "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { attrs: { scope: "col" } }, [
+                                      _vm._v(_vm._s(_vm.$t("index.lunch")))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { attrs: { scope: "col" } }, [
+                                      _vm._v(_vm._s(_vm.$t("index.dinner")))
+                                    ])
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("tbody", [
+                                  _c("tr", [
+                                    _c("th", { attrs: { scope: "row" } }, [
+                                      _vm._v(
+                                        _vm._s(_vm.$t("index.adults_and_kids"))
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "9 " + _vm._s(_vm.$t("index.euros"))
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "12 " + _vm._s(_vm.$t("index.euros"))
+                                      )
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("th", { attrs: { scope: "row" } }, [
+                                      _vm._v(
+                                        _vm._s(_vm.$t("index.children_3_5"))
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "6 " + _vm._s(_vm.$t("index.euros"))
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "7,20 " + _vm._s(_vm.$t("index.euros"))
+                                      )
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("th", { attrs: { scope: "row" } }, [
+                                      _vm._v(
+                                        _vm._s(_vm.$t("index.children_6_12"))
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "7 " + _vm._s(_vm.$t("index.euros"))
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        "9 " + _vm._s(_vm.$t("index.euros"))
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              ]
                             )
                           ])
                         ])
                       ]),
                       _vm._v(" "),
-                      _vm._m(3)
+                      _c("tbody", [
+                        _c("tr", [
+                          _c("th", { attrs: { scope: "row" } }, [
+                            _vm._v(_vm._s(_vm.$t("index.adults_and_kids")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("190 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("50 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("300 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("80 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("6 " + _vm._s(_vm.$t("index.euros")))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", { attrs: { scope: "row" } }, [
+                            _vm._v(_vm._s(_vm.$t("index.children_2")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(_vm.$t("index.free")))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(_vm.$t("index.free")))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(_vm.$t("index.free")))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(_vm.$t("index.free")))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(_vm.$t("index.free")))])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", { attrs: { scope: "row" } }, [
+                            _vm._v(
+                              _vm._s(_vm.$t("index.children_3_5")) + " (50%)"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("95 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("25 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("150 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("40 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("6 " + _vm._s(_vm.$t("index.euros")))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", { attrs: { scope: "row" } }, [
+                            _vm._v(
+                              _vm._s(_vm.$t("index.children_6_12")) + " (30%)"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("133 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("35 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("210 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("64 " + _vm._s(_vm.$t("index.euros")))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v("6 " + _vm._s(_vm.$t("index.euros")))
+                          ])
+                        ])
+                      ])
                     ]
                   )
                 ])
@@ -62301,7 +71410,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "form-group col-lg-6" }, [
           _c("label", [
-            _vm._v("Type\n                    "),
+            _vm._v(_vm._s(_vm.$t("index.type")) + "\n                    "),
             _c(
               "select",
               {
@@ -62318,15 +71427,25 @@ var render = function() {
                     staticStyle: { display: "none" },
                     attrs: { disabled: "", selected: "", value: "" }
                   },
-                  [_vm._v(" -- select an option --")]
+                  [
+                    _vm._v(
+                      " -- " +
+                        _vm._s(_vm.$t("index.select_option")) +
+                        "\n                            --\n                        "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "0" } }, [_vm._v("Standard")]),
+                _c("option", { attrs: { value: "0" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.standard")))
+                ]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "1" } }, [_vm._v("Deluxe")]),
+                _c("option", { attrs: { value: "1" } }, [
+                  _vm._v(_vm._s(_vm.$t("index.deluxe")))
+                ]),
                 _vm._v(" "),
                 _c("option", { attrs: { value: "2" } }, [
-                  _vm._v("No Accommodation")
+                  _vm._v(_vm._s(_vm.$t("index.no_accommodation")))
                 ])
               ]
             )
@@ -62352,7 +71471,11 @@ var render = function() {
               value: "1"
             }
           }),
-          _vm._v("\n                Single-room preferred\n            ")
+          _vm._v(
+            "\n                " +
+              _vm._s(_vm.$t("index.single_room_preferred")) +
+              "\n            "
+          )
         ])
       ]),
       _vm._v(" "),
@@ -62378,7 +71501,9 @@ var render = function() {
               }
             }),
             _vm._v(
-              "\n                This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per\n                parent)\n            "
+              "\n                " +
+                _vm._s(_vm.$t("index.child_with_parent")) +
+                "\n            "
             )
           ])
         ]
@@ -62386,142 +71511,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", { attrs: { scope: "col" } }),
-      _vm._v(" "),
-      _c("th", { attrs: { colspan: "2", scope: "col" } }, [_vm._v("Regular")]),
-      _vm._v(" "),
-      _c("th", { attrs: { colspan: "2", scope: "col" } }, [_vm._v("Deluxe")]),
-      _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("No Accommodation")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [
-          _vm._v(
-            "The meals have to be reserved before the XXth of XX.\n                                                    After this date, no meals can be ordered.\n                                                "
-          )
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Lunch")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Dinner")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tbody", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "row" } }, [
-          _vm._v("Adults and children over 13")
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("9 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("12 euros")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("th", { attrs: { scope: "row" } }, [_vm._v("Children from 3 to 5")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("6 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("7,20 euros")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("th", { attrs: { scope: "row" } }, [
-          _vm._v("Children from 6 to 12")
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("7 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("9 euros")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tbody", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "row" } }, [
-          _vm._v("Adults and children over 13")
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("190 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("50 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("300 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("80 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("6 euros")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("th", { attrs: { scope: "row" } }, [_vm._v("Children under 2")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Free")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Free")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Free")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Free")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Free")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("th", { attrs: { scope: "row" } }, [
-          _vm._v("Children from 3 to 5 (50%)")
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("95 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("25 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("150 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("40 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("6 euros")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("th", { attrs: { scope: "row" } }, [
-          _vm._v("Children from 6 to 12 (30%)")
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("133 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("35 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("210 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("64 euros")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("6 euros")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -62532,7 +71522,7 @@ if (false) {
 }
 
 /***/ }),
-/* 170 */
+/* 173 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -11,8 +11,22 @@
 |
 */
 
-Route::get('/', function () {
-    return redirect('register/create');
+Route::any('/', function () {
+    return redirect(session('locale') ?: Lang::getLocale());
+});
+
+Route::get('register/{sub}', function ($sub) {
+    return redirect(session('locale') ?: Lang::getLocale() . $sub);
+});
+
+Route::prefix('{lang?}')->middleware('locale')->group(function () {
+    Route::get('/', function () {
+        return redirect(session('locale') . '/register/create');
+    });
+    Route::get('register/create', 'RegisterController@create');
+    Route::get('register/success', function () {
+        return view('success');
+    });
 });
 
 Route::group(['prefix' => 'admin'], function () {
@@ -20,7 +34,3 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 Route::post('register', 'RegisterController@store');
-Route::get('register/create', 'RegisterController@create');
-Route::get('register/success', function () {
-    return view('success');
-});

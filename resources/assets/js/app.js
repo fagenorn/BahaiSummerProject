@@ -6,7 +6,19 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+
+import Vue from 'vue'
+import Vuex from 'vuex';
+import vuexI18n from 'vuex-i18n';
+import Locales from './vue-i18n-locales.generated.js';
+
+Vue.use(Vuex);
+const store = new Vuex.Store();
+Vue.use(vuexI18n.plugin, store);
+Vue.i18n.add('en', Locales.en);
+Vue.i18n.add('nl', Locales.nl);
+Vue.i18n.add('fr', Locales.fr);
+Vue.i18n.set('en');
 
 /**
  * Dev tools disabled when in production when compiling to production
@@ -28,7 +40,8 @@ require('./custom');
 Vue.component('person-form', require('./components/PersonForm.vue'));
 
 window.onload = function () {
-    new Vue({
+    window.App = new Vue({
+        store,
         el: '#peopleContainer',
         data: {
             people: [{destroyed: false}]

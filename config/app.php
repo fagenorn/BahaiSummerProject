@@ -79,7 +79,7 @@ return [
     */
 
     'locale' => 'en',
-
+    'locales' => ['fr', 'en', 'nl'],
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -179,6 +179,8 @@ return [
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+
+        MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
     ],
 
     /*
