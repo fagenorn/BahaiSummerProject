@@ -5,16 +5,11 @@
         <h1 class="display-3">Welcome</h1>
         <p class="lead">The online registration form for the Belgian Bahá'í Summer School.</p>
     </div>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    {!! Form::open(['url' => ['register'], 'method' => 'post', 'role'=> 'form', 'class' => 'form']) !!}
+    <div class="alert alert-danger print-error-msg" style="display: none">
+        <ul>
+        </ul>
+    </div>
+    {!! Form::open(['url' => ['register'], 'method' => 'post', 'role'=> 'form', 'class' => 'form', 'novalidate' => 'novalidate']) !!}
     <div class="col-lg-12 well">
         <div class="form-row">
             <div class="form-group col-lg-6">
@@ -47,7 +42,7 @@
             <div v-if="index !== lastVisableIndex" class="divider"></div>
         </div>
         <button class="btn btn-primary pull-right" type="button" v-on:click="addPerson()">Add Person</button>
-        {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
+        {{Form::submit('Submit', ['class' => 'btn btn-primary btn-submit'])}}
     </div>
     {!! Form::close() !!}
 @endsection

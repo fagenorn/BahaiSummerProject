@@ -60938,6 +60938,35 @@ var start_date = "2018-07-06";
 var end_date = "2018-07-10";
 
 initializeDates = function initializeDates() {
+    $(document).ready(function () {
+        $(".btn-submit").click(function (e) {
+            e.preventDefault();
+            var data = $(".form").serialize();
+
+            $.ajax({
+                url: "/register",
+                type: 'POST',
+                data: data,
+                success: function success(data) {
+                    if (!$.isEmptyObject(data.error)) {
+                        printErrorMsg(data.error);
+                        window.scrollTo(0, 0);
+                    } else {
+                        window.location.href = "success";
+                    }
+                }
+            });
+        });
+
+        function printErrorMsg(msg) {
+            $(".print-error-msg").show();
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display', 'block');
+            $.each(msg, function (key, value) {
+                $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+            });
+        }
+    });
     $("[rel=tooltip]").tooltip({ html: true });
     $('input[type="daterange-single-dob"]').each(function () {
         if (!this.value) $(this).daterangepicker({
@@ -60946,8 +60975,7 @@ initializeDates = function initializeDates() {
             },
             "forceParse": false,
             "singleDatePicker": true,
-            "showDropdowns": true,
-            "autoUpdateInput": false
+            "showDropdowns": true
         });
     });
 
@@ -60962,9 +60990,7 @@ initializeDates = function initializeDates() {
             "startDate": start_date,
             "endDate": end_date,
             "minDate": start_date,
-            "maxDate": end_date,
-            "autoUpdateInput": false
-
+            "maxDate": end_date
         });
     });
 };
@@ -61055,7 +61081,7 @@ exports = module.exports = __webpack_require__(164)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -61787,6 +61813,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['index'],
@@ -61796,7 +61824,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         initializeDates();
         $("input[name=rows\\[" + this.index + "\\]\\[dob\\]]").on('apply.daterangepicker', function (e, picker) {
-            picker.element.val(picker.startDate.format(picker.locale.format));
             var dob = $("input[name=rows\\[" + _this.index + "\\]\\[dob\\]]").data("daterangepicker").startDate;
             var age = Math.floor((new Date() - dob) / (365.25 * 24 * 60 * 60 * 1000));
             console.log(age);
@@ -61806,12 +61833,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 $("#free-child-" + _this.index).slideUp();
                 $("input[name=rows\\[" + _this.index + "\\]\\[acc_free_parent\\]]").prop('checked', false);
             }
-        });
-        $("input[name=rows\\[" + this.index + "\\]\\[arrival_date\\]]").on('apply.daterangepicker', function (e, picker) {
-            picker.element.val(picker.startDate.format(picker.locale.format));
-        });
-        $("input[name=rows\\[" + this.index + "\\]\\[departure_date\\]]").on('apply.daterangepicker', function (e, picker) {
-            picker.element.val(picker.startDate.format(picker.locale.format));
         });
         $("#heading-meal-prices-" + this.index).hover(function () {
             $("#meal-prices-" + _this.index).fadeIn(500);
@@ -61961,9 +61982,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("option", { attrs: { value: "1" } }, [_vm._v("Vegetarian")]),
                 _vm._v(" "),
-                _c("option", { attrs: { value: "2" } }, [_vm._v("Halal")]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "3" } }, [
+                _c("option", { attrs: { value: "2" } }, [
                   _vm._v("Self-catering")
                 ])
               ]
@@ -62049,8 +62068,9 @@ var render = function() {
                     }
                   }),
                   _vm._v(
-                    "\n                                Before Lunch\n                            "
-                  )
+                    "\n                                Before Lunch\n                                "
+                  ),
+                  _c("small", [_vm._v("(Please bring your own lunch)")])
                 ])
               ]),
               _vm._v(" "),
@@ -62161,7 +62181,7 @@ var render = function() {
       _vm._v(" "),
       _c("span", { staticClass: "help-block" }, [
         _vm._v(
-          "This year, you have the choice between a regular room in the main building or a deluxe room in the Bed&Breakfast across the street."
+          "This year, you have the choice between a regular room in the main building (La Ferme) or a deluxe room in the Bed&Breakfast across the street."
         )
       ]),
       _vm._v(" "),
@@ -62381,7 +62401,11 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }),
+        _c("th", { attrs: { scope: "col" } }, [
+          _vm._v(
+            "The meals have to be reserved before the XXth of XX.\n                                                    After this date, no meals can be ordered.\n                                                "
+          )
+        ]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Lunch")]),
         _vm._v(" "),

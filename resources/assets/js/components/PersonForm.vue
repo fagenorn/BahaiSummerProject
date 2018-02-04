@@ -43,8 +43,7 @@
                             <option style="display:none;" disabled selected value> -- select an option --</option>
                             <option value="0">Standard</option>
                             <option value="1">Vegetarian</option>
-                            <option value="2">Halal</option>
-                            <option value="3">Self-catering</option>
+                            <option value="2">Self-catering</option>
                         </select>
                     </label>
                 </div>
@@ -86,6 +85,7 @@
                                            :name="`rows[${index}][arrival_meal]`"
                                            value="0">
                                     Before Lunch
+                                    <small>(Please bring your own lunch)</small>
                                 </label>
                             </div>
                             <div class="form-check">
@@ -141,7 +141,7 @@
         </div>
         <div>
             <h3>Accommodation</h3>
-            <span class="help-block">This year, you have the choice between a regular room in the main building or a deluxe room in the Bed&Breakfast across the street.</span>
+            <span class="help-block">This year, you have the choice between a regular room in the main building (La Ferme) or a deluxe room in the Bed&Breakfast across the street.</span>
             <div class="row">
                 <div class="form-group col-lg-12">
                     <div class="card">
@@ -176,7 +176,9 @@
                                                    class="table table-striped table-bordered">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col"></th>
+                                                    <th scope="col">The meals have to be reserved before the XXth of XX.
+                                                        After this date, no meals can be ordered.
+                                                    </th>
                                                     <th scope="col">Lunch</th>
                                                     <th scope="col">Dinner</th>
                                                 </tr>
@@ -281,7 +283,6 @@
         mounted: function () {
             initializeDates();
             $("input[name=rows\\[" + this.index + "\\]\\[dob\\]]").on('apply.daterangepicker', (e, picker) => {
-                picker.element.val(picker.startDate.format(picker.locale.format));
                 let dob = $("input[name=rows\\[" + this.index + "\\]\\[dob\\]]").data("daterangepicker").startDate;
                 let age = Math.floor((new Date() - dob) / (365.25 * 24 * 60 * 60 * 1000));
                 console.log(age);
@@ -291,12 +292,6 @@
                     $("#free-child-" + this.index).slideUp();
                     $("input[name=rows\\[" + this.index + "\\]\\[acc_free_parent\\]]").prop('checked', false);
                 }
-            });
-            $("input[name=rows\\[" + this.index + "\\]\\[arrival_date\\]]").on('apply.daterangepicker', (e, picker) => {
-                picker.element.val(picker.startDate.format(picker.locale.format));
-            });
-            $("input[name=rows\\[" + this.index + "\\]\\[departure_date\\]]").on('apply.daterangepicker', (e, picker) => {
-                picker.element.val(picker.startDate.format(picker.locale.format));
             });
             $("#heading-meal-prices-" + this.index).hover(() => {
                 $("#meal-prices-" + this.index).fadeIn(500);

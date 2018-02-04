@@ -17,16 +17,20 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'last_name' => 'required|alpha',
             'address' => 'required',
             'email' => 'required|email',
             'phone' => 'required|phone',
         ]);
 
+        if (!$validator->passes()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
+
         foreach ($request->rows as $row) {
             /** @noinspection PhpUnhandledExceptionInspection */
-            Validator::make($row, [
+            $validator = Validator::make($row, [
                 'first_name' => 'required',
                 'last_name' => 'required',
                 'dob' => 'required|date_format:"Y-m-d"|before:today|after:120 years ago',
@@ -41,7 +45,11 @@ class RegisterController extends Controller
                 'arrival_meal' => ['required_if:full_stay,0', Rule::in(['0', '1', '2'])],
                 'departure_date' => 'required_if:full_stay,0|nullable|date_format:"Y-m-d"|after_or_equal:arrival_date|before_or_equal:2018-07-10',
                 'departure_meal' => ['required_if:full_stay,0', Rule::in(['0', '1', '2'])],
-            ])->validate();
+            ]);
+
+            if (!$validator->passes()) {
+                return response()->json(['error' => $validator->errors()->all()]);
+            }
         }
 
         $group = Group::create([
@@ -71,6 +79,6 @@ class RegisterController extends Controller
             ]);
         }
 
-        return view('success');
+        return response()->json(['success' => 'Added new records.']);
     }
 }

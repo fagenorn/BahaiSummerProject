@@ -21,3 +21,6 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::post('register', 'RegisterController@store');
 Route::get('register/create', 'RegisterController@create');
+Route::get('register/success', function () {
+    return view('success');
+});
