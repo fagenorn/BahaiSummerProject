@@ -18,7 +18,7 @@ Vue.use(vuexI18n.plugin, store);
 Vue.i18n.add('en', Locales.en);
 Vue.i18n.add('nl', Locales.nl);
 Vue.i18n.add('fr', Locales.fr);
-Vue.i18n.set('en');
+Vue.i18n.set(Laravel.locale);
 
 /**
  * Dev tools disabled when in production when compiling to production
