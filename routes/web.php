@@ -23,6 +23,8 @@ Route::get('register/{sub}', function ($sub) {
     return redirect(session('locale') ?: Lang::getLocale() . $sub);
 });
 
+Route::get('groups/{id}/invoice', 'InvoiceController@create');
+
 Route::prefix('{lang?}')->middleware('locale')->group(function () {
     Route::get('/', function () {
         return redirect(session('locale') . '/register/create');

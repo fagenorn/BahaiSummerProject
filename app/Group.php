@@ -16,8 +16,8 @@ class Group extends Model
         'last_name', 'address', 'email', 'phone'
     ];
 
-//    public function users()
-//    {
-//        return $this->hasMany(Participant::class, 'group_id', 'id');
-//    }
+    public function users()
+    {
+        return $this->hasMany(Participant::class, 'group_id', 'id');
+    }
 }
