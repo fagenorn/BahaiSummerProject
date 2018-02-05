@@ -14,7 +14,7 @@ class AddPaidToGroups extends Migration
     public function up()
     {
         Schema::table('groups', function ($table) {
-            $table->integer('paid');
+            $table->integer('paid')->default(0);
         });
     }
 

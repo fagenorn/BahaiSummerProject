@@ -1,40 +1,37 @@
 let start_date = "2018-07-06";
 let end_date = "2018-07-10";
-
-$(document).ready(function () {
-    let clicked = false;
-    $("#submit").on("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (!clicked) {
-            clicked = true;
-            let data = $(".form").serialize();
-            $.ajax({
-                url: "/register",
-                type: 'POST',
-                data: data,
-                success: function (data) {
-                    if (!$.isEmptyObject(data.error)) {
-                        printErrorMsg(data.error);
-                        window.scrollTo(0, 0);
-                        clicked = false;
-                    } else {
-                        window.location.href = "success";
-                    }
+let clicked = false;
+$(document).on("click", "#submit", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!clicked) {
+        clicked = true;
+        let data = $(".form").serialize();
+        $.ajax({
+            url: "/register",
+            type: 'POST',
+            data: data,
+            success: function (data) {
+                if (!$.isEmptyObject(data.error)) {
+                    printErrorMsg(data.error);
+                    window.scrollTo(0, 0);
+                    clicked = false;
+                } else {
+                    window.location.href = "success";
                 }
-            });
-        }
-    });
-
-    function printErrorMsg(msg) {
-        $(".print-error-msg").show();
-        $(".print-error-msg").find("ul").html('');
-        $(".print-error-msg").css('display', 'block');
-        $.each(msg, function (key, value) {
-            $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+            }
         });
     }
 });
+
+function printErrorMsg(msg) {
+    $(".print-error-msg").show();
+    $(".print-error-msg").find("ul").html('');
+    $(".print-error-msg").css('display', 'block');
+    $.each(msg, function (key, value) {
+        $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+    });
+}
 
 initializeDates = function () {
     $("[rel=tooltip]").tooltip({html: true});
