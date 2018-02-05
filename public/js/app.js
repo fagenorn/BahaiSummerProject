@@ -63379,7 +63379,7 @@ var index = {
     "fr": {
         "index": {
             "welcome": "Bienvenue",
-            "welcome_message": "Formulaire d’enregistremenent pour l’école d’été bahá\\’íe belge",
+            "welcome_message": "Formulaire d’enregistremenent pour l’école d’été bahá’íe belge",
             "family_name": "Nom de famille",
             "address": "Adresse",
             "phone": "Tél\/GSM",
