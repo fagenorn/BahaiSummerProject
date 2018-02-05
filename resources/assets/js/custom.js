@@ -5,6 +5,7 @@ $(document).ready(function () {
     let clicked = false;
     $("#submit").on("click", function (e) {
         e.preventDefault();
+        e.stopPropagation();
         if (!clicked) {
             clicked = true;
             let data = $(".form").serialize();
@@ -23,7 +24,6 @@ $(document).ready(function () {
                 }
             });
         }
-        return false;
     });
 
     function printErrorMsg(msg) {

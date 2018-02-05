@@ -69915,6 +69915,7 @@ $(document).ready(function () {
     var clicked = false;
     $("#submit").on("click", function (e) {
         e.preventDefault();
+        e.stopPropagation();
         if (!clicked) {
             clicked = true;
             var data = $(".form").serialize();
@@ -69933,7 +69934,6 @@ $(document).ready(function () {
                 }
             });
         }
-        return false;
     });
 
     function printErrorMsg(msg) {
