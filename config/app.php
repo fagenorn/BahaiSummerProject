@@ -181,6 +181,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
+
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*

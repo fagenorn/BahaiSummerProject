@@ -43,9 +43,9 @@ class RegisterController extends Controller
                 'acc_single_room' => 'required|boolean',
                 'acc_free_parent' => 'required|boolean|free_child:dob',
                 'full_stay' => 'required|boolean',
-                'arrival_date' => 'required_if:full_stay,0|nullable|date_format:"Y-m-d"|before_or_equal:departure_date|after_or_equal:2018-07-06',
+                'arrival_date' => 'required_if:full_stay,0|nullable|date_format:"Y-m-d"|before_or_equal:departure_date|after_or_equal:' . \Config::get('constants.start_day'),
                 'arrival_meal' => ['required_if:full_stay,0', Rule::in(['0', '1', '2'])],
-                'departure_date' => 'required_if:full_stay,0|nullable|date_format:"Y-m-d"|after_or_equal:arrival_date|before_or_equal:2018-07-10',
+                'departure_date' => 'required_if:full_stay,0|nullable|date_format:"Y-m-d"|after_or_equal:arrival_date|before_or_equal:' . \Config::get('constants.end_day'),
                 'departure_meal' => ['required_if:full_stay,0', Rule::in(['0', '1', '2'])],
             ]);
 
