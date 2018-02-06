@@ -89,7 +89,6 @@
                                            :name="`rows[${index}][arrival_meal]`"
                                            value="0">
                                     {{ $t('index.before_lunch') }}
-                                    <small>({{ $t('index.bring_own_lunch') }})</small>
                                 </label>
                             </div>
                             <div class="form-check">
