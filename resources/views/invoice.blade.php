@@ -39,8 +39,13 @@
             margin-bottom: 30px;
         }
 
-        .invoice-details, .invoice-customer {
+        .invoice-details {
             float: right;
+        }
+
+        .invoice-customer {
+            /*float: right;*/
+            display: inline-block;
         }
 
         p {
@@ -63,6 +68,7 @@
 
         .invoice-block {
             margin-bottom: 30px;
+            overflow: auto;
         }
 
         .table {
@@ -138,29 +144,31 @@
 <body>
 <div class="invoice-box">
     <div class="invoice-block">
-        <div class="invoice-logo">
-            <img src="https://camo.githubusercontent.com/7089de92c15e07062f4753149e942182d27845f3/687474703a2f2f692e696d6775722e636f6d2f7439473372464d2e706e67"
-                 style="width:100%; max-width:300px;">
+        {{--<div class="invoice-logo">--}}
+        {{--<img src="https://camo.githubusercontent.com/7089de92c15e07062f4753149e942182d27845f3/687474703a2f2f692e696d6775722e636f6d2f7439473372464d2e706e67"--}}
+        {{--style="width:100%; max-width:300px;">--}}
+        {{--</div>--}}
+        <div class="invoice-customer">
+            <p>{{$group -> last_name}}</p>
+            <p>{{$group -> address}}</p>
         </div>
         <div class="invoice-details">
             <p>Décompte / Rekening #: {{$group->invoice_number}}</p>
             <p>Date / Datum: {{$group->created_at->format('d/m/y')}}</p>
         </div>
     </div>
-    <div class="invoice-block">
-        <div class="invoice-business">
-            <p>Gîte d'Etape de Villers-Sainte-Gertrude</p>
-            <p>Rue du Millénaire, 1</p>
-            <p>B-6941 Villers-Sainte-Gertrude Belgique</p>
-        </div>
-        <div class="invoice-customer">
-            <p>{{$group -> last_name}}</p>
-            <p>{{$group -> address}}</p>
-        </div>
-    </div>
+    {{--<div class="invoice-block">--}}
+    {{--<div class="invoice-business">--}}
+    {{--<p></p>--}}
+    {{--</div>--}}
+    {{--<div class="invoice-customer">--}}
+    {{--<p>{{$group -> last_name}}</p>--}}
+    {{--<p>{{$group -> address}}</p>--}}
+    {{--</div>--}}
+    {{--</div>--}}
     <div class="table">
         <div class="table-header">
-            <div class="table-cell">Description / Beschrijving</div>
+            <div class="table-cell">Participation / Deelname</div>
             <div class="table-cell cell-two">Prix / Prijs</div>
         </div>
         <div>
@@ -201,9 +209,9 @@
         174
     </p>
     <div class="note-alt">
-        <strong>Rest van de betaling </strong>: door bank overschrijving (in één of meer keren) te betalen voor 15
+        <strong>Rest van de betaling </strong>: door bankoverschrijving (in één of meer keren) te betalen voor 1
         juli<br>
-        <strong>Solde</strong>: à payer (en une ou plusieurs fois) sur le compte avant le 15 juillet
+        <strong>Solde</strong>: à payer (en une ou plusieurs fois) sur le compte avant le 1er juillet
     </div>
     <div class="note">
         Compte/Rekening ASN des Bahá'ís de Belgique<br>

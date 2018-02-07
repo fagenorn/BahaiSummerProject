@@ -62461,7 +62461,7 @@ var index = {
             "free": "Free",
             "type": "Type",
             "single_room_preferred": "Single-room preferred",
-            "child_with_parent": "This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per parent)",
+            "child_with_parent": "This child is accompanied by a parent. I wish his\/her stay to be free of charge. (Valid only for one child per participating parent. Only valid if standard accommodation is selected. For children staying in a deluxe room, a price adjustment is calculated.)",
             "departure": "Departure",
             "information": "Information",
             "success": "Success",
@@ -63397,7 +63397,7 @@ var index = {
             "english": "Anglais",
             "dutch": "Néérlandais",
             "french": "Français",
-            "diet": "Diet",
+            "diet": "Régime alimentaire",
             "standard": "Classique",
             "vegetarian": "Végetarien",
             "self_catering": "Je cuisine mes repas",
@@ -63414,7 +63414,7 @@ var index = {
             "after_dinner": "Après le souper",
             "accommodation": "Hébergement",
             "accommodation_message": "Cette année, vous avez le choix entre une chamber “standard” dans le building principal (La Ferme), ou une chamber “Deluxe” dans le Bed&Breakfast d'en face.",
-            "show_prices": "Prix des chambres",
+            "show_prices": "Prix du séjour",
             "regular": "Standard",
             "deluxe": "Deluxe",
             "no_accommodation": "Sans hébergement",
@@ -63434,7 +63434,7 @@ var index = {
             "free": "Gratuit",
             "type": "Type",
             "single_room_preferred": "Supplément chambre single",
-            "child_with_parent": "Cet enfant est accompagné d’un parent. Je désire la gratuité pour lui. (Condition uniquement valable pour un enfant par parent participant à l'école d'été)",
+            "child_with_parent": "Cet enfant est accompagné d’un parent. Je désire la gratuité pour lui. (Condition uniquement valable pour un enfant par parent participant à l'école d'été. La gratuité n'est pas offerte en chambre deluxe, mais un ajustement de prix est calculé.)",
             "departure": "Départ",
             "information": "Information",
             "success": "Succès",
@@ -65203,7 +65203,7 @@ var index = {
             "free": "Gratis",
             "type": "Type",
             "single_room_preferred": "Voorkeur voor eenpersoonskamer",
-            "child_with_parent": "Dit kind wordt vergezeld door een ouder. Ik wens dat hun verblijf gratis is. (Slechts één kind per ouder)",
+            "child_with_parent": "Dit kind wordt vergezeld door een ouder. Ik wens dat zijn\/haar verblijf gratis is. (Alleen geldig voor één kind per deelnemende ouder. Alleen geldig als standaard accommodatie is geselecteerd. Voor kinderen die in een deluxe kamer verblijven, wordt een prijscorrectie berekend.)",
             "departure": "Vertrek",
             "information": "Informatie",
             "success": "Succes",
@@ -69952,7 +69952,9 @@ initializeDates = function initializeDates() {
             },
             "forceParse": false,
             "singleDatePicker": true,
-            "showDropdowns": true
+            "showDropdowns": true,
+            "minDate": "1900-01-01",
+            "maxDate": end_date
         });
     });
 

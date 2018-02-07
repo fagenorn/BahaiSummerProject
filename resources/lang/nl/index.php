@@ -56,7 +56,7 @@ return [
     'free' => 'Gratis',
     'type' => 'Type',
     'single_room_preferred' => 'Voorkeur voor eenpersoonskamer',
-    'child_with_parent' => 'Dit kind wordt vergezeld door een ouder. Ik wens dat hun verblijf gratis is. (Slechts één kind per ouder)',
+    'child_with_parent' => 'Dit kind wordt vergezeld door een ouder. Ik wens dat zijn/haar verblijf gratis is. (Alleen geldig voor één kind per deelnemende ouder. Alleen geldig als standaard accommodatie is geselecteerd. Voor kinderen die in een deluxe kamer verblijven, wordt een prijscorrectie berekend.)',
     'departure' => 'Vertrek',
     'information' => 'Informatie',
     'success' => 'Succes',

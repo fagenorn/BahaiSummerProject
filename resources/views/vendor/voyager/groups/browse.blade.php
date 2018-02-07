@@ -329,8 +329,7 @@
 
         $('td').on('click', '.invoice', function (e) {
             var group_id = $(this).data('id');
-            window.location.href = "/groups/" + group_id + "/invoice";
-            console.log(group_id);
+            window.open("/groups/" + group_id + "/invoice", '_blank');
         });
     </script>
 @stop

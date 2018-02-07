@@ -43,6 +43,8 @@ initializeDates = function () {
             "forceParse": false,
             "singleDatePicker": true,
             "showDropdowns": true,
+            "minDate": "1900-01-01",
+            "maxDate": end_date,
         });
     });
 

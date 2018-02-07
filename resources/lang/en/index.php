@@ -56,7 +56,7 @@ return [
     'free' => 'Free',
     'type' => 'Type',
     'single_room_preferred' => 'Single-room preferred',
-    'child_with_parent' => 'This child is accompanied by a parent. I wish their stay to be free of charge. (Only one child per parent)',
+    'child_with_parent' => 'This child is accompanied by a parent. I wish his/her stay to be free of charge. (Valid only for one child per participating parent. Only valid if standard accommodation is selected. For children staying in a deluxe room, a price adjustment is calculated.)',
     'departure' => 'Departure',
     'information' => 'Information',
     'success' => 'Success',

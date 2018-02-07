@@ -15,6 +15,6 @@ class InvoiceController extends Controller
         $group = Group::findOrFail($id);
 
         $pdf = PDF::loadView('invoice', array('group' => $group));
-        return $pdf->stream();
+        return $pdf->stream('invoice.pdf');
     }
 }
