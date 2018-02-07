@@ -126,8 +126,11 @@
             width: auto;
         }
 
-        .table-footer {
+        .table-footer .divider {
+            margin: 0 0 0 25px;
+            opacity: 0.3;
         }
+
 
     </style>
 </head>
@@ -170,6 +173,14 @@
         </div>
         <div class="table-footer">
             <div class="table-footer-group">
+                <div class="table-footer">
+                    <div class="table-cell cell-empty"></div>
+                    <div class="table-cell cell-total">Reduction:
+                        € {{$group->reduction > 0 ? '' : '+'}}{{number_format(-1 * $group->reduction,2,",",".")}}</div>
+                </div>
+                <div class="divider">
+                    <hr>
+                </div>
                 <div class="table-footer">
                     <div class="table-cell cell-empty"></div>
                     <div class="table-cell cell-total">Totaal: €{{number_format($group->total_price,2,",",".")}}</div>

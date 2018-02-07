@@ -32,7 +32,7 @@ class Group extends Model
         foreach ($this->users as $user) {
             $total += $user->price;
         }
-        return $total;
+        return $total - $this->reduction;
     }
 
     public function getDuePriceAttribute()
