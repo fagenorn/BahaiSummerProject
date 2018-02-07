@@ -219,4 +219,9 @@ class Participant extends Model
 
         return (($this->total_meals['lunch'] - $this->total_nights) * $price_lunch) + (($this->total_meals['dinner'] - $this->total_nights) * $price_dinner);
     }
+
+    private function hasParentOnDate($date)
+    {
+        return false;
+    }
 }

@@ -39,13 +39,19 @@
             margin-bottom: 30px;
         }
 
-        .invoice-details {
+        .invoice-details-group-parent {
+            height: 170px;
+        }
+
+        .invoice-details-group {
+            /*height: 300px;*/
+            /*text-align: right;*/
             float: right;
         }
 
-        .invoice-customer {
-            /*float: right;*/
+        .invoice-details, .invoice-customer {
             display: inline-block;
+            /*float: right;*/
         }
 
         p {
@@ -68,7 +74,6 @@
 
         .invoice-block {
             margin-bottom: 30px;
-            overflow: auto;
         }
 
         .table {
@@ -137,39 +142,49 @@
             opacity: 0.3;
         }
 
+        .description {
+            margin-top: 4px;
+        }
 
+        .price {
+            margin-top: -6px;
+        }
     </style>
 </head>
 
 <body>
 <div class="invoice-box">
-    <div class="invoice-block">
-        {{--<div class="invoice-logo">--}}
-        {{--<img src="https://camo.githubusercontent.com/7089de92c15e07062f4753149e942182d27845f3/687474703a2f2f692e696d6775722e636f6d2f7439473372464d2e706e67"--}}
-        {{--style="width:100%; max-width:300px;">--}}
-        {{--</div>--}}
-        <div class="invoice-customer">
-            <p>{{$group -> last_name}}</p>
-            <p>{{$group -> address}}</p>
-        </div>
-        <div class="invoice-details">
-            <p>Décompte / Rekening #: {{$group->invoice_number}}</p>
-            <p>Date / Datum: {{$group->created_at->format('d/m/y')}}</p>
+    <div class="invoice-details-group-parent">
+        <div class="invoice-details-group">
+            <div class="invoice-block">
+                {{--<div class="invoice-logo">--}}
+                {{--<img src="https://camo.githubusercontent.com/7089de92c15e07062f4753149e942182d27845f3/687474703a2f2f692e696d6775722e636f6d2f7439473372464d2e706e67"--}}
+                {{--style="width:100%; max-width:300px;">--}}
+                {{--</div>--}}
+                <div class="invoice-details">
+                    <p>Décompte / Rekening #: {{$group->invoice_number}}</p>
+                    <p>Date / Datum: {{$group->created_at->format('d/m/y')}}</p>
+                </div>
+            </div>
+            <div class="invoice-block">
+                {{--<div class="invoice-business">--}}
+                {{--<p>Gîte d'Etape de Villers-Sainte-Gertrude</p>--}}
+                {{--<p>Rue du Millénaire, 1</p>--}}
+                {{--<p>B-6941 Villers-Sainte-Gertrude Belgique</p>--}}
+                {{--</div>--}}
+                <div class="invoice-customer">
+                    <p>{{$group -> last_name}}</p>
+                    <p>{{$group -> address}}</p>
+                </div>
+            </div>
         </div>
     </div>
-    {{--<div class="invoice-block">--}}
-    {{--<div class="invoice-business">--}}
-    {{--<p></p>--}}
-    {{--</div>--}}
-    {{--<div class="invoice-customer">--}}
-    {{--<p>{{$group -> last_name}}</p>--}}
-    {{--<p>{{$group -> address}}</p>--}}
-    {{--</div>--}}
-    {{--</div>--}}
     <div class="table">
         <div class="table-header">
-            <div class="table-cell">Participation / Deelname</div>
-            <div class="table-cell cell-two">Prix / Prijs</div>
+            <div class="table-cell description">Participation à l'école d'été de Belgique<br>Deelname aan de Belgian
+                Summer School
+            </div>
+            <div class="table-cell cell-two price">Prix / Prijs</div>
         </div>
         <div>
             @foreach ($group->users as $user)
@@ -181,14 +196,16 @@
         </div>
         <div class="table-footer">
             <div class="table-footer-group">
-                <div class="table-footer">
-                    <div class="table-cell cell-empty"></div>
-                    <div class="table-cell cell-total">Réduction / Reductie:
-                        € {{$group->reduction < 0 ? '+' : ''}}{{number_format(-1 * $group->reduction,2,",",".")}}</div>
-                </div>
-                <div class="divider">
-                    <hr>
-                </div>
+                @if($group->reduction != 0)
+                    <div class="table-footer">
+                        <div class="table-cell cell-empty"></div>
+                        <div class="table-cell cell-total">Réduction / Reductie:
+                            € {{$group->reduction < 0 ? '+' : ''}}{{number_format(-1 * $group->reduction,2,",",".")}}</div>
+                    </div>
+                    <div class="divider">
+                        <hr>
+                    </div>
+                @endif
                 <div class="table-footer">
                     <div class="table-cell cell-empty"></div>
                     <div class="table-cell cell-total">Total / Totaal:
@@ -204,9 +221,9 @@
     </div>
     <p class="note-alt">
         <strong>Mededeling</strong>: {{$group->last_name}} Factuur N° {{$group->invoice_number}} Zomerschool 2018 -
-        174<br>
+        175<br>
         <strong>Communication</strong>: {{$group->last_name}} Factuur N° {{$group->invoice_number}} Ecole d'été 2018 -
-        174
+        175
     </p>
     <div class="note-alt">
         <strong>Rest van de betaling </strong>: door bankoverschrijving (in één of meer keren) te betalen voor 1

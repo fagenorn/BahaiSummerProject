@@ -264,7 +264,7 @@
                 <label class="form-check-label">
                     <input type='hidden' :name="`rows[${index}][acc_single_room]`" value='0'>
                     <input class="form-check-input" :name="`rows[${index}][acc_single_room]`" type="checkbox" value="1">
-                    {{ $t('index.single_room_preferred') }}
+                    {{ $t('index.single_room_preferred') }} <small>{{ $t('index.single_room_preferred_message') }}</small>
                 </label>
             </div>
             <div :id="`free-child-${index}`" class="form-check">

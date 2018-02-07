@@ -62,4 +62,5 @@ return [
     'success' => 'Success',
     'success_message' => 'Thank you. Your preregistration was successful. The logistics committee of the Summer School
             will send you your invoice. Once you have paid the 50% down payment, your registration will be complete.',
+    'single_room_preferred_message' => '(Additional charge per night. Standard: €12,50, Deluxe: €37,5)',
 ];

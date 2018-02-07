@@ -13,7 +13,7 @@ class InvoiceController extends Controller
         Voyager::canOrFail('read_groups');
 
         $group = Group::findOrFail($id);
-
+//        return view('invoice', array('group' => $group));
         $pdf = PDF::loadView('invoice', array('group' => $group));
         return $pdf->stream('invoice.pdf');
     }

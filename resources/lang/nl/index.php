@@ -62,4 +62,5 @@ return [
     'success' => 'Succes',
     'success_message' => 'Hartelijk bedankt. Je voorinschrijving was succesvol. Het logistiek comité van de Zomer School
             stuurt je een factuur. Zodra u de aanbetaling van 50% heeft betaald, is uw registratie voltooid.',
+    'single_room_preferred_message' => '(Extra kosten per nacht. Standaard: € 12,50, Deluxe: € 37,5)',
 ];

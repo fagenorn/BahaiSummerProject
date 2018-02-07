@@ -62465,7 +62465,8 @@ var index = {
             "departure": "Departure",
             "information": "Information",
             "success": "Success",
-            "success_message": "Thank you. Your preregistration was successful. The logistics committee of the Summer School\r\n            will send you your invoice. Once you have paid the 50% down payment, your registration will be complete."
+            "success_message": "Thank you. Your preregistration was successful. The logistics committee of the Summer School\r\n            will send you your invoice. Once you have paid the 50% down payment, your registration will be complete.",
+            "single_room_preferred_message": "(Additional charge per night. Standard: €12,50, Deluxe: €37,5)"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -63438,7 +63439,8 @@ var index = {
             "departure": "Départ",
             "information": "Information",
             "success": "Succès",
-            "success_message": "Merci. Vous êtes préenregistré à l’école d’été. Le comité de logistique vous enverra votre facture. Votre réservation sera complète une fois votre acompte payé."
+            "success_message": "Merci. Vous êtes préenregistré à l’école d’été. Le comité de logistique vous enverra votre facture. Votre réservation sera complète une fois votre acompte payé.",
+            "single_room_preferred_message": "(Supplément par nuit. Standard: 12,50 €, Deluxe: 37,5 €)"
         },
         "validation": {
             "accepted": "Le champ {attribute} doit être accepté.",
@@ -65207,7 +65209,8 @@ var index = {
             "departure": "Vertrek",
             "information": "Informatie",
             "success": "Succes",
-            "success_message": "Hartelijk bedankt. Je voorinschrijving was succesvol. Het logistiek comité van de Zomer School\r\n            stuurt je een factuur. Zodra u de aanbetaling van 50% heeft betaald, is uw registratie voltooid."
+            "success_message": "Hartelijk bedankt. Je voorinschrijving was succesvol. Het logistiek comité van de Zomer School\r\n            stuurt je een factuur. Zodra u de aanbetaling van 50% heeft betaald, is uw registratie voltooid.",
+            "single_room_preferred_message": "(Extra kosten per nacht. Standaard: € 12,50, Deluxe: € 37,5)"
         },
         "validation": {
             "accepted": "{attribute} moet geaccepteerd zijn.",
@@ -71589,8 +71592,11 @@ var render = function() {
           _vm._v(
             "\n                " +
               _vm._s(_vm.$t("index.single_room_preferred")) +
-              "\n            "
-          )
+              " "
+          ),
+          _c("small", [
+            _vm._v(_vm._s(_vm.$t("index.single_room_preferred_message")))
+          ])
         ])
       ]),
       _vm._v(" "),

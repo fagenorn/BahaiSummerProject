@@ -61,5 +61,5 @@ return [
     'information' => 'Information',
     'success' => 'Succès',
     'success_message' => 'Merci. Vous êtes préenregistré à l’école d’été. Le comité de logistique vous enverra votre facture. Votre réservation sera complète une fois votre acompte payé.',
-
+    'single_room_preferred_message' => '(Supplément par nuit. Standard: 12,50 €, Deluxe: 37,5 €)',
 ];
