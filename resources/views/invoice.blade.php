@@ -110,8 +110,8 @@
             -webkit-border-radius: 6px;
             border-radius: 6px;
             padding: 12px 25px 8px 0;
-            margin-left: 450px;
-            width: 180px;
+            margin-left: 360px;
+            width: 270px;
         }
 
         .cell-two {
@@ -143,8 +143,8 @@
                  style="width:100%; max-width:300px;">
         </div>
         <div class="invoice-details">
-            <p>Factuur #: {{$group->invoice_number}}</p>
-            <p>Datum: {{$group->created_at->format('d/m/y')}}</p>
+            <p>Décompte / Rekening #: {{$group->invoice_number}}</p>
+            <p>Date / Datum: {{$group->created_at->format('d/m/y')}}</p>
         </div>
     </div>
     <div class="invoice-block">
@@ -160,8 +160,8 @@
     </div>
     <div class="table">
         <div class="table-header">
-            <div class="table-cell">Beschrijving</div>
-            <div class="table-cell cell-two">Prijs</div>
+            <div class="table-cell">Description / Beschrijving</div>
+            <div class="table-cell cell-two">Prix / Prijs</div>
         </div>
         <div>
             @foreach ($group->users as $user)
@@ -175,28 +175,35 @@
             <div class="table-footer-group">
                 <div class="table-footer">
                     <div class="table-cell cell-empty"></div>
-                    <div class="table-cell cell-total">Reduction:
-                        € {{$group->reduction > 0 ? '' : '+'}}{{number_format(-1 * $group->reduction,2,",",".")}}</div>
+                    <div class="table-cell cell-total">Réduction / Reductie:
+                        € {{$group->reduction < 0 ? '+' : ''}}{{number_format(-1 * $group->reduction,2,",",".")}}</div>
                 </div>
                 <div class="divider">
                     <hr>
                 </div>
                 <div class="table-footer">
                     <div class="table-cell cell-empty"></div>
-                    <div class="table-cell cell-total">Totaal: €{{number_format($group->total_price,2,",",".")}}</div>
+                    <div class="table-cell cell-total">Total / Totaal:
+                        €{{number_format($group->total_price,2,",",".")}}</div>
                 </div>
                 <div class="table-footer">
                     <div class="table-cell cell-empty"></div>
-                    <div class="table-cell cell-total">Te Betalen: €{{number_format($group->due_price,2,",",".")}}</div>
+                    <div class="table-cell cell-total">A payer / Te Betalen:
+                        €{{number_format($group->due_price,2,",",".")}}</div>
                 </div>
             </div>
         </div>
     </div>
     <p class="note-alt">
-        <strong>Mededeling</strong>: {{$group->last_name}} Factuur N° {{$group->invoice_number}} Zomerschool 2018 - 174
+        <strong>Mededeling</strong>: {{$group->last_name}} Factuur N° {{$group->invoice_number}} Zomerschool 2018 -
+        174<br>
+        <strong>Communication</strong>: {{$group->last_name}} Factuur N° {{$group->invoice_number}} Ecole d'été 2018 -
+        174
     </p>
     <div class="note-alt">
-        <strong>Rest van de betaling </strong>: door bank overschrijving (in één of meer keren) te betalen voor 15 juli
+        <strong>Rest van de betaling </strong>: door bank overschrijving (in één of meer keren) te betalen voor 15
+        juli<br>
+        <strong>Solde</strong>: à payer (en une ou plusieurs fois) sur le compte avant le 15 juillet
     </div>
     <div class="note">
         Compte/Rekening ASN des Bahá'ís de Belgique<br>
