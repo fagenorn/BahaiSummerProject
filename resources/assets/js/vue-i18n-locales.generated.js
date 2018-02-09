@@ -2603,7 +2603,7 @@ export default {
             "dutch": "Néérlandais",
             "french": "Français",
             "diet": "Régime alimentaire",
-            "standard": "Classique",
+            "standard": "Standard",
             "vegetarian": "Végetarien",
             "self_catering": "Je cuisine mes repas",
             "stay": "Séjour",

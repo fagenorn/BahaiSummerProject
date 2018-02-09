@@ -181,8 +181,8 @@
     </div>
     <div class="table">
         <div class="table-header">
-            <div class="table-cell description">Participation à l'école d'été de Belgique<br>Deelname aan de Belgian
-                Summer School
+            <div class="table-cell description">Participation à l'école d'été de Belgique<br>Deelname aan de Belgishe
+                Zomer School
             </div>
             <div class="table-cell cell-two price">Prix / Prijs</div>
         </div>
