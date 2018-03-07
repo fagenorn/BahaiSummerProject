@@ -29,9 +29,9 @@ class InvoiceController extends Controller
             $excel->setTitle('Groups');
             $excel->sheet('Groups', function ($sheet) {
                 $sheet->row(1, array(
-                    'Last Name', 'Email', 'Phone'
+                    'Last Name', 'Email', 'Phone', 'Participants'
                 ));
-                $sheet->cells('A1:C1', function($cells) {
+                $sheet->cells('A1:D1', function ($cells) {
                     $cells->setFontSize(14);
                     $cells->setFontWeight('bold');
                     $cells->setAlignment('center');
@@ -40,9 +40,11 @@ class InvoiceController extends Controller
 
                 $groups = Group::all();
                 for ($i = 1; $i <= count($groups); $i++) {
-                    $group = $groups[$i-1];
-                    $sheet->row($i+1, array(
-                        $group -> last_name, $group -> email, $group -> phone
+                    $group = $groups[$i - 1];
+                    $sheet->row($i + 1, array(
+                        $group->last_name, $group->email, $group->phone, $group->users->map(function ($user) {
+                            return $user->last_name . " " . $user->first_name;
+                        })->implode(', ')
                     ));
                 }
             });
