@@ -24,6 +24,7 @@ Route::get('register/{sub}', function ($sub) {
 });
 
 Route::get('groups/{id}/invoice', 'InvoiceController@create');
+Route::get('groups/export', 'InvoiceController@download');
 
 Route::prefix('{lang?}')->middleware('locale')->group(function () {
     Route::get('/', function () {

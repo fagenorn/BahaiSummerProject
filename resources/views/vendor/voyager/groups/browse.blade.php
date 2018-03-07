@@ -12,6 +12,15 @@
                 <i class="voyager-plus"></i> <span>{{ __('voyager.generic.add_new') }}</span>
             </a>
         @endcan
+        @can('read',app($dataType->model_name))
+            <a href="/groups/export"
+               target="_blank"
+               title="Export"
+               class="btn btn-warning btn-add-new export">
+                <i class="voyager-file-text"></i> <span
+                        class="hidden-xs hidden-sm">Export</span>
+            </a>
+        @endcan
         @can('delete',app($dataType->model_name))
             @include('voyager::partials.bulk-delete')
         @endcan
@@ -219,7 +228,7 @@
                                                     <i class="voyager-file-text"></i> <span
                                                             class="hidden-xs hidden-sm">Invoice</span>
                                                 </a>
-                                            @endcan
+                                                @endcan
                                         </td>
                                     </tr>
                                 @endforeach
