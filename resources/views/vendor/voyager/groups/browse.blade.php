@@ -21,6 +21,15 @@
                         class="hidden-xs hidden-sm">Export</span>
             </a>
         @endcan
+        @can('read',app($dataType->model_name))
+            <a href="/groups/exportTables"
+               target="_blank"
+               title="Generate Tables"
+               class="btn btn-warning btn-add-new export">
+                <i class="voyager-file-text"></i> <span
+                        class="hidden-xs hidden-sm">Generate Tables</span>
+            </a>
+        @endcan
         @can('delete',app($dataType->model_name))
             @include('voyager::partials.bulk-delete')
         @endcan
@@ -228,7 +237,7 @@
                                                     <i class="voyager-file-text"></i> <span
                                                             class="hidden-xs hidden-sm">Invoice</span>
                                                 </a>
-                                                @endcan
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach

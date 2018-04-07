@@ -78,6 +78,23 @@ class Participant extends Model
         return $this->belongsTo(Group::class, 'group_id', 'id');
     }
 
+    public function isPresentOnDate($date)
+    {
+        $start_date = new DateTime(\Config::get('constants.start_day'));
+        $end_date = new DateTime(\Config::get('constants.end_day'));
+
+        if ($date > $end_date || $date < $start_date) {
+            return false;
+        }
+
+        if ($this->full_stay) {
+            return true;
+        }
+
+        $date = $date->format('Y-m-d');
+        return $this->arrival_date <= $date && $this->departure_date >= $date;
+    }
+
     public function getAgeTypeAttribute()
     {
         $age = $this->age;
@@ -97,6 +114,19 @@ class Participant extends Model
         }
 
         return $age_type;
+    }
+
+    public function getGenderNameAttribute()
+    {
+        $gender = $this->gender;
+        switch ($gender) {
+            case '0': //the range from range of 0-20
+                return 'Male';
+            case '1': //range of 21-40
+                return 'Female';
+            default: //range of 21-40
+                return 'N/A';
+        }
     }
 
     public function getPriceAttribute()
