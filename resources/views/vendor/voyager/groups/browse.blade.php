@@ -12,28 +12,58 @@
                 <i class="voyager-plus"></i> <span>{{ __('voyager.generic.add_new') }}</span>
             </a>
         @endcan
+        @can('delete',app($dataType->model_name))
+            @include('voyager::partials.bulk-delete')
+        @endcan
+        @include('voyager::multilingual.language-selector')
+    </div>
+    <div class="container-fluid">
+        <h1 class="page-title"><i class="voyager-data"></i>Tables</h1>
         @can('read',app($dataType->model_name))
             <a href="/groups/export"
                target="_blank"
                title="Export"
                class="btn btn-warning btn-add-new export">
                 <i class="voyager-file-text"></i> <span
-                        class="hidden-xs hidden-sm">Export</span>
+                        class="hidden-xs hidden-sm">Service coord.</span>
             </a>
         @endcan
         @can('read',app($dataType->model_name))
-            <a href="/groups/exportTables"
+            <a href="/groups/export/meals"
                target="_blank"
                title="Generate Tables"
                class="btn btn-warning btn-add-new export">
-                <i class="voyager-file-text"></i> <span
-                        class="hidden-xs hidden-sm">Generate Tables</span>
+                <i class="voyager-pizza"></i> <span
+                        class="hidden-xs hidden-sm">Meals</span>
             </a>
         @endcan
-        @can('delete',app($dataType->model_name))
-            @include('voyager::partials.bulk-delete')
+        @can('read',app($dataType->model_name))
+            <a href="/groups/export/payments"
+               target="_blank"
+               title="Generate Tables"
+               class="btn btn-warning btn-add-new export">
+                <i class="voyager-dollar"></i> <span
+                        class="hidden-xs hidden-sm">Payments</span>
+            </a>
         @endcan
-        @include('voyager::multilingual.language-selector')
+        @can('read',app($dataType->model_name))
+            <a href="/groups/export/age_language"
+               target="_blank"
+               title="Generate Tables"
+               class="btn btn-warning btn-add-new export">
+                <i class="voyager-group"></i> <span
+                        class="hidden-xs hidden-sm">Age & Language</span>
+            </a>
+        @endcan
+        @can('read',app($dataType->model_name))
+            <a href="/groups/export/days_distribution"
+               target="_blank"
+               title="Generate Tables"
+               class="btn btn-warning btn-add-new export">
+                <i class="voyager-calendar"></i> <span
+                        class="hidden-xs hidden-sm">Days Distribution</span>
+            </a>
+        @endcan
     </div>
 @stop
 

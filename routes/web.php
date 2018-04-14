@@ -25,7 +25,10 @@ Route::get('register/{sub}', function ($sub) {
 
 Route::get('groups/{id}/invoice', 'InvoiceController@create');
 Route::get('groups/export', 'InvoiceController@download');
-Route::get('groups/exportTables', 'InvoiceController@downloadTables');
+Route::get('groups/export/payments', 'InvoiceController@downloadPayments');
+Route::get('groups/export/meals', 'InvoiceController@downloadMeals');
+Route::get('groups/export/age_language', 'InvoiceController@downloadAgeLanguage');
+Route::get('groups/export/days_distribution', 'InvoiceController@downloadDaysDistribution');
 
 Route::prefix('{lang?}')->middleware('locale')->group(function () {
     Route::get('/', function () {

@@ -54,12 +54,12 @@ class InvoiceController extends Controller
         })->download('xlsx');
     }
 
-    public function downloadTables()
+    public function downloadAgeLanguage()
     {
         Voyager::canOrFail('read_groups');
 
-        Excel::create('Group Tables', function ($excel) {
-            $excel->setTitle('Our new awesome title');
+        Excel::create('Age and Language', function ($excel) {
+            $excel->setTitle('Age & Language');
 
             $excel->sheet('Age & Language', function ($sheet) {
                 $languages = [
@@ -72,10 +72,13 @@ class InvoiceController extends Controller
                     ['text' => 'Surname', 'prop' => 'last_name'],
                     ['text' => 'Gender', 'prop' => 'gender_name']
                 ];
+
                 $age_groups = [
-                    ['text' => 'Under 3 years', 'min' => 0, 'max' => 2],
-                    ['text' => '3 to 11 years', 'min' => 3, 'max' => 11],
-                    ['text' => 'Over 11 years', 'min' => 12, 'max' => 999]
+                    ['text' => '0 to 3 years', 'min' => 0, 'max' => 3],
+                    ['text' => '4 to 10 years', 'min' => 4, 'max' => 10],
+                    ['text' => '11 to 15 years', 'min' => 11, 'max' => 15],
+                    ['text' => '16 to 30 years', 'min' => 16, 'max' => 30],
+                    ['text' => 'Over 30 years', 'min' => 31, 'max' => 999],
                 ];
 
                 $tallest = 0;
@@ -202,6 +205,15 @@ class InvoiceController extends Controller
                     $cell->setBackground('#F4B084');
                 });
             });
+        })->download('xlsx');
+    }
+
+    public function downloadDaysDistribution()
+    {
+        Voyager::canOrFail('read_groups');
+
+        Excel::create('Days Distribution', function ($excel) {
+            $excel->setTitle('Days Distribution');
 
             $excel->sheet('Days Distribution', function ($sheet) {
                 $headers = [
@@ -210,9 +222,11 @@ class InvoiceController extends Controller
                     ['text' => 'Gender', 'prop' => 'gender_name']
                 ];
                 $age_groups = [
-                    ['text' => 'Under 3 years', 'min' => 0, 'max' => 2],
-                    ['text' => '3 to 11 years', 'min' => 3, 'max' => 11],
-                    ['text' => 'Over 11 years', 'min' => 12, 'max' => 999]
+                    ['text' => '0 to 3 years', 'min' => 0, 'max' => 3],
+                    ['text' => '4 to 10 years', 'min' => 4, 'max' => 10],
+                    ['text' => '11 to 15 years', 'min' => 11, 'max' => 15],
+                    ['text' => '16 to 30 years', 'min' => 16, 'max' => 30],
+                    ['text' => 'Over 30 years', 'min' => 31, 'max' => 999],
                 ];
 
                 $dates = [];
@@ -354,6 +368,15 @@ class InvoiceController extends Controller
                     $cell->setBackground('#F4B084');
                 });
             });
+        })->download('xlsx');
+    }
+
+    public function downloadMeals()
+    {
+        Voyager::canOrFail('read_groups');
+
+        Excel::create('Meals', function ($excel) {
+            $excel->setTitle('Meals');
 
             $excel->sheet('Meals', function ($sheet) {
                 $meals = [
@@ -513,6 +536,15 @@ class InvoiceController extends Controller
                     $cell->setBackground('#F4B084');
                 });
             });
+        })->download('xlsx');
+    }
+
+    public function downloadPayments()
+    {
+        Voyager::canOrFail('read_groups');
+
+        Excel::create('Payments', function ($excel) {
+            $excel->setTitle('Payments');
 
             $excel->sheet('Payments', function ($sheet) {
                 $headers = [
@@ -598,4 +630,6 @@ class InvoiceController extends Controller
             });
         })->download('xlsx');
     }
+
+
 }
