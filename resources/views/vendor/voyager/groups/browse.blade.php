@@ -38,6 +38,15 @@
             </a>
         @endcan
         @can('read',app($dataType->model_name))
+            <a href="/groups/export/accommodation"
+               target="_blank"
+               title="Generate Tables"
+               class="btn btn-warning btn-add-new export">
+                <i class="voyager-home"></i> <span
+                        class="hidden-xs hidden-sm">Accommodation</span>
+            </a>
+        @endcan
+        @can('read',app($dataType->model_name))
             <a href="/groups/export/payments"
                target="_blank"
                title="Generate Tables"
@@ -53,6 +62,15 @@
                class="btn btn-warning btn-add-new export">
                 <i class="voyager-group"></i> <span
                         class="hidden-xs hidden-sm">Age & Language</span>
+            </a>
+        @endcan
+        @can('read',app($dataType->model_name))
+            <a href="/groups/export/free_paying"
+               target="_blank"
+               title="Generate Tables"
+               class="btn btn-warning btn-add-new export">
+                <i class="voyager-group"></i> <span
+                        class="hidden-xs hidden-sm">Free / Paying</span>
             </a>
         @endcan
         @can('read',app($dataType->model_name))

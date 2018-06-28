@@ -71,6 +71,7 @@ class RegisterController extends Controller
                 'language' => $row['language'],
                 'diet' => $row['diet'],
                 'acc_type' => $row['acc_type'],
+                'meals_disabled' => \Config::get('constants.meals_disabled'),
                 'acc_single_room' => $row['acc_single_room'],
                 'acc_free_parent' => $row['acc_free_parent'],
                 'full_stay' => $row['full_stay'],

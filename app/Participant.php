@@ -15,7 +15,7 @@ class Participant extends Model
      * @var array
      */
     protected $fillable = [
-        'group_id', 'first_name', 'last_name', 'dob', 'gender', 'language', 'diet', 'acc_type', 'acc_single_room', 'acc_free_parent', 'full_stay', 'arrival_date', 'arrival_meal', 'departure_date', 'departure_meal',
+        'group_id', 'first_name', 'last_name', 'dob', 'gender', 'language', 'meals_disabled', 'diet', 'acc_type', 'acc_single_room', 'acc_free_parent', 'full_stay', 'arrival_date', 'arrival_meal', 'departure_date', 'departure_meal',
     ];
 
     private $full_prices_standard = [

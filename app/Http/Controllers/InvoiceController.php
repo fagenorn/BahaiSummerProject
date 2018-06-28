@@ -208,6 +208,112 @@ class InvoiceController extends Controller
         })->download('xlsx');
     }
 
+    public function downloadFreePaying()
+    {
+        Voyager::canOrFail('read_groups');
+
+        Excel::create('Free - Paying', function ($excel) {
+            $excel->setTitle('Free - Paying');
+
+            $excel->sheet('Free - Paying', function ($sheet) {
+                $headers = [
+                    ['text' => 'Name', 'prop' => 'first_name'],
+                    ['text' => 'Surname', 'prop' => 'last_name'],
+                    ['text' => 'Gender', 'prop' => 'gender_name']
+                ];
+
+                $age_groups = [
+                    ['text' => '0 to 3 years', 'min' => 0, 'max' => 3],
+                    ['text' => 'Over 3 years', 'min' => 4, 'max' => 99999],
+                ];
+
+                $participants_all = Participant::all();
+                $col = 'B';
+                $row = 2;
+
+                for ($j = 0; $j < sizeof($headers); $j++) {
+                    $header = $headers[$j];
+                    $sheet->cell(chr(ord($col) + $j) . $row, function ($cell) use ($header) {
+                        $cell->setValue($header['text']);
+                        $cell->setFontSize(12);
+                        $cell->setFontWeight('bold');
+                        $cell->setBorder('medium', 'medium', 'medium', 'medium');
+                        $cell->setAlignment('center');
+                        $cell->setValignment('center');
+                    });
+                }
+
+                // Create age groups
+                for ($j = 0; $j < sizeof($age_groups); $j++) {
+                    $age_group = $age_groups[$j];
+                    $row += 2;
+                    $sheet->mergeCells($col . $row . ':' . chr(ord($col) + sizeof($headers) - 1) . $row);
+                    $sheet->cell($col . $row, function ($cell) use ($age_group) {
+                        $cell->setValue($age_group['text']);
+                        $cell->setFontSize(13);
+                        $cell->setFontWeight('bold');
+                        $cell->setBorder('medium', 'medium', 'medium', 'medium');
+                        $cell->setAlignment('center');
+                        $cell->setValignment('center');
+                    });
+
+                    $participants = $participants_all->filter(function ($item) use ($age_group) {
+                        return $item->age >= $age_group['min'] && $item->age <= $age_group['max'];
+                    });
+
+                    // Add participants
+                    for ($k = 0; $k < $participants->count(); $k++) {
+                        $row++;
+                        $participant = $participants->slice($k, 1)->first();
+
+                        for ($f = 0; $f < sizeof($headers); $f++) {
+                            $header = $headers[$f]['prop'];
+                            $data = $participant->$header;
+                            $sheet->cell(chr(ord($col) + $f) . $row, function ($cell) use ($data) {
+                                $cell->setValue($data);
+                                $cell->setFontSize(12);
+                                $cell->setBorder('thin', 'thin', 'thin', 'thin');
+                            });
+                        }
+                    }
+
+                    // Set total
+                    $row++;
+                    $size = $participants->count();
+                    $sheet->mergeCells($col . $row . ':' . chr(ord($col) + sizeof($headers) - 1) . $row);
+                    $sheet->cell($col . $row, function ($cell) use ($size) {
+                        $cell->setValue('Total: ' . $size);
+                        $cell->setFontSize(12);
+                        $cell->setFontWeight('bold');
+                        $cell->setBorder('thick', 'thin', 'thin', 'thin');
+                        $cell->setAlignment('center');
+                        $cell->setValignment('center');
+                        $cell->setBackground('#FCE4D6');
+                    });
+                }
+
+                // Set total
+                $row += 2;
+                $size = $participants_all->count();
+                $sheet->mergeCells($col . $row . ':' . chr(ord($col) + sizeof($headers) - 1) . $row);
+                $sheet->cell($col . $row, function ($cell) use ($size) {
+                    $cell->setValue('Total: ' . $size);
+                    $cell->setFontSize(12);
+                    $cell->setFontWeight('bold');
+                    $cell->setBorder('thick', 'thick', 'thick', 'thick');
+                    $cell->setAlignment('center');
+                    $cell->setValignment('center');
+                    $cell->setBackground('#F8CBAD');
+                });
+
+                // Set column width
+                for ($j = 0; $j < sizeof($headers); $j++) {
+                    $sheet->setWidth(chr(ord($col) + $j), 16);
+                }
+            });
+        })->download('xlsx');
+    }
+
     public function downloadDaysDistribution()
     {
         Voyager::canOrFail('read_groups');
@@ -519,6 +625,175 @@ class InvoiceController extends Controller
                     // Set column width
                     for ($j = 0; $j < sizeof($headers); $j++) {
                         $sheet->setWidth(chr(ord($col) + $j), 16);
+                    }
+                }
+
+                // Set total
+                $tallest += 2;
+                $size = $participants_all->count();
+                $sheet->mergeCells('B' . $tallest . ':' . chr(ord($last_col) + sizeof($headers) - 1) . $tallest);
+                $sheet->cell('B' . $tallest, function ($cell) use ($size) {
+                    $cell->setValue('Total: ' . $size);
+                    $cell->setFontSize(14);
+                    $cell->setFontWeight('bold');
+                    $cell->setBorder('thick', 'thick', 'thick', 'thick');
+                    $cell->setAlignment('center');
+                    $cell->setValignment('center');
+                    $cell->setBackground('#F4B084');
+                });
+            });
+        })->download('xlsx');
+    }
+
+    public function downloadAccommodation()
+    {
+        Voyager::canOrFail('read_groups');
+
+        Excel::create('Accommodation', function ($excel) {
+            $excel->setTitle('Accommodation');
+
+            $excel->sheet('Accommodation', function ($sheet) {
+                $accommodation = [
+                    ['text' => 'Standard', 'prop' => '0'],
+                    ['text' => 'Deluxe', 'prop' => '1'],
+                    ['text' => 'No Accommodation', 'prop' => '2']
+                ];
+                $headers = [
+                    ['text' => 'Accommodation Type', 'prop' => ''],
+                    ['text' => 'Amount', 'prop' => ''],
+                ];
+                $age_groups = [
+                    ['text' => 'Under 3 years', 'min' => 0, 'max' => 2],
+                    ['text' => '3 to 11 years', 'min' => 3, 'max' => 11],
+                    ['text' => 'Over 11 years', 'min' => 12, 'max' => 999],
+                    ['text' => 'All Participants', 'min' => 0, 'max' => 999]
+                ];
+
+                $dates = [];
+                $start = new DateTime(\Config::get('constants.start_day'));
+                $end = new DateTime(\Config::get('constants.end_day'));
+                $done = false;
+                while (!$done) {
+                    $dates[] = clone $start;
+                    $start->add(new DateInterval('P1D'));
+                    if ($start > $end) {
+                        $done = true;
+                    }
+                }
+
+                $tallest = 0;
+                $last_col = 'B';
+                $participants_all = Participant::all();
+                for ($i = 0; $i < sizeof($dates); $i++) {
+                    $date = $dates[$i];
+                    $participants_date = $participants_all->filter(function ($item) use ($date) {
+                        return $item->isPresentOnDate($date);
+                    });
+
+                    // ord('B') == 66
+                    $col = chr(66 + (sizeof($headers) + 1) * $i);
+                    $last_col = $col;
+                    $row = 2;
+
+                    for ($j = 0; $j < sizeof($headers); $j++) {
+                        $header = $headers[$j];
+                        $sheet->cell(chr(ord($col) + $j) . $row, function ($cell) use ($header) {
+                            $cell->setValue($header['text']);
+                            $cell->setFontSize(12);
+                            $cell->setFontWeight('bold');
+                            $cell->setBorder('medium', 'medium', 'medium', 'medium');
+                            $cell->setAlignment('center');
+                            $cell->setValignment('center');
+                        });
+                    }
+
+
+                    // Set day
+                    $row++;
+                    $sheet->mergeCells($col . $row . ':' . chr(ord($col) + sizeof($headers) - 1) . ($row + 1));
+                    $sheet->cell($col . $row, function ($cell) use ($date) {
+                        $cell->setValue($date->format('d F Y'));
+                        $cell->setFontSize(16);
+                        $cell->setFontWeight('bold');
+                        $cell->setBorder('medium', 'medium', 'medium', 'medium');
+                        $cell->setAlignment('center');
+                        $cell->setValignment('center');
+                    });
+
+                    // Create age groups
+                    $row++;
+                    for ($j = 0; $j < sizeof($age_groups); $j++) {
+                        $age_group = $age_groups[$j];
+                        $row += 2;
+                        $sheet->mergeCells($col . $row . ':' . chr(ord($col) + sizeof($headers) - 1) . $row);
+                        $sheet->cell($col . $row, function ($cell) use ($age_group) {
+                            $cell->setValue($age_group['text']);
+                            $cell->setFontSize(13);
+                            $cell->setFontWeight('bold');
+                            $cell->setBorder('medium', 'medium', 'medium', 'medium');
+                            $cell->setAlignment('center');
+                            $cell->setValignment('center');
+                        });
+
+                        $participants_age = $participants_date->filter(function ($item) use ($age_group) {
+                            return $item->age >= $age_group['min'] && $item->age <= $age_group['max'];
+                        });
+
+                        // Add meals
+                        for ($k = 0; $k < sizeof($accommodation); $k++) {
+                            $acc = $accommodation[$k];
+                            $row++;
+                            $participants_acc = $participants_age->where('acc_type', $acc['prop']);
+                            $size = $participants_acc->count();
+                            $name = $acc['text'];
+                            $sheet->cell($col . $row, function ($cell) use ($name) {
+                                $cell->setValue($name);
+                                $cell->setFontSize(12);
+                                $cell->setBorder('thin', 'thin', 'thin', 'thin');
+                            });
+                            $sheet->cell(chr(ord($col) + 1) . $row, function ($cell) use ($size) {
+                                $cell->setValue($size);
+                                $cell->setFontSize(12);
+                                $cell->setBorder('thin', 'thin', 'thin', 'thin');
+                            });
+                        }
+
+                        // Set total
+                        $row++;
+                        $size = $participants_age->count();
+                        $sheet->mergeCells($col . $row . ':' . chr(ord($col) + sizeof($headers) - 1) . $row);
+                        $sheet->cell($col . $row, function ($cell) use ($size) {
+                            $cell->setValue('Total: ' . $size);
+                            $cell->setFontSize(12);
+                            $cell->setFontWeight('bold');
+                            $cell->setBorder('thick', 'thin', 'thin', 'thin');
+                            $cell->setAlignment('center');
+                            $cell->setValignment('center');
+                            $cell->setBackground('#FCE4D6');
+                        });
+                    }
+
+                    // Set total
+                    $row += 2;
+                    $size = $participants_date->count();
+                    $sheet->mergeCells($col . $row . ':' . chr(ord($col) + sizeof($headers) - 1) . $row);
+                    $sheet->cell($col . $row, function ($cell) use ($size) {
+                        $cell->setValue('Total: ' . $size);
+                        $cell->setFontSize(12);
+                        $cell->setFontWeight('bold');
+                        $cell->setBorder('thick', 'thick', 'thick', 'thick');
+                        $cell->setAlignment('center');
+                        $cell->setValignment('center');
+                        $cell->setBackground('#F8CBAD');
+                    });
+
+                    if ($row > $tallest) {
+                        $tallest = $row;
+                    }
+
+                    // Set column width
+                    for ($j = 0; $j < sizeof($headers); $j++) {
+                        $sheet->setWidth(chr(ord($col) + $j), 23);
                     }
                 }
 
