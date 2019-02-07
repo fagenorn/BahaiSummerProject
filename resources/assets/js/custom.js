@@ -1,5 +1,5 @@
-let start_date = "2018-07-06";
-let end_date = "2018-07-10";
+let start_date = "2019-07-06";
+let end_date = "2019-07-10";
 let clicked = false;
 $(document).on("click", "#submit", function (e) {
     e.preventDefault();
